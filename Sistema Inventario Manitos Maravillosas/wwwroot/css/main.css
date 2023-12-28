@@ -266,23 +266,26 @@ img {
 /*------- Dropdown-------*/
 
 .custom-dropdown-button {
-    background-color: transparent; 
+    background-color: transparent;
     color: var(--colorMain);
-    border: 1px solid var(--colorMain); 
+    border: 1px solid var(--colorMain);
 }
-
-.custom-dropdown-button:hover {
-    color: #fff; 
-    background-color: var(--colorMain); 
+ 
+.custom-dropdown-button:hover,
+.custom-dropdown-button:focus,
+.custom-dropdown-button:active {
+    color: #fff;
+    background-color: var(--colorMain);
 }
 
 .custom-dropdown-item {
-    color: var(--colorMain); 
+    color: var(--colorMain);
 }
 
-.custom-dropdown-item:hover {
-    color: #fff; 
-    background-color: var(--colorMain); 
+.custom-dropdown-item:hover,
+.custom-dropdown-item:focus {
+    color: #fff;
+    background-color: var(--colorMain);
 }
 
 /*------- Table Icons-------*/
@@ -293,9 +296,9 @@ img {
     color: inherit; 
     cursor: pointer; 
 }
-    
-.icon-button.bi-brush-fill {
-    color: var(--colorMain); 
+
+.icon-button.bi-pencil-square {
+    color: var(--colorMain);
 }
 
 .icon-button.bi-trash-fill {
@@ -306,4 +309,13 @@ img {
     opacity: 0.7; 
 }
 
+/*------- Search Input-------*/
 
+.search-input {
+    margin-right: 25px; 
+    width: 200px; 
+}
+
+.search-input .input-group-text .bi-search {
+    color: var(--colorMain);
+}
