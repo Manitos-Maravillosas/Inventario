@@ -112,7 +112,7 @@
 
                 <!---Administración-->
                 <li class="inline-nav-item">
-                    <a class="d-flex justify-content-between align-items-center aside-link " href="/Admin/BuscarInstalacion">
+                    <a class="d-flex justify-content-between align-items-center aside-link " href="">
                         <div>
                             <i class="bi bi-briefcase-fill"></i>
                             Administración
@@ -120,6 +120,13 @@
                         <i class="bi bi-caret-down-fill arrowCollapse"></i> <!-- Add if dropdown needed -->
                     </a>
                     <!-- Optional Submenu Items -->
+                    <ul class="subMenuCollapse" role="navigation">
+                        <li class="subMenuNavItem">
+                            <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Client" asp-action="Client">Cliente</a>
+                        </li>
+                        
+                    </ul>
+                     
                 </li>
 
                 <!---Reportes-->

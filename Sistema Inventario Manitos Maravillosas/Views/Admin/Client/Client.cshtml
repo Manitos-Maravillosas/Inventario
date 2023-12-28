@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Models.Admin.Client>
+
+@{
+    ViewData["Title"] = "Client";
+}
+
+<h1>Client</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+</table>
