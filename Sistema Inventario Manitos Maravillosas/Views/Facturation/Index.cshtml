@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Venta de Productos</h3>
+
+<section>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <form class="row">
+                        <label for="idProduct" class="col-sm-4 col-form-label">Código del Producto</label>
+                        <div class="col-auto">
+                            <input type="text" class="form-control" id="idProduct">
+                        </div>
+
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary mb-2">Buscar Producto                <i class="pbi bi-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <form class="row">
+
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-outline-primary mb-2"><i class="bi bi-person-fill-check"></i>   Asignar Cliente</i></button>
+                        </div>
+                        <label for="idProduct" class="col-sm-4 col-form-label">Maynor Martínez</label>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="card">
+        <div class="card-body">
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Código</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Precio $</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Subtotal $</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>50 $</td>
+                        <td>1</td>
+                        <td>50 $</td>
+                        <td>asdf</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Otto</td>
+                        <td>31 $</td>
+                        <td>2</td>
+                        <td>3510 $</td>
+                        <td>asdf</td>
+                    </tr>
+                    @* Subtotal *@
+                    <tr class="fw-bold no-border">
+                        <th scope="row" colspan="4"></th>
+                        <td>Subtotal</td>
+                        <td colspan="2"> 3015 $</td>
+                    </tr>
+                    @* Envio *@
+                    <tr class="fw-bold no-border">
+                        <th scope="row" colspan="3"></th>
+                        <td class="text-end"><button type="button" class="btn btn-secondary btn-sm"><i class="bi bi-gear-fill"></i></button></td>
+                        <td>Envío</td>
+                        <td colspan="2"> 3015 $</td>
+                    </tr>
+                    @* Desceunto *@
+                    <tr class="fw-bold no-border">
+                        <th scope="row" colspan="3"></th>
+                        <td class="align-items-md-center text-end" style="width:13%">
+                            <div class="input-group mb-3 col-2">
+                              <span class="input-group-text" id="basic-addon1">%</span>
+                              <input type="number" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>      
+                        </td>
+                        <td>Descuento</td>
+                        <td colspan="2"> 3015 $</td>
+                    </tr>
+                    @* Total *@
+                    <tr class="fw-bold no-border">
+                        <th scope="row" colspan="4"></th>
+                        <td>Subtotal</td>
+                        <td colspan="2"> 3015 $</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="py-3">
+        <div class="accordion" id="accordionExample">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Información del Cliente
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Resumen de Envío
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="card">
+        <div class="card-body">
+            <h4>Gestión de Cobro</h4>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <button type="button" class="btn btn-warning">Limpiar Datos   <i class="bi bi-stars"></i></button>
+                    <button type="button" class="btn btn-outline-secondary">Dejar Pendiente  <i class="bi bi-file-earmark-bar-graph-fill"></i></button>
+                </div>
+                <div>
+                    Total
+                    <button type="button" class="btn btn-success"><i class="bi bi-cash-stack"></i>  Cobrar</button
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- get the clients returned from the controller  -->
+
+@foreach (var item in Model)
+{
+    <p>@item.Name</p>
+}
+
+

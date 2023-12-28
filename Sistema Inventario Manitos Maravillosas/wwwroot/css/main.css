@@ -1,0 +1,268 @@
+﻿:root {
+    --colorMain: #0d6efd;
+    --colorMainRGB: 13, 110, 253;
+    --colorMainTrans: rgba(13, 110, 253, 0.1);
+    --colorDisable: #ACB4BC;
+    --greyColor: #F1F1F1;
+    --whiteContranst: #F6F6F6;
+    --greyFooterRGB: 241, 241, 241;
+    --textGrey: #495057;
+    --textGreyRGB: 73, 80, 87;
+    --textcolor: #00A88F;
+    --textcolorRGB: 0, 163, 143;
+    --textBlack: #000000;
+    --textBlackRGB: 0, 0, 0;
+    --gradientMaincolor: linear-gradient(to right, #00A38B, #16c1b5);
+    --gradientMaincolorTrans: linear-gradient(to right, rgba(0, 163, 139, 0.6), rgba(22, 193, 181, 0.6));
+    --white: #FFFFFF;
+    --font-primary: 'Roboto', sans-serif;
+    --topBarMaxHeight: 60px;
+}
+
+
+html {
+    font-size: 14px;
+    height: 100%;
+    margin: 0;
+    font-family: var(--font-primary);
+    min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+/* This secction is for color backgrounds*/
+
+.bg-colorMain {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--colorMainRGB), var(--bs-bg-opacity));
+}
+
+.bg-gradient {
+    background: var(--gradientMaincolor) !important;
+    color: white;
+}
+
+
+
+/* This secction is for color backgrounds with transparency*/
+
+.bg-colorMainTrans {
+    --bs-bg-opacity: 0.1;
+    background-color: rgba(var(--colorMainRGB), var(--bs-bg-opacity));
+}
+
+.bg-grayContrast {
+    background-color: var(--whiteContranst);
+}
+
+.bg-grey {
+    background-color: var(--greyColor);
+}
+
+/* This secction is for color for texts*/
+
+.txt-Grey {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--textGreyRGB), var(--bs-bg-opacity));
+}
+
+.txt-color {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--textGreyRGB), var(--bs-bg-opacity));
+}
+
+/* This secction set the color of boostrap valriables*/
+/*.text-primary {
+    color: var(--colorMain) !important;
+}
+
+.btn-primary {
+    color: var(--colorMain);
+    border-color: var(--colorMain);
+}
+
+.btn-outline-primary {
+    color: var(--colorMain);
+    border-color: var(--colorMain);
+}
+
+    .btn-outline-primary:hover {
+        color: var(--colorMain);
+        background-color: var(--colorMainTrans);
+        border-color: var(--colorMain);
+    }
+
+.active {
+    background-color: var(--colorMain) !important;
+    border: 0px;
+}
+
+.list-group-item:hover {
+    background-color: var(--colorMainTrans);
+}
+
+.disable {
+    background-color: var(--colorDisable) !important;
+}*/
+
+
+/*------------------------------------------------------- Layout modifications -----------------------------------*/
+
+.page {
+    height: calc(100% - var(--topBarMaxHeight));
+    overflow: hidden;
+}
+
+.content-page {
+    overflow-y: auto;
+
+    /* Scrollable content */
+}
+
+
+/*-----------------------------------------------------Top Bar*/
+.topBarContainer {
+    max-height: var(--topBarMaxHeight);
+    height: var(--topBarMaxHeight);
+}
+
+.topBar {
+    height: 100%;
+    font-weight: 200;
+}
+
+#mainIcon {
+    text-decoration: none;
+    color: black;
+}
+
+#myIcon{
+    width: 50px;
+    height: 50px;
+}
+/*-----------------------------------------------------Side Bar*/
+.sideBarContainer {
+    padding: 1rem;
+}
+
+.sideBar {
+    border-radius: 10px;
+    height: 100%;    
+}
+
+/*each item li*/
+.inline-nav-item {
+    list-style-type: none;
+    width: 234px;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    flex: 0 0 auto;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
+
+.inline-nav-item i{
+    padding: 0px 10px;
+}
+
+    .inline-nav-item:hover {
+        --bs-bg-opacity: 0.05;
+        background-color: rgba(var(--colorMainRGB), var(--bs-bg-opacity));
+        border-right-width: 3px;
+        border-right-style: solid;
+        border-color: var(--colorMain);
+    }
+
+.inline-active {
+    width: 234px;
+    align-items: center;
+    padding: 8px 24px 8px 30px;
+    position: relative;
+    flex: 0 0 auto;
+    border-right-width: 3px;
+    border-right-style: solid;
+    border-color: var(--colorMain);
+}
+
+/*each Item a*/
+.aside-link {
+    display: block;
+    padding: 1rem 1rem;
+    text-decoration: none;
+    color: var(--textBlack);
+}
+
+    .aside-link:hover {
+        color: var(--textBlack);
+    }
+
+
+.arrowCollapse {
+    /* Add a transition effect for transform property */
+    transition: transform 0.3s ease;
+    font-size: .75rem;
+}
+
+.collapsed .arrowCollapse {
+    /* Rotate the arrow 180 degrees when the parent is collapsed */
+    transform: rotate(180deg);
+}
+
+
+/*------------------ Sub Menu side Bar*/
+.subMenuCollapse {
+    transition: max-height 0.5s ease-out;
+    overflow: hidden;
+    max-height: 0; /* Initially menu is collapsed */
+}
+
+
+.subMenuNavItem:hover {
+    color: var(--textGrey) !important;
+}
+
+.collapsed .subMenuCollapse {
+    max-height: 100px;
+}
+
+/*each element li*/
+.subMenuNavItem {
+    display: block;
+    padding: .1rem 1rem;
+    text-decoration: none;
+    color: var(--textBlack);
+}
+
+
+/*each elemnt a*/
+.aside-linkSubItem {
+    display: block;
+    padding: 0.2rem 1rem;
+    text-decoration: none;
+    color: var(--textGrey);
+}
+
+
+
+
