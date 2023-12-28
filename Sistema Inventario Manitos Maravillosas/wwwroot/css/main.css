@@ -263,6 +263,47 @@ img {
     color: var(--textGrey);
 }
 
+/*------- Dropdown-------*/
 
+.custom-dropdown-button {
+    background-color: transparent; 
+    color: var(--colorMain);
+    border: 1px solid var(--colorMain); 
+}
+
+.custom-dropdown-button:hover {
+    color: #fff; 
+    background-color: var(--colorMain); 
+}
+
+.custom-dropdown-item {
+    color: var(--colorMain); 
+}
+
+.custom-dropdown-item:hover {
+    color: #fff; 
+    background-color: var(--colorMain); 
+}
+
+/*------- Table Icons-------*/
+
+.icon-button {
+    border: none; 
+    background-color: transparent; 
+    color: inherit; 
+    cursor: pointer; 
+}
+    
+.icon-button.bi-brush-fill {
+    color: var(--colorMain); 
+}
+
+.icon-button.bi-trash-fill {
+    color: red; 
+}
+    
+.icon-button:hover {
+    opacity: 0.7; 
+}
 
 

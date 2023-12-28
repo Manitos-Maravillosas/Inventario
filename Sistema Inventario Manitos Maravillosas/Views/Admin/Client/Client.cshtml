@@ -1,32 +1,82 @@
 ﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Models.Admin.Client>
 
 @{
-    ViewData["Title"] = "Client";
+    ViewData["Title"] = "Clientes";
 }
 
-<h1>Client</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+<section class="container px-5 py-3">
 
-</table>
+    <h3 style="margin-bottom: 2rem;">Clientes</h3>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle custom-dropdown-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Filtrar solcitudes por nombre de instalación">
+            Nombre
+        </button>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+            <li><a class="dropdown-item custom-dropdown-item" data-id="0" href="#">Todos</a></li>
+          
+        </ul>
+    </div>
+
+    <table class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido 1</th>
+                <th scope="col">Apellido 2</th>
+                <th scope="col">Identificación</th>
+                <th scope="col">Número</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Fernanda </td>
+                <td>Murillo</td>
+                <td>Mena</td>
+                <td>901150359</td>
+                <td>85986048</td>
+                <td>murillomf2001gmail.com</td>        
+                <td>
+                    <button class="icon-button bi bi-brush-fill" aria-label="Modificar" data-id="0" style="cursor: pointer;">
+                    </button>
+                    <button class="icon-button bi bi-trash-fill" aria-label="Eliminar" data-id="1" style="cursor: pointer;">
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>Fernanda </td>
+                <td>Murillo</td>
+                <td>Mena</td>
+                <td>901150359</td>
+                <td>85986048</td>
+                <td>murillomf2001gmail.com</td>
+                <td>
+                    <button class="icon-button bi bi-brush-fill" aria-label="Modificar" data-id="0" style="cursor: pointer;">
+                    </button>
+                    <button class="icon-button bi bi-trash-fill" aria-label="Eliminar" data-id="1" style="cursor: pointer;">
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>Fernanda </td>
+                <td>Murillo</td>
+                <td>Mena</td>
+                <td>901150359</td>
+                <td>85986048</td>
+                <td>murillomf2001gmail.com</td>
+                <td>
+                    <button class="icon-button bi bi-brush-fill" aria-label="Modificar" data-id="0" style="cursor: pointer;">
+                    </button>
+                    <button class="icon-button bi bi-trash-fill" aria-label="Eliminar" data-id="1" style="cursor: pointer;">
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</section>
