@@ -45,58 +45,33 @@
             <table class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
                 <thead>
                     <tr>
+                        <th scope="col">Identificación</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Apellido 1</th>
                         <th scope="col">Apellido 2</th>
-                        <th scope="col">Identificación</th>
                         <th scope="col">Correo</th>
-                        <th scope="col">Número</th>
+                        <th scope="col">Número de Contacto</th>
                         <th scope="col">Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Fernanda </td>
-                        <td>Murillo</td>
-                        <td>Mena</td>
-                        <td>901150359</td>
-                        <td>85986048</td>
-                        <td>murillomf2001gmail.com</td>
-                        <td>
-                            <button class="icon-button bi bi-pencil-square" aria-label="Modificar" data-id="0" style="cursor: pointer;">
-                            </button>
-                            <button class="icon-button bi bi-trash-fill" aria-label="Eliminar" data-id="1" style="cursor: pointer;">
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Fernanda </td>
-                        <td>Murillo</td>
-                        <td>Mena</td>
-                        <td>901150359</td>
-                        <td>85986048</td>
-                        <td>murillomf2001gmail.com</td>
-                        <td>
-                            <button class="icon-button bi bi-pencil-square" aria-label="Modificar" data-id="0" style="cursor: pointer;">
-                            </button>
-                            <button class="icon-button bi bi-trash-fill" aria-label="Eliminar" data-id="1" style="cursor: pointer;">
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Fernanda </td>
-                        <td>Murillo</td>
-                        <td>Mena</td>
-                        <td>901150359</td>
-                        <td>85986048</td>
-                        <td>murillomf2001gmail.com</td>
-                        <td>
-                            <button class="icon-button bi bi-pencil-square" aria-label="Modificar" data-id="0" style="cursor: pointer;">
-                            </button>
-                            <button class="icon-button bi bi-trash-fill" aria-label="Eliminar" data-id="1" style="cursor: pointer;">
-                            </button>
-                        </td>
-                    </tr>
+                    @foreach (var client in Model)
+                    {
+                        <tr>
+                            <td>@client.Id</td>
+                            <td>@client.Name</td>
+                            <td>@client.LastName1</td>
+                            <td>@client.LastName2</td>
+                            <td>@client.Email</td>
+                            <td>@client.PhoneNumber</td>
+                            <td>
+                                <button class="icon-button bi bi-pencil-square" aria-label="Modificar" data-id="0" style="cursor: pointer;">
+                                </button>
+                                <button class="icon-button bi bi-trash-fill" aria-label="Eliminar" data-id="1" style="cursor: pointer;">
+                                </button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
 
