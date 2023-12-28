@@ -6,9 +6,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
     public class ClientController : Controller
     {
         // GET: ClientController
-        public ActionResult Client() // Nombre de la vista
+        public ActionResult Index() // Nombre de la vista
         {
-            return View("~/Views/Admin/Client/Client.cshtml");
+            return View("~/Views/Admin/Client/Index.cshtml");
         }
 
         // GET: ClientController/Details/5

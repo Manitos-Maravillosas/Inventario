@@ -11,8 +11,8 @@
 
     <div class="card mb-2">
         <div class="card-body">
-            <div class="d-flex align-items-center">
-               
+            <div class="d-flex align-items-center justify-content-between">
+
                 <div class="input-group search-input">
                     <input type="text" class="form-control" placeholder="Buscar...">
                     <span class="input-group-text">
@@ -20,21 +20,25 @@
                     </span>
                 </div>
 
-                <div class="dropdown ms-auto">
-                    <button class="btn btn-secondary dropdown-toggle custom-dropdown-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        Nombre
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item custom-dropdown-item" data-id="0" href="#">Identificacicón</a></li>
-                        <li><a class="dropdown-item custom-dropdown-item" data-id="0" href="#">Nombre</a></li>
-                        <li><a class="dropdown-item custom-dropdown-item" data-id="0" href="#">Apellido 1</a></li>
-                        <li><a class="dropdown-item custom-dropdown-item" data-id="0" href="#">Apellido 2</a></li>
-                    </ul>
+                <div class="d-flex align-items-center ms-auto">
+                    <label class="me-2">Filtrar Por:</label>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle custom-dropdown-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Nombre
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item custom-dropdown-item" href="#">Identificación</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" href="#">Nombre</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" href="#">Apellido 1</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" href="#">Apellido 2</a></li>
+                        </ul>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
+
 
     <div class="card mb-2">
         <div class="card-body">
