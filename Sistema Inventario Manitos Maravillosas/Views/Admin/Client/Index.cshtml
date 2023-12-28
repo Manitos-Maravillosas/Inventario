@@ -14,7 +14,7 @@
             <div class="d-flex align-items-center justify-content-between">
 
                 <div class="input-group search-input">
-                    <input type="text" class="form-control" placeholder="Buscar...">
+                    <input id="searchInput" type="text" class="form-control" placeholder="Buscar...">
                     <span class="input-group-text">
                         <i class="bi bi-search"></i>
                     </span>
@@ -42,7 +42,7 @@
 
     <div class="card mb-2">
         <div class="card-body">
-            <table class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
+            <table id="clients"class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
                 <thead>
                     <tr>
                         <th scope="col">Identificación</th>
@@ -82,3 +82,17 @@
     </div>
 
 </section>
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function () {
+        var searchTerm = this.value.toLowerCase();
+        var tableRows = document.getElementById('clients').getElementsByTagName('tr');
+
+        for (var i = 1; i < tableRows.length; i++) {
+            var row = tableRows[i];
+            var rowText = row.textContent.toLowerCase();
+            row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+        }
+    });
+</script>
+
