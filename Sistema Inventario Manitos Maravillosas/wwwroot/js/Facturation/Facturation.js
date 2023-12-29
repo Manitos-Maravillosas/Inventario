@@ -43,3 +43,18 @@
     
 
 });
+
+
+function addProductToCart() {
+    var input = document.getElementById("inputField").value;
+    fetch('/YourController/GetData?input=' + input)
+        .then(response => response.json())
+        .then(data => {
+            var table = document.getElementById("dataTable");
+            table.innerHTML = ''; // Clear existing rows
+            data.forEach(item => {
+                // Assuming 'item' has properties 'id' and 'name'
+                table.innerHTML += '<tr><td>' + item.id + '</td><td>' + item.name + '</td></tr>';
+            });
+        });
+}
