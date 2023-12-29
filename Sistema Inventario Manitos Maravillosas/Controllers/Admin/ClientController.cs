@@ -85,6 +85,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
 
                     connection.Open();
                     command.ExecuteNonQuery();
+                    connection.Close();
                 }
             }
         }
@@ -110,6 +111,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
 
                     connection.Open();
                     command.ExecuteNonQuery();
+                    connection.Close();
                 }
             }
         }
@@ -133,30 +135,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
 
                     connection.Open();
 
-                    try
-                    {
-                        int rowsAffected = command.ExecuteNonQuery();
-                        if (rowsAffected == 0)
-                        {
-                            // No se eliminó ningún registro, puedes registrar un mensaje de error si lo deseas
-                            Console.WriteLine("No se eliminó ningún registro.");
-                        }
-                        else
-                        {
-                            // Éxito: el cliente se eliminó correctamente
-                            Console.WriteLine("Cliente eliminado correctamente.");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Error al eliminar el cliente, registra el error
-                        Console.WriteLine("Error al eliminar el cliente: " + ex.Message);
-                    }
                 }
             }
         }
-
-
 
         // GET: ClientController
         public ActionResult Index() // Nombre de la vista
@@ -179,15 +160,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
             if (ModelState.IsValid)
             {
                 AddClient(client);
+                TempData["Success"] = "Cliente agregado correctamente";
                 return RedirectToAction(nameof(Index));
             }
             else
             {
-                // Volver a la vista con el modelo actual para mostrar errores de validación
                 return View("~/Views/Admin/Client/Create.cshtml", client);
             }
         }
-
 
         // GET: ClientController/Edit/5
         public ActionResult Edit(int id)
