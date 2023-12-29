@@ -1,0 +1,45 @@
+﻿document.addEventListener('DOMContentLoaded', function () {
+    console.log('Facturation.js loaded');
+
+    // Modal handling
+    var assignClient = document.querySelector('#assignClient');
+    assignClient.addEventListener('click', function () {
+        var clientModal = new bootstrap.Modal(document.getElementById('modalClient'));
+        clientModal.show();
+    });
+
+    var assignDelivery = document.querySelector('#assignDelivery');
+    assignDelivery.addEventListener('click', function () {
+        var deliveryModal = new bootstrap.Modal(document.getElementById('modalDelivery'));
+        deliveryModal.show();
+    });
+
+    var editableCell = document.querySelectorAll('.editableCell');
+    var editableInput = document.querySelectorAll('.editableInput');
+
+    editableCell.forEach(function (cell) {
+        cell.addEventListener('dblclick', function () {
+            var parent = cell.parentElement;
+            var input = parent.querySelector('.editableInput');
+            input.value = cell.textContent; // Use textContent instead of innerHTML
+            input.style.display = 'block'; // Show the input
+            cell.style.display = 'none'; // Hide the div
+            input.focus();
+        });
+    });
+
+    editableInput.forEach(function (input) {
+        input.addEventListener('blur', function () {
+            var parent = input.parentElement;
+            var div = parent.querySelector('.editableCell');
+            if (input.value === '') {
+                input.value = 0;
+            }
+            div.textContent = input.value; // Use textContent instead of innerHTML
+            input.style.display = 'none'; // Hide the input
+            div.style.display = 'block'; // Show the div
+        });
+    });
+    
+
+});

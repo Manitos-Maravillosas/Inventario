@@ -1,38 +1,37 @@
-﻿
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+
 @{
     ViewData["Title"] = "Index";
 }
 
 <h3>Venta de Productos</h3>
 
-<section>
+<section class="mb-3">
 
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm">
             <div class="card">
                 <div class="card-body">
                     <form class="row">
-                        <label for="idProduct" class="col-sm-4 col-form-label">Código del Producto</label>
-                        <div class="col-auto">
-                            <input type="text" class="form-control" id="idProduct">
-                        </div>
-
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary mb-2">Buscar Producto                <i class="pbi bi-search"></i></button>
-                        </div>
+                        <div class="input-group flex-nowrap">                          
+                          <input type="text" class="form-control" placeholder="Código del Producto" aria-label="Código del Producto" aria-describedby="addon-wrapping">
+                          <span class="input-group-text" id="addon-wrapping"><i class="pbi bi-search"></i></span>
+                        </div>  
+                        
                     </form>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm">
             <div class="card">
                 <div class="card-body">
                     <form class="row">
 
                         <div class="col-auto">
-                            <button type="submit" class="btn btn-outline-primary mb-2"><i class="bi bi-person-fill-check"></i>   Asignar Cliente</i></button>
+                            <button id="assignClient" type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-check"></i>   Asignar Cliente</i></button>
                         </div>
-                        <label for="idProduct" class="col-sm-4 col-form-label">Maynor Martínez</label>
+                        <label for="idProduct" class="col-sm col-form-label">155582647</label>
+                        <label for="idProduct" class="col-sm col-form-label">Maynor Martínez</label>
                     </form>
                 </div>
             </div>
@@ -43,6 +42,7 @@
 <section>
     <div class="card">
         <div class="card-body">
+
 
             <table class="table table-hover">
                 <thead>
@@ -62,7 +62,10 @@
                         <td>Mark</td>
                         <td>Otto</td>
                         <td>50 $</td>
-                        <td>1</td>
+                        <td class="w-20">
+                            <div class="editableCell">21</div>
+                            <input class="editableInput" type="number">
+                        </td>
                         <td>50 $</td>
                         <td>asdf</td>
                     </tr>
@@ -71,7 +74,10 @@
                         <td>Jacob</td>
                         <td>Otto</td>
                         <td>31 $</td>
-                        <td>2</td>
+                        <td class="w-20">
+                            <div class="editableCell" >21</div>
+                            <input class="editableInput" type="number">
+                        </td>
                         <td>3510 $</td>
                         <td>asdf</td>
                     </tr>
@@ -84,31 +90,36 @@
                     @* Envio *@
                     <tr class="fw-bold no-border">
                         <th scope="row" colspan="3"></th>
-                        <td class="text-end"><button type="button" class="btn btn-secondary btn-sm"><i class="bi bi-gear-fill"></i></button></td>
+                        <td class="text-end"><button id="assignDelivery" type="button" class="btn btn-secondary btn-sm"><i class="bi bi-gear-fill"></i></button></td>
                         <td>Envío</td>
                         <td colspan="2"> 3015 $</td>
                     </tr>
                     @* Desceunto *@
-                    <tr class="fw-bold no-border">
+                    <tr class="fw-bold no-border  border-bottom border-secondary ">
                         <th scope="row" colspan="3"></th>
                         <td class="align-items-md-center text-end" style="width:13%">
-                            <div class="input-group mb-3 col-2">
-                              <span class="input-group-text" id="basic-addon1">%</span>
-                              <input type="number" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-                            </div>      
+                            
                         </td>
-                        <td>Descuento</td>
+                        <td class="d-flex justify-content-between ">Descuento 
+                            <div class=" w-50 d-flex justify-content-end">
+                                <div class="fw-normal  w-50 text-end">
+                                    <div class="editableCell">21</div>
+                                    <input class="editableInput" type="number">
+                                </div>
+                                %
+                            </div>
+                            
+                        </td>
                         <td colspan="2"> 3015 $</td>
                     </tr>
                     @* Total *@
-                    <tr class="fw-bold no-border">
+                    <tr class="fw-bold no-border fs-4">
                         <th scope="row" colspan="4"></th>
-                        <td>Subtotal</td>
+                        <td>Total</td>
                         <td colspan="2"> 3015 $</td>
                     </tr>
                 </tbody>
             </table>
-
         </div>
     </div>
 </section>
@@ -125,7 +136,33 @@
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        <!--Acordion body of the delevery-->
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="circle d-flex justify-content-center align-items-center">
+                                        DB
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fs-6">1546 - Daniela Baltonado</div>
+                                    <div class="text-black-50 fw-light">CargoTrans</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label" >Dirección</label>
+                                <textarea class="form-control" style="height: 100px;" aria-label="Dirección"></textarea>
+                                
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" >Número de Contacto</label>
+                                <input type="text" class="form-control" aria-label="Número de Contacto">
+                            </div>
+
+                        </form>
                     </div>
                 </div>
             </div>
@@ -138,7 +175,19 @@
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="circle d-flex justify-content-center align-items-center">
+                                        <i class="bi bi-truck"></i> <!-- Initials -->
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fs-6">Envío Departamenta</div>
+                                    <div class="text-black-50 fw-light">CargoTrans</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,7 +207,7 @@
                 </div>
                 <div>
                     Total
-                    <button type="button" class="btn btn-success"><i class="bi bi-cash-stack"></i>  Cobrar</button
+                    <button type="button" class="btn btn-success"><i class="bi bi-cash-stack"></i>  Cobrar</button>
                 </div>
             </div>
         </div>
@@ -166,9 +215,199 @@
 </section>
 <!-- get the clients returned from the controller  -->
 
-@foreach (var item in Model)
-{
-    <p>@item.Name</p>
+
+<!-- Button modal for Client-->
+<div class="modal fade" tabindex="-1" id="modalClient">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Buscar Cliente</h5>                
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+                <div class="input-group flex-nowrap mb-3">
+                    <input type="text" class="form-control" placeholder="Identificacion" aria-label="Identificacion del cliente" aria-describedby="addon-wrapping">
+                    <span class="input-group-text" id="addon-wrapping"><i class="pbi bi-search"></i></span>
+                </div>
+                <ul id="listClient" class="list-group scrollable-list mb-2">
+                    <li class="list-group-item list-group-item-action">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="circle d-flex justify-content-center align-items-center">
+                                        DB <!-- Initials -->
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
+                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="circle d-flex justify-content-center align-items-center">
+                                        DB <!-- Initials -->
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
+                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
+                                </div>
+                            </div>
+                        </div>
+                    <li class="list-group-item list-group-item-action">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="circle d-flex justify-content-center align-items-center">
+                                        DB <!-- Initials -->
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
+                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
+                                </div>
+                            </div>
+                        </div>
+                    <li class="list-group-item list-group-item-action">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="circle d-flex justify-content-center align-items-center">
+                                        DB <!-- Initials -->
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
+                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="circle d-flex justify-content-center align-items-center">
+                                        DB <!-- Initials -->
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
+                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="circle d-flex justify-content-center align-items-center">
+                                        DB <!-- Initials -->
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
+                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-plus-square"></i></button>
+          </div>
+            
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Aceptar</button>
+          </div>
+        </div>
+  </div>
+</div>
+
+<!-- Button modal for Delevery-->
+<div class="modal fade" tabindex="-1" id="modalDelivery">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Configurar Envío</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar Envío</label>
+                    </div>
+                    <!--this select should querry from the data base-->
+                    <div class="mb-3">
+                        <label class="form-label">Método de envío</label>
+                        <select class="form-select " aria-label="Seleccione un tipo de Envío">
+                            <option disabled>Seleccione un método de Envío</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+
+                    <!--this select should querry from the data base-->
+                    <div class="mb-3">
+                        <label class="form-label">Empresa responsable de enviar</label>
+                        <select class="form-select mb-3" aria-label="Seleccione una Empresa">
+                            <option selected>Seleccione una Empresa</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Costo Cubierto por Manitos Maravilloas</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">$</span>
+                            <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Cubierto" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cobrar A:</label>
+                        <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
+                            <div class="form-check form-check-inline radio-item">
+                                <input type="radio" name="radioPub" id="public" value="1" role="radio" aria-label="Opción público">
+                                <label for="public">Público</label>
+                            </div>
+                            <div class="form-check form-check-inline radio-item">
+                                <input type="radio" name="radioPub" id="private" value="0" role="radio" aria-label="Opción privado">
+                                <label for="private">Privado</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Costo Adicional</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">$</span>
+                            <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/facturation/facturation.js"></script>
 }
-
-
