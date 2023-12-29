@@ -1,3 +1,4 @@
+// --------------------------- Client Table Filter ---------------------------//
 
 var selectedColumn = -1; // -1 representa todas las columnas
 

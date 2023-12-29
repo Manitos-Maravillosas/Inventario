@@ -4,6 +4,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Models.Admin
 {
     public class Client
     {
+        [Required(ErrorMessage = "Client Id is required.")]
         public string Id { get; set; }
 
         [Required(ErrorMessage = "Client name is required.")]

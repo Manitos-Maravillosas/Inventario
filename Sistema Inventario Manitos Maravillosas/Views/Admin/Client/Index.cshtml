@@ -70,17 +70,27 @@
                             <td>@client.Email</td>
                             <td>@client.PhoneNumber</td>
                             <td>
-                                <button class="icon-button bi bi-pencil-square" aria-label="Modificar" data-id="0" style="cursor: pointer;">
-                                </button>
-                                <button class="icon-button bi bi-trash-fill" aria-label="Eliminar" data-id="1" style="cursor: pointer;">
-                                </button>
+                                <form asp-area="Admin" asp-controller="Client" asp-action="Edit" method="get" style="display: inline;">
+                                    <input type="hidden" name="id" value="@client.Id" />
+                                    <button type="submit" class="icon-button bi bi-pencil-square" aria-label="Modificar" style="cursor: pointer;"></button>
+                                </form>
+
+
+                                <button class="icon-button bi bi-trash-fill" aria-label="Eliminar" data-id="1" style="cursor: pointer; display: inline;"></button>
                             </td>
+
                         </tr>
                     }
                 </tbody>
+
             </table>
 
-            <button type="button" class="btn btn-primary px-5 py-1 mt-2">Agregar <i class="bi bi-plus-circle"></i></button>
+            <form asp-area="Admin" asp-controller="Client" asp-action="Create" method="get">
+                <button type="submit" class="btn btn-primary px-5 py-1 mt-2">
+                    Agregar <i class="bi bi-plus-circle"></i>
+                </button>
+            </form>
+
             
 
         </div>

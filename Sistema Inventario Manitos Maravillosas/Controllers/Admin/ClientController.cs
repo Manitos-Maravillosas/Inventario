@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.InteropServices;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
 {
@@ -62,6 +63,58 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
 
             return clients;
         }
+
+        private void AddClient(Client client)
+        {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("CRUD_Cliente", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Configura los parámetros aquí basándote en el objeto 'client'
+                    // Verificar si cada propiedad es nula y asignar DBNull.Value en ese caso
+                    command.Parameters.Add(new SqlParameter("@idClient", string.IsNullOrEmpty(client.Id) ? (object)DBNull.Value : client.Id));
+                    command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(client.Name) ? (object)DBNull.Value : client.Name));
+                    command.Parameters.Add(new SqlParameter("@lastName1", string.IsNullOrEmpty(client.LastName1) ? (object)DBNull.Value : client.LastName1));
+                    command.Parameters.Add(new SqlParameter("@lastName2", string.IsNullOrEmpty(client.LastName2) ? (object)DBNull.Value : client.LastName2));
+                    command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(client.Email) ? (object)DBNull.Value : client.Email));
+                    command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(client.PhoneNumber) ? (object)DBNull.Value : client.PhoneNumber));
+                    command.Parameters.Add(new SqlParameter("@operation", 1)); 
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void ModifyClient(Client client)
+        {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("CRUD_Cliente", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Configura los parámetros aquí basándote en el objeto 'client'
+                    // Verificar si cada propiedad es nula y asignar DBNull.Value en ese caso
+                    command.Parameters.Add(new SqlParameter("@idClient", string.IsNullOrEmpty(client.Id) ? (object)DBNull.Value : client.Id));
+                    command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(client.Name) ? (object)DBNull.Value : client.Name));
+                    command.Parameters.Add(new SqlParameter("@lastName1", string.IsNullOrEmpty(client.LastName1) ? (object)DBNull.Value : client.LastName1));
+                    command.Parameters.Add(new SqlParameter("@lastName2", string.IsNullOrEmpty(client.LastName2) ? (object)DBNull.Value : client.LastName2));
+                    command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(client.Email) ? (object)DBNull.Value : client.Email));
+                    command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(client.PhoneNumber) ? (object)DBNull.Value : client.PhoneNumber));
+                    command.Parameters.Add(new SqlParameter("@operation", 3));
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+
         // GET: ClientController
         public ActionResult Index() // Nombre de la vista
         {
@@ -69,53 +122,96 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
             return View("~/Views/Admin/Client/Index.cshtml", clients);
         }
 
-        // GET: ClientController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         // GET: ClientController/Create
         public ActionResult Create()
         {
-            return View();
+            return View("~/Views/Admin/Client/Create.cshtml");
         }
 
         // POST: ClientController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Client client)
         {
-            try
+            if (ModelState.IsValid)
             {
+                AddClient(client);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            else
             {
-                return View();
+                // Volver a la vista con el modelo actual para mostrar errores de validación
+                return View("~/Views/Admin/Client/Create.cshtml", client);
             }
         }
+
 
         // GET: ClientController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Client client = null;
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("CRUD_Cliente", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@idClient", id));
+                    command.Parameters.Add(new SqlParameter("@name", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@lastName1", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@lastName2", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@email", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@phoneNumber", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@operation", 2)); // Asumiendo 3 para leer
+
+                    connection.Open();
+
+                    using (SqlDataReader dataReader = command.ExecuteReader())
+                    {
+                        if (dataReader.Read())
+                        {
+                            client = new Client
+                            {
+                                Id = dataReader["idClient"].ToString(),
+                                Name = dataReader["name"].ToString(),
+                                LastName1 = dataReader["lastName1"].ToString(),
+                                LastName2 = dataReader["lastName2"].ToString(),
+                                Email = dataReader["email"].ToString(),
+                                PhoneNumber = dataReader["phoneNumber"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            return View("~/Views/Admin/Client/Edit.cshtml", client);
         }
+
 
         // POST: ClientController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Client client)
         {
-            try
+            if (ModelState.IsValid)
             {
+                // Realiza la modificación solo si el modelo es válido
+                ModifyClient(client);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            else
             {
-                return View();
+                // Volver a la vista con el modelo actual y los errores de validación
+                return View("~/Views/Admin/Client/Edit.cshtml", client);
             }
         }
+
 
         // GET: ClientController/Delete/5
         public ActionResult Delete(int id)
