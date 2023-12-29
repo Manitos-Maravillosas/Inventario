@@ -114,6 +114,49 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
             }
         }
 
+        private void DeleteClient(int id)
+        {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("CRUD_Cliente", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add(new SqlParameter("@idClient", id));
+                    command.Parameters.Add(new SqlParameter("@name", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@lastName1", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@lastName2", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@email", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@phoneNumber", DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@operation", 4));
+
+                    connection.Open();
+
+                    try
+                    {
+                        int rowsAffected = command.ExecuteNonQuery();
+                        if (rowsAffected == 0)
+                        {
+                            // No se eliminó ningún registro, puedes registrar un mensaje de error si lo deseas
+                            Console.WriteLine("No se eliminó ningún registro.");
+                        }
+                        else
+                        {
+                            // Éxito: el cliente se eliminó correctamente
+                            Console.WriteLine("Cliente eliminado correctamente.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Error al eliminar el cliente, registra el error
+                        Console.WriteLine("Error al eliminar el cliente: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+
 
         // GET: ClientController
         public ActionResult Index() // Nombre de la vista
@@ -216,22 +259,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
         // GET: ClientController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            DeleteClient(id);
+            return RedirectToAction(nameof(Index));
         }
 
-        // POST: ClientController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }
