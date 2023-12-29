@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Runtime.InteropServices;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
+namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin.Client
 {
     public class ClientController : Controller
     {
@@ -81,7 +81,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
                     command.Parameters.Add(new SqlParameter("@lastName2", string.IsNullOrEmpty(client.LastName2) ? (object)DBNull.Value : client.LastName2));
                     command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(client.Email) ? (object)DBNull.Value : client.Email));
                     command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(client.PhoneNumber) ? (object)DBNull.Value : client.PhoneNumber));
-                    command.Parameters.Add(new SqlParameter("@operation", 1)); 
+                    command.Parameters.Add(new SqlParameter("@operation", 1));
 
                     connection.Open();
                     command.ExecuteNonQuery();
@@ -161,7 +161,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
             {
                 AddClient(client);
                 TempData["Success"] = "Cliente agregado correctamente";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Create));
             }
             else
             {
@@ -243,6 +243,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Admin
             return RedirectToAction(nameof(Index));
         }
 
-        
+
     }
 }

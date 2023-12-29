@@ -63,11 +63,6 @@ break;
     }
 
 row.style.display = displayRow ? '' : 'none';
-}
-}
-
-
-< !--Coloca esto al final del archivo de layout, antes de cerrar la etiqueta </body > -->
 
 
 
