@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
+using Sistema_Inventario_Manitos_Maravillosas.Models.Inventory;
 using System.Data.SqlClient;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
@@ -12,6 +13,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
         {
             Configuration = configuration;
         }
+
+        //Models for the view
+        public Product Product { get; set; }
+
 
         public List<Client> GetClients()
         {
@@ -40,13 +45,45 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
             return clients;
         }   
 
+        //get products
+        public List<Product> GetProducts()
+        {
+            List<Product> products = new List<Product>();
+            string connectionString = Configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            connection.Open();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM Product", connection);
+            SqlDataReader dataReader = command.ExecuteReader();
+
+            while (dataReader.Read())
+            {
+                Product product = new Product();
+                product.IdProduct = Convert.ToString(dataReader["IdProduct"]);
+                product.ProductName = Convert.ToString(dataReader["Product"]);
+                product.Stock = Convert.ToInt32(dataReader["Stock"]);
+                product.Cost = Convert.ToInt32(dataReader["Cost"]);
+                product.Description = Convert.ToString(dataReader["Description"]);
+                product.Status = Convert.ToBoolean(dataReader["Status"]);
+                product.IdBusiness = Convert.ToInt32(dataReader["IdBusiness"]);
+                product.IdProductCategory = Convert.ToInt32(dataReader["IdProductCategory"]);
+                products.Add(product);
+            }
+
+            connection.Close();
+
+            return products;
+        }
+
         // GET: FacturationController
         public ActionResult Index()
         {
             List<Client> clients = GetClients();
+            List<Product> products = GetProducts();
 
             ViewBag.Title = "Facturaasdfasdftion";
-            return View(clients);
+            return View(products);
         }
 
         // GET: FacturationController/Details/5

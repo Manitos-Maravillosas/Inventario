@@ -1,0 +1,70 @@
+
+
+.radio-item [type="radio"] {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.radio-item [type="radio"]:focus + label::after {
+	/* Add a focus style, like a border or a shadow */
+	box-shadow: 0 0 0 3px rgba(82, 78, 238, 0.5); /* This is just an example, adjust as needed */
+}
+
+
+.radio-item + .radio-item {
+	margin-top: 10px;
+
+}
+
+.radio-item label {
+	display: block;
+	padding-left: 20px;
+	cursor: pointer;
+	color: var(--colorMain);
+	min-width: 200px;
+	position: relative;
+	transition: 0.4s ease-in-out 0s;
+}
+
+	.radio-item label:after,
+	.radio-item label:before {
+		content: "";
+		position: absolute;
+		border-radius: 50%;
+	}
+
+	.radio-item label:after {
+		height: 15px;
+		width: 15px;
+		border: 2px solid var(--colorMain);
+		left: -3px;
+		top: calc(50% - 7px);
+	}
+
+	.radio-item label:before {
+		background: var(--colorMain);
+		height: 17px;
+		width: 17px;
+		left: -4px;
+		transform: scale(5);
+		top: calc(50% - 8px);
+		opacity: 0;
+		visibility: hidden;
+		transition: 0.4s ease-in-out 0s;
+	}
+
+.radio-item [type="radio"]:checked ~ label {
+	border-color: #524eee;
+}
+
+	.radio-item [type="radio"]:checked ~ label::before {
+		opacity: 1;
+		visibility: visible;
+		transform: scale(1);
+	}
