@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Models.Admin
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
 {
     public class Client
     {
