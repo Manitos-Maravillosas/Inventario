@@ -95,8 +95,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
             {
                 ViewData["ErrorMessage"] = result.Message;
             }
-            ViewData["Success"] = "Se ha eliminado al Cliente!";
-            return View("Index");
+            else
+            {
+                ViewData["Success"] = "Se ha eliminado al Cliente!";
+            }
+            var clients = _clientService.GetAll();
+            return View("Index", clients);
         }
 
 
