@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
 using Sistema_Inventario_Manitos_Maravillosas.Models.Inventory;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using System.Data.SqlClient;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
@@ -43,7 +43,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
             connection.Close();
 
             return clients;
-        }   
+        }
 
         //get products
         public List<Product> GetProducts()
@@ -79,7 +79,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
         // GET: FacturationController
         public ActionResult Index()
         {
-            List<Client> clients = GetClients();
+
             List<Product> products = GetProducts();
 
             ViewBag.Title = "Facturaasdfasdftion";

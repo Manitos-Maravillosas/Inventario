@@ -47,7 +47,7 @@
                     <!---SubMenu Items-->
                     <ul class="subMenuCollapse" role="navigation">
                         <li class="subMenuNavItem">
-                            <a class="aside-linkSubItem" asp-area="Facturation" asp-controller="Facturation" asp-action="Index">Caja</a>
+                            <a class="aside-linkSubItem" asp-area="" asp-controller="Facturation" asp-action="Index">Caja</a>
                         </li>
                         <li class="subMenuNavItem">
                             @Html.ActionLink("Proformas", "Index", "Home", new { area = "" }, new { @class = "aside-linkSubItem" })
@@ -123,7 +123,7 @@
                     <!-- Optional Submenu Items -->
                     <ul class="subMenuCollapse" role="navigation">
                         <li class="subMenuNavItem">
-                            <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Client" asp-action="Client">Cliente</a>
+                            <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Client" asp-action="Index">Cliente</a>
                         </li>
                         
                     </ul>
@@ -170,8 +170,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" 
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="~/js/site.js"></script>
     <script src="~/js/sidebarscript.js"></script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

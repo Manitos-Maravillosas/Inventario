@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Models.Admin
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
 {
     public class Client
     {
+        [Required(ErrorMessage = "Client Id is required.")]
         public string Id { get; set; }
 
         [Required(ErrorMessage = "Client name is required.")]
@@ -18,8 +19,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Models.Admin
         public string LastName2 { get; set; }
 
         [Required(ErrorMessage = "Client email is required.")]
-        [EmailAddress(ErrorMessage = "Invalid email address.")]
+        //[EmailAddress(ErrorMessage = "Invalid email address.")]
         [StringLength(150, ErrorMessage = "Client email must be at most {1} characters.")]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Client name is required.")]
+        public string PhoneNumber { get; set; }
     }
 }
