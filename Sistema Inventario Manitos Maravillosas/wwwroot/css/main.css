@@ -308,12 +308,68 @@ img {
 
 /* ------------------------------------------------- Facturation---------------------------------------      */
 
+/*-------- Word Ballon-------*/
+.custom-icon-btn {
+    position: relative;
+    display: inline-block;
+}
+
+    .custom-icon-btn .custom-tooltip {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: white;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+    }
+
+        .custom-icon-btn .custom-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: black transparent transparent transparent;
+        }
+
+    .custom-icon-btn:hover .custom-tooltip {
+        visibility: visible;
+    }
+.custom-icon-btn .custom-tooltip {
+    /* Propiedades existentes */
+    transition: visibility 0.2s linear, opacity 0.2s linear;
+    opacity: 0;
+}
+
+    .custom-icon-btn:hover .custom-tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+
+
+
 /*------- Table Input-------*/
+.table > tbody > tr.no-border > td,
+.table > tbody > tr.no-border > th {
+    border: none;
+}
+
 .w-20 {
     width: 20%;
 }
 .w-30 {
     width: 30%;
+}
+tr.rowHover:hover {
+    background-color: var(--greyColor) !important; /* Asume el color de fondo original */
 }
 
 .editableCell {

@@ -1,5 +1,0 @@
-﻿/*----------------------------------------------------------------------------------------------------Tables Styles*/
-.table > tbody > tr.no-border > td,
-.table > tbody > tr.no-border > th {
-    border: none;
-}

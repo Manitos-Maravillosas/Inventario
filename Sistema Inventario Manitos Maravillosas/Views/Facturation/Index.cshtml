@@ -17,13 +17,24 @@
         <div class="col-sm">
             <div class="card">
                 <div class="card-body">
-                    <form  class="row">
-                        <div class="input-group flex-nowrap">
-                            <input id="idProducto" as type="text" class="form-control" placeholder="Código del Producto" aria-label="Código del Producto" aria-describedby="addon-wrapping" onchange="addProductToCart()">
-                          <span class="input-group-text" id="addon-wrapping"><i class="pbi bi-search"></i></span>
-                        </div>  
-                        
-                    </form>
+                    <div class="row ">
+                        <form class="col-11 ">
+                            <div class="input-group flex-nowrap">
+                                <input id="idProducto" as type="text" class="form-control" placeholder="Código del Producto" aria-label="Código del Producto" aria-describedby="addon-wrapping" onchange="addProductToCart()">
+                                <span class="input-group-text" id="addon-wrapping"><i class="pbi bi-search"></i></span>
+                            </div>
+
+                        </form>
+
+                        <div class="col-1 d-flex align-items-center">
+                            <div class="custom-icon-btn">
+                                <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-plus-square"></i></button>
+                                <span class="custom-tooltip">Agregar Manualmente</span>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -49,7 +60,7 @@
         <div class="card-body">
 
 
-            <table class="table table-hover">
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">Código</th>
@@ -62,7 +73,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr class="rowHover">
                         <th scope="row">1</th>
                         <td>Mark</td>
                         <td>Otto</td>
@@ -74,16 +85,25 @@
                         <td>50 $</td>
                         <td>asdf</td>
                     </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Otto</td>
-                        <td>31 $</td>
-                        <td class="w-20">
-                            <div class="editableCell" >21</div>
+                    <tr class="rowHover">
+                        <th scope="row">1</th>
+                        <td>
+                            <div class="editableCell">21</div>
+                            <input class="editableInput" type="text">
+                        </td>
+                        <td>
+                            <div class="editableCell">21</div>
+                            <input class="editableInput" type="text">
+                        </td>
+                        <td>
+                            <div class="editableCell">21</div>
                             <input class="editableInput" type="number">
                         </td>
-                        <td>3510 $</td>
+                        <td class="w-20">
+                            <div class="editableCell">21</div>
+                            <input class="editableInput" type="number">
+                        </td>
+                        <td>50 $</td>
                         <td>asdf</td>
                     </tr>
                     @* Subtotal *@
@@ -103,9 +123,9 @@
                     <tr class="fw-bold no-border  border-bottom border-secondary ">
                         <th scope="row" colspan="3"></th>
                         <td class="align-items-md-center text-end" style="width:13%">
-                            
                         </td>
-                        <td class="d-flex justify-content-between ">Descuento 
+                        <td class="d-flex justify-content-between ">
+                            Descuento
                             <div class=" w-50 d-flex justify-content-end">
                                 <div class="fw-normal  w-50 text-end">
                                     <div class="editableCell">21</div>
@@ -113,7 +133,7 @@
                                 </div>
                                 %
                             </div>
-                            
+
                         </td>
                         <td colspan="2"> 3015 $</td>
                     </tr>
@@ -123,8 +143,10 @@
                         <td>Total</td>
                         <td colspan="2"> 3015 $</td>
                     </tr>
+                                       
                 </tbody>
             </table>
+           
         </div>
     </div>
 </section>

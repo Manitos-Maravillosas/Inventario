@@ -1,5 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    console.log('Facturation.js loaded');
+
 
     // Modal handling
     var assignClient = document.querySelector('#assignClient');
@@ -16,7 +16,8 @@
 
     var editableCell = document.querySelectorAll('.editableCell');
     var editableInput = document.querySelectorAll('.editableInput');
-
+    console.log(editableCell);
+console.log(editableInput);
     editableCell.forEach(function (cell) {
         cell.addEventListener('dblclick', function () {
             var parent = cell.parentElement;
