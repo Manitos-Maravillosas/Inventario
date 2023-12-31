@@ -29,7 +29,7 @@ builder.Services.AddDbContext<InventarioDbContext>(options => options.UseSqlServ
     builder.Configuration.GetConnectionString("ConnectionToDataBase")));
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<InventarioDbContext>();
+    .AddEntityFrameworkStores<InventarioDbContext>().AddDefaultTokenProviders();
 
 builder.Services.AddHttpClient(); // Register HttpClient
 
@@ -40,6 +40,9 @@ builder.Services.Configure<SignInOptions>(options =>
 {
     options.RequireConfirmedEmail = false;
 });
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+   opt.TokenLifespan = TimeSpan.FromHours(2));
 
 var app = builder.Build();
 
