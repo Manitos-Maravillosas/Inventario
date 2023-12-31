@@ -55,8 +55,19 @@
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
-            <!-- Botón de envío -->
-            <div class="mb-3">
+            <!-- Botón de envío y volver -->
+            <div class="d-flex justify-content-between mb-3">
+                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Client", new { area = "Admin" })'">
+                    @if (action == "Edit")
+                    {
+                        <span>Volver <i class="bi bi-arrow-left-short"></i></span>
+                    }
+                    else
+                    {
+                        <span>Volver <i class="bi bi-arrow-left-short"></i></span>
+                    }
+                </button>
+
                 <button type="submit" class="btn btn-primary">
                     @if (action == "Edit")
                     {
@@ -67,7 +78,9 @@
                         <span>Agregar <i class="bi bi-plus-circle"></i></span>
                     }
                 </button>
+                
             </div>
         </form>
+        
     </div>
 </div>
