@@ -7,8 +7,9 @@ using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>(); // Agrega esta línea
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
