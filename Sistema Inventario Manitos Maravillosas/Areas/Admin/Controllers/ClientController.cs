@@ -51,7 +51,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 {
                     ViewData["ErrorMessage"] = result.Message;
                 }
-                ViewData["Success"] = "Client created successfully!";
+                ViewData["Success"] = "Cliente agregado correctamente!";
                
             }
             return View(client); // Return the view with the client model if ModelState is not valid
@@ -81,7 +81,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 {
                     ViewData["ErrorMessage"] = result.Message;
                 }
-                ViewData["Success"] = "Se ha modificado los datos del Cliente!";
+                ViewData["Success"] = "Se ha modificado los datos del cliente!";
 
             }
             return View(client); // Return the view with the client model if ModelState is not valid
