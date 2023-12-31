@@ -5,6 +5,13 @@ VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sistema Inventario Manitos Maravillosas", "Sistema Inventario Manitos Maravillosas.csproj", "{9E0F5277-B895-45B5-8D69-E5AA24843287}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "..\EmailService\EmailService.csproj", "{E2B7EE46-7C43-4AC1-898A-D312D2243E6D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FAA7EBAE-3452-490D-AEC7-694E7EBCC392}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{9E0F5277-B895-45B5-8D69-E5AA24843287}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E0F5277-B895-45B5-8D69-E5AA24843287}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E0F5277-B895-45B5-8D69-E5AA24843287}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2B7EE46-7C43-4AC1-898A-D312D2243E6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2B7EE46-7C43-4AC1-898A-D312D2243E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2B7EE46-7C43-4AC1-898A-D312D2243E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2B7EE46-7C43-4AC1-898A-D312D2243E6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

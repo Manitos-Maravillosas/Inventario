@@ -1,14 +1,21 @@
+using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
-using SistemaInventario.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using SistemaInventario.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IClientService, ClientService>();
+
+var emailConfig = builder.Configuration
+        .GetSection("EmailConfiguration")
+        .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -33,7 +40,6 @@ builder.Services.Configure<SignInOptions>(options =>
 {
     options.RequireConfirmedEmail = false;
 });
-
 
 var app = builder.Build();
 
