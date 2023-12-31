@@ -68,16 +68,14 @@
                                 <td>@client.Email</td>
                                 <td>@client.PhoneNumber</td>
                                 <td>
-                                    
-                                    <form asp-action="Edit" method="get" style="display: inline;">
+                                    <form asp-action="Edit" method="get" style="display: inline-block;">
                                         <input type="hidden" name="id" value="@client.Id" />
                                         <button type="submit" class="icon-button bi bi-pencil-square" aria-label="Modificar" style="cursor: pointer;"></button>
                                     </form>
-                                    <form id="deleteForm" asp-action="Delete" method="post" style="display: inline;">
+                                    <form id="deleteForm-@client.Id" asp-action="Delete" method="post" style="display: inline-block;">
                                         <input type="hidden" name="id" value="@client.Id" />
-                                        
+                                        <button type="button" onclick="confirmDelete('@client.Id', '@client.Name')" class="icon-button bi bi-trash-fill" aria-label="Eliminar"></button>
                                     </form>
-                                    <button onclick="confirmDelete('@client.Id', '@client.Name')" class="icon-button bi bi-trash-fill" aria-label="Eliminar" style="cursor: pointer;"></button>
 
                                 </td>
                             </tr>
@@ -115,9 +113,10 @@
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // execute the subimt event on the form with the id deleteForm
-                        var form = document.getElementById("deleteForm");
-                        form.submit();
+                    // Construye el ID del formulario basado en el ID del cliente
+                    var formId = "deleteForm-" + clientId;
+                    var form = document.getElementById(formId);
+                    form.submit();  // Envía el formulario
                 }
             });
         }

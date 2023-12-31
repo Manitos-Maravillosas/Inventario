@@ -98,7 +98,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@lastName2", DBNull.Value),
                             new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
-                            new SqlParameter("@operation", '4') // Operation for 'Read' is 2
+                            new SqlParameter("@operation", '4') 
                         };
 
                         command.Parameters.AddRange(parameters);
