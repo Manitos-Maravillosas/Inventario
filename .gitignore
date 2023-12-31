@@ -3,7 +3,7 @@
 
 # ignere the DB settings
 Sistema Inventario Manitos Maravillosas/appSettings.json
-
+EmailService/appsettings.json
 
 # User-specific files
 *.rsuser
