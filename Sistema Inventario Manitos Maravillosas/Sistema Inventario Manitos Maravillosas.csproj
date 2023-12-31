@@ -28,4 +28,8 @@
     <Folder Include="Areas\Admin\Data\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EmailService\EmailService.csproj" />
+  </ItemGroup>
+
 </Project>
