@@ -462,3 +462,23 @@ tr.rowHover:hover {
 .search-input .input-group-text .bi-search {
     color: var(--colorMain);
 }
+
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: "\25BC";
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.8em;
+}
+
+.select-wrapper select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}

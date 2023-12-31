@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
@@ -19,6 +21,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         public ActionResult Index()
         {
             var employees = _employeeService.GetAll();
+            
             return View("~/Areas/Admin/Views/Emp/Index.cshtml", employees);
         }
 
@@ -32,8 +35,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // GET: EmployeeController/Create
         public ActionResult Create()
         {
-            return View();
+            var businessNames = _employeeService.GetBusinessNames();
+            ViewBag.BusinessNames = new SelectList(businessNames);
+
+            return View("~/Areas/Admin/Views/Emp/Create.cshtml");
         }
+
 
         // POST: EmployeeController/Create
         [HttpPost]

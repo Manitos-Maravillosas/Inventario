@@ -1,0 +1,15 @@
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Employee
+
+@{
+    ViewData["Title"] = "Crear Empleado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Action"] = "Create";
+}
+<section class="container px-5 py-3">
+    <h3 style="margin-bottom: 2rem;">Agregar Empleado</h3>
+
+    <partial name="_EmployeeForm" model="Model" view-data="ViewData">
+
+    </partial>
+</section>

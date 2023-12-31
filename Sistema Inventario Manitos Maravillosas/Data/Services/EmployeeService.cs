@@ -94,6 +94,53 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return employees;
         }
 
+        //------------------------------------------------------------------------------------
+        //                              GetBusinessNames                                             
+        //------------------------------------------------------------------------------------
+        public List<string> GetBusinessNames()
+        {
+            List<string> businessNames = new List<string>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null; // Declarar la conexión fuera del bloque try-catch
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand getBusinessNamesCommand = new SqlCommand("spGetBusinessNames", connection))
+                {
+                    getBusinessNamesCommand.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataReader businessDataReader = getBusinessNamesCommand.ExecuteReader())
+                    {
+                        while (businessDataReader.Read())
+                        {
+                            string businessName = businessDataReader["name"].ToString();
+                            businessNames.Add(businessName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones
+                // Puedes lanzar una excepción personalizada o registrar el error según tus necesidades
+                throw new Exception("Error al obtener nombres de negocios.", ex);
+            }
+            finally
+            {
+                // Asegurarse de cerrar la conexión en caso de excepción o no
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+            return businessNames;
+        }
+
+
 
 
     }

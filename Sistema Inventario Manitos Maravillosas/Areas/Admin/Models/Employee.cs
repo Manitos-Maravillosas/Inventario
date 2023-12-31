@@ -1,4 +1,5 @@
-﻿using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
@@ -41,5 +42,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
         public virtual User User { get; set; }
 
         public string BusinessName { get; set; }
+
+        public int SelectedBusiness { get; set; }
+        public List<SelectListItem> BusinessList { get; set; }
+
+       
+            
     }
 }
