@@ -36,10 +36,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         public ActionResult Create()
         {
             var businessNames = _employeeService.GetBusinessNames();
+            var userEmails = _employeeService.GetUserEmails(); // Obtener los correos electrónicos
             ViewBag.BusinessNames = new SelectList(businessNames);
+            ViewBag.UserEmails = new SelectList(userEmails);
 
             return View("~/Areas/Admin/Views/Emp/Create.cshtml");
         }
+
 
 
         // POST: EmployeeController/Create

@@ -69,15 +69,18 @@
                     <span asp-validation-for="SelectedBusiness" class="text-danger"></span>
                 </div>
 
-
-                <!-- Número de Contacto / Usuario -->
                 <div class="col-md-6">
-                    <label class="form-label">Número de Contacto</label>
-                    <input type="text" class="form-control" asp-for="Username" aria-label="Número de Contacto">
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    <label asp-for="Email" class="control-label mb-2">Correo Electrónico</label>
+                    <div class="select-wrapper">
+                        <select asp-for="Email" class="form-control" asp-items="ViewBag.UserEmails">
+                            <option value="">Seleccione un correo electrónico</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-            </div>
 
+
+            </div>
 
             <!-- Botón de envío y volver -->
             <div class="d-flex justify-content-between mb-3">

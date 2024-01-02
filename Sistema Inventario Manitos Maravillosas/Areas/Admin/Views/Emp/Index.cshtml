@@ -54,6 +54,7 @@
                         <th scope="col">Puesto</th>
                         <th scope="col">Número de Contacto</th>
                         <th scope="col">Negocio</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Opciones</th>
                     </tr>
                 </thead>
@@ -70,6 +71,7 @@
                                 <td>@employee.Position</td>
                                 <td>@employee.PhoneNumber</td>
                                 <td>@employee.BusinessName</td>
+                                <td>@employee.Email</td>
                                 <td>
                                     <form asp-action="Edit" method="get" style="display: inline-block;">
                                         <input type="hidden" name="id" value="@employee.IdEmployee" />

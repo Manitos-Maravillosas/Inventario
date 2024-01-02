@@ -8,5 +8,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         List<Employee> GetAll();
         List<string> GetBusinessNames();
 
+        List<string> GetUserEmails();
+
     }
 }

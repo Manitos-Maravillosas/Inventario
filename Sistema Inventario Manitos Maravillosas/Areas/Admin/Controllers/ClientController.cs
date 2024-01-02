@@ -54,7 +54,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 ViewData["Success"] = "Cliente agregado correctamente!";
                
             }
-            return View(client); // Return the view with the client model if ModelState is not valid
+            return View(client); 
         }
 
         // POST: ClientController/Edit/5
@@ -84,7 +84,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 ViewData["Success"] = "Se ha modificado los datos del cliente!";
 
             }
-            return View(client); // Return the view with the client model if ModelState is not valid
+            return View(client); 
         }
 
         public ActionResult Delete(string id)
@@ -102,9 +102,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
             var clients = _clientService.GetAll();
             return View("Index", clients);
         }
-
-
-
 
 
     }

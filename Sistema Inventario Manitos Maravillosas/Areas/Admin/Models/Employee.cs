@@ -36,9 +36,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
         public virtual Business Business { get; set; }
 
         // Clave foránea y propiedad de navegación para User
-        [Required(ErrorMessage = "Se requiere el nombre de usuario.")]
-        [StringLength(100, ErrorMessage = "El nombre de usuario debe tener más de 1 letra.")]
-        public string Username { get; set; }
+        [Required(ErrorMessage = "Se requiere el correo del empleado.")]
+        [StringLength(100, ErrorMessage = "El correo del empleado debe tener más de 1 letra.")]
+        public string Email { get; set; }
         public virtual User User { get; set; }
 
         public string BusinessName { get; set; }
