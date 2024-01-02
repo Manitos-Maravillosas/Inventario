@@ -28,7 +28,7 @@
 
                         <div class="col-1 d-flex align-items-center">
                             <div class="custom-icon-btn">
-                                <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-plus-square"></i></button>
+                                <button id="addRowButton" type="button" class="btn btn-primary btn-sm"><i class="bi bi-plus-square"></i></button>
                                 <span class="custom-tooltip">Agregar Manualmente</span>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
         <div class="card-body">
 
 
-            <table class="table">
+            <table id="productsTable" class="table">
                 <thead>
                     <tr>
                         <th scope="col">Código</th>
@@ -85,10 +85,10 @@
                         <td>50 $</td>
                         <td>asdf</td>
                     </tr>
-                    <tr class="rowHover">
+                    <tr class="rowHover editableRow">
                         <th scope="row">1</th>
                         <td>
-                            <div class="editableCell">21</div>
+                            <div class="editableCell h-100"></div>
                             <input class="editableInput" type="text">
                         </td>
                         <td>

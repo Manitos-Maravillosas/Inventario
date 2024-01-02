@@ -387,6 +387,7 @@ tr.rowHover:hover {
     color: inherit;
     cursor: pointer;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    min-height:30px; /* Adjust as needed */
 }
 
 .editableCell:hover {
