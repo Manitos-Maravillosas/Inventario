@@ -8,6 +8,7 @@
     <div class="card-body">
 
         <form id="employeeForm" asp-controller="Employee" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+            @Html.AntiForgeryToken()
             <!-- Fila 1: Identificación, Nombre -->
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -56,17 +57,16 @@
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
-            <!-- Fila 3: Businees, Username -->
+            <!-- Fila 3: Businees, Email -->
             <div class="row mb-3">
-                <!-- Negocio -->
                 <div class="col-md-6">
-                    <label asp-for="SelectedBusiness" class="control-label mb-2">Negocio</label>
+                    <label asp-for="BusinessName" class="control-label mb-2">Negocio</label>
                     <div class="select-wrapper">
-                        <select asp-for="SelectedBusiness" class="form-control" asp-items="@(ViewBag.BusinessNames as SelectList)">
+                        <select asp-for="BusinessName" class="form-control" asp-items="ViewBag.BusinessNames">
                             <option value="">Seleccione un negocio</option>
                         </select>
                     </div>
-                    <span asp-validation-for="SelectedBusiness" class="text-danger"></span>
+                    <span asp-validation-for="BusinessName" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6">
@@ -78,7 +78,6 @@
                     </div>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-
 
             </div>
 
@@ -104,4 +103,3 @@
 
     </div>
 </div>
-

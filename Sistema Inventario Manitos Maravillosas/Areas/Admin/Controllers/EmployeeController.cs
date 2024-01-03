@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Models;
+using System.Diagnostics;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 {
@@ -36,28 +38,32 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         public ActionResult Create()
         {
             var businessNames = _employeeService.GetBusinessNames();
-            var userEmails = _employeeService.GetUserEmails(); // Obtener los correos electrónicos
+            var userEmails = _employeeService.GetUserEmails(); 
             ViewBag.BusinessNames = new SelectList(businessNames);
             ViewBag.UserEmails = new SelectList(userEmails);
 
             return View("~/Areas/Admin/Views/Emp/Create.cshtml");
         }
 
-
-
         // POST: EmployeeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+        public ActionResult Create(Employee employee)
+        {            
+
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _employeeService.Add(employee);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Empleado agregado correctamente!";
+                
             }
-            catch
-            {
-                return View();
-            }
+            ViewBag.BusinessNames = new SelectList(_employeeService.GetBusinessNames());
+            ViewBag.UserEmails = new SelectList(_employeeService.GetUserEmails());
+            return View("~/Areas/Admin/Views/Emp/Create.cshtml");
         }
 
         // GET: EmployeeController/Edit/5

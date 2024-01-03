@@ -19,6 +19,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
         [StringLength(50, ErrorMessage = "El primer apellido del empleado debe tener más de 1 letra.", MinimumLength = 2)]
         public string LastName1 { get; set; }
 
+        [Required(ErrorMessage = "Se requiere el segundo apellido del empleado.")]
         [StringLength(50, ErrorMessage = "El segundo apellido del empleado debe tener más de 1 letra.")]
         public string LastName2 { get; set; }
 
@@ -33,20 +34,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
         // Clave foránea y propiedad de navegación para Business
         [Required(ErrorMessage = "Se requiere el ID del negocio.")]
         public int IdBusiness { get; set; }
-        public virtual Business Business { get; set; }
-
+       
         // Clave foránea y propiedad de navegación para User
         [Required(ErrorMessage = "Se requiere el correo del empleado.")]
         [StringLength(100, ErrorMessage = "El correo del empleado debe tener más de 1 letra.")]
         public string Email { get; set; }
-        public virtual User User { get; set; }
 
+        [Required(ErrorMessage = "Se requiere el neogcio del empleado.")]
         public string BusinessName { get; set; }
 
-        public int SelectedBusiness { get; set; }
-        public List<SelectListItem> BusinessList { get; set; }
-
-       
+        
             
     }
 }

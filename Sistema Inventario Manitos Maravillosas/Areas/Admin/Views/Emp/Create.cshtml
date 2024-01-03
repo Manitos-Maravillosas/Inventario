@@ -13,3 +13,46 @@
 
     </partial>
 </section>
+
+
+@section Scripts {
+    <script src="@Url.Content("~/js/Admin/Employee.js")"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    @if (ViewData["Success"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: "Perfecto!",
+                    text: "@ViewData["Success"]",
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Admin/Employee/Index'; 
+                    }
+                });
+            });
+        </script>
+    }
+
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Error',
+                    text: '@ViewData["ErrorMessage"]',
+                    icon: 'error'
+                });
+            });
+        </script>
+
+        ViewData["ErrorMessage"] = null;
+    }
+
+
+
+}
