@@ -11,5 +11,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         OperationResult Add(Product newProduct);
         OperationResult Update(Product product);
         OperationResult Delete(string id);
+
+        Product GetStockById(string id, int quantity);
+
+        OperationResult AddStock(string id, int quantity);
+
+        OperationResult UpdateStock(string id, int quantity);
+
     }
 }

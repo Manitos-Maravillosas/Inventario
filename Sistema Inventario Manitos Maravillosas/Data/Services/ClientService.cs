@@ -223,13 +223,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         var parameters = new SqlParameter[]
                         {
-                    new SqlParameter("@idClient", id),
-                    new SqlParameter("@name", DBNull.Value),
-                    new SqlParameter("@lastName1", DBNull.Value),
-                    new SqlParameter("@lastName2", DBNull.Value),
-                    new SqlParameter("@email", DBNull.Value),
-                    new SqlParameter("@phoneNumber", DBNull.Value),
-                    new SqlParameter("@operation", '2') // Operation for 'Read' is 2
+                            new SqlParameter("@idClient", id),
+                            new SqlParameter("@name", DBNull.Value),
+                            new SqlParameter("@lastName1", DBNull.Value),
+                            new SqlParameter("@lastName2", DBNull.Value),
+                            new SqlParameter("@email", DBNull.Value),
+                            new SqlParameter("@phoneNumber", DBNull.Value),
+                            new SqlParameter("@operation", '2') // Operation for 'Read' is 2
                         };
 
                         command.Parameters.AddRange(parameters);

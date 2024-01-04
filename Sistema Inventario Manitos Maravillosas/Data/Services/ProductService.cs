@@ -3,6 +3,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models.Inventory;
 using System.Data;
 using System.Data.SqlClient;
+using System;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
@@ -17,6 +18,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             _configuration = configuration;
         }
         public OperationResult Add(Product newProduct)
+        {
+            throw new NotImplementedException();
+        }
+
+        public OperationResult AddStock(string id, int quantity)
         {
             throw new NotImplementedException();
         }
@@ -91,7 +97,84 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             throw new NotImplementedException();
         }
 
+        public Product GetStockById(string id, int quantity)
+        {
+            Product product = new Product();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spGetStockOfProductById", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        var parameters = new SqlParameter[]
+                        {
+                            new SqlParameter("@idProduct",id),
+                            new SqlParameter("@cantProduct", quantity)
+                        };
+
+                        command.Parameters.AddRange(parameters);
+
+                        connection.Open();
+
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+                            if (!dataReader.HasRows)
+                            {
+                                // Handle the case when no data is returned
+                                // You might want to log this or handle it according to your application's logic
+                                return null; // Return the empty list
+                            }
+
+                            while (dataReader.Read())
+                            {
+                                product.IdProduct = Convert.ToString(dataReader["IdProduct"]);
+                                product.ProductName = Convert.ToString(dataReader["Product"]);
+                                product.Stock = Convert.ToInt32(dataReader["Stock"]);
+                                product.Cost = Convert.ToInt32(dataReader["Cost"]);
+                                product.Description = Convert.ToString(dataReader["Description"]);
+                                product.Status = Convert.ToBoolean(dataReader["Status"]);
+                                product.IdBusiness = Convert.ToInt32(dataReader["IdBusiness"]);
+                                product.IdProductCategory = Convert.ToInt32(dataReader["IdProductCategory"]);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                // Check if the error is a custom error thrown using RAISEERROR
+                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                {
+                    throw new CustomDataException("Error Message", sqlEx);
+                }
+                else
+                {
+                    // You can use different strategies to relay this message back to the user.
+                    // For example, you might throw a new exception with the user-friendly message,
+                    // or you could return an error response that your frontend can use to display the alert.
+                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                // Consider whether to throw a custom exception or handle it differently
+                throw new CustomDataException("A general error occurred in ProductService.", ex);
+            }
+
+            return product;
+        }
+
         public OperationResult Update(Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public OperationResult UpdateStock(string id, int quantity)
         {
             throw new NotImplementedException();
         }

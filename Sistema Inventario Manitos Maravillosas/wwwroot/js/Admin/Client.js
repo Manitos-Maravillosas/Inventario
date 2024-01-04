@@ -77,7 +77,7 @@ document.getElementById('searchInput').addEventListener('keyup', function () {
         // Busca en todas las celdas de la fila
         for (var j = 0; j < row.cells.length; j++) {
             if (row.cells[j].textContent.toLowerCase().indexOf(searchTerm) > -1) {
-                row.style.display = ''; // Muestra la fila si el término de búsqueda coincide
+                row.style.display = ''; // Muestra la fila si el tï¿½rmino de bï¿½squeda coincide
                 break;
             }
         }
