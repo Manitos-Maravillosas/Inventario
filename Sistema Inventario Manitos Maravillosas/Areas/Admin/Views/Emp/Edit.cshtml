@@ -1,0 +1,52 @@
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Employee
+
+
+@{
+    ViewData["Title"] = "Modificar Empleado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Action"] = "Edit";
+}
+
+<section class="container px-5 py-3">
+    <h3 style="margin-bottom: 2rem;">Modificar Empleado</h3>
+    <partial name="_EmployeeForm" model="Model" view-data="ViewData">
+</section>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    @if (ViewData["Success"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: "Perfecto!",
+                    text: "@ViewData["Success"]",
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Admin/Employee/Index'; 
+                    }
+                });
+            });
+        </script>
+    }
+
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Error',
+                    text: '@ViewData["ErrorMessage"]',
+                    icon: 'error'
+                });
+            });
+        </script>
+
+        ViewData["ErrorMessage"] = null;
+    }
+}
+

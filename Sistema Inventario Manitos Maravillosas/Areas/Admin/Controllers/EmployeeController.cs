@@ -67,24 +67,34 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         }
 
         // GET: EmployeeController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            Employee employee = _employeeService.GetById(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            ViewBag.BusinessNames = new SelectList(_employeeService.GetBusinessNames());
+            ViewBag.UserEmails = new SelectList(_employeeService.GetUserEmails());
+            return View("~/Areas/Admin/Views/Emp/Edit.cshtml",employee);
         }
 
         // POST: EmployeeController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Employee employee)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _employeeService.Update(employee);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Se ha modificado los datos del empleado!";
+
             }
-            catch
-            {
-                return View();
-            }
+            return View("~/Areas/Admin/Views/Emp/Edit.cshtml");
         }
 
         // GET: EmployeeController/Delete/5

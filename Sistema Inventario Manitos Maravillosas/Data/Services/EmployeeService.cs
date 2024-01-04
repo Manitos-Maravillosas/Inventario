@@ -246,6 +246,130 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return result;
         }
 
+        //------------------------------------------------------------------------------------
+        //                              Update                                             
+        //------------------------------------------------------------------------------------
+        public OperationResult Update(Employee newEmployee)
+        {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spEmployeeCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        // Configure parameters
+                        command.Parameters.Add(new SqlParameter("@idEmployee", string.IsNullOrEmpty(newEmployee.IdEmployee) ? DBNull.Value : newEmployee.IdEmployee));
+                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newEmployee.Name) ? DBNull.Value : newEmployee.Name));
+                        command.Parameters.Add(new SqlParameter("@lastName1", string.IsNullOrEmpty(newEmployee.LastName1) ? DBNull.Value : newEmployee.LastName1));
+                        command.Parameters.Add(new SqlParameter("@lastName2", string.IsNullOrEmpty(newEmployee.LastName2) ? DBNull.Value : newEmployee.LastName2));
+                        command.Parameters.Add(new SqlParameter("@position", string.IsNullOrEmpty(newEmployee.Position) ? DBNull.Value : newEmployee.Position));
+                        command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(newEmployee.PhoneNumber) ? DBNull.Value : newEmployee.PhoneNumber));
+                        command.Parameters.Add(new SqlParameter("@idBusiness", newEmployee.IdBusiness != 0 ? (object)newEmployee.IdBusiness : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@BusinessName", string.IsNullOrEmpty(newEmployee.BusinessName) ? DBNull.Value : newEmployee.BusinessName));
+                        command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(newEmployee.Email) ? DBNull.Value : newEmployee.Email));
+                        command.Parameters.Add(new SqlParameter("@operation", 3));
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                string userMessage = "An error occurred while processing your request.";
+
+                
+                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                {
+                    // Handle custom error
+                    result.Success = false;
+                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    return result;
+                }
+                else
+                {
+                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
+
+
+            }
+            catch (Exception ex)
+            {                
+                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+            }
+
+            return result;
+        }
+
+        //------------------------------------------------------------------------------------
+        //                              GetById                                             
+        //------------------------------------------------------------------------------------
+        public Employee GetById(string id)
+        {
+            Employee employee = new Employee();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spEmployeeCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        var parameters = new SqlParameter[]
+                        {
+                            new SqlParameter("@idEmployee", id),
+                            new SqlParameter("@name", DBNull.Value),
+                            new SqlParameter("@lastName1", DBNull.Value),
+                            new SqlParameter("@lastName2", DBNull.Value),
+                            new SqlParameter("@position", DBNull.Value),
+                            new SqlParameter("@phoneNumber", DBNull.Value),
+                            new SqlParameter("@idBusiness", DBNull.Value),
+                            new SqlParameter("@email", DBNull.Value),
+                            new SqlParameter("@operation", '2')
+                        };
+
+                        command.Parameters.AddRange(parameters);
+
+                        connection.Open();
+
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+                            
+                            while (dataReader.Read())
+                            {
+                                 employee = new Employee
+                                {
+                                    IdEmployee = dataReader["idEmployee"].ToString(),
+                                    Name = dataReader["name"].ToString(),
+                                    LastName1 = dataReader["lastName1"].ToString(),
+                                    LastName2 = dataReader["lastName2"].ToString(),
+                                    Position = dataReader["position"].ToString(),
+                                    PhoneNumber = dataReader["phoneNumber"].ToString(),
+                                    BusinessName = dataReader["businessName"].ToString(),
+                                    Email = dataReader["email"].ToString(),
+                                };
+                               
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here
+                // Handle the exception as per your application's policy
+                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+            }
+
+            return employee;
+        }
 
     }
 }

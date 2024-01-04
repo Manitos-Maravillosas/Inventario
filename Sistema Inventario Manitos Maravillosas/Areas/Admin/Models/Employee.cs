@@ -42,8 +42,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
 
         [Required(ErrorMessage = "Se requiere el neogcio del empleado.")]
         public string BusinessName { get; set; }
-
-        
-            
+                            
     }
 }
