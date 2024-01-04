@@ -1,8 +1,8 @@
 ﻿using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
-using Sistema_Inventario_Manitos_Maravillosas.Models.Inventory;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services
 {
     public interface IProductService
     {

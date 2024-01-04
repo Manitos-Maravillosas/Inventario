@@ -1,11 +1,11 @@
 ﻿using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
-using Sistema_Inventario_Manitos_Maravillosas.Models.Inventory;
 using System.Data;
 using System.Data.SqlClient;
 using System;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services
 {
     public class ProductService : IProductService
     {
@@ -75,7 +75,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             while (dataReader.Read())
                             {
                                 Product product = new Product();
-                             
+
                                 products.Add(product);
                             }
                         }
@@ -163,7 +163,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 // Log the exception
                 // Consider whether to throw a custom exception or handle it differently
-                throw new CustomDataException("A general error occurred in ProductService.", ex);
+                throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
             return product;

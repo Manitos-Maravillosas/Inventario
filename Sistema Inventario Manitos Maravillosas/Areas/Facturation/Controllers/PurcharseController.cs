@@ -1,20 +1,21 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Sistema_Inventario_Manitos_Maravillosas.Models.Inventory;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using System.Data.SqlClient;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
-using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
-    public class FacturationController : Controller
+    [Area("Facturation")]
+    public class PurcharseController : Controller
     {
         private readonly IProductService _productService;
 
         private List<Product> cartProducts = new List<Product>();
 
-        public FacturationController(IProductService productService)
+        public PurcharseController(IProductService productService)
         {
             _productService = productService;
         }
@@ -27,7 +28,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
             return View();
         }
 
-        // POST: Facturation/AddProductToCart
+        // POST: Facturation/Purcharse/AddProductToCart
         [HttpPost]
         public IActionResult AddProductToCart(string id, int quantity = 1)
         {
@@ -36,7 +37,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
                 var product = _productService.GetStockById(id, quantity);
                 if (product != null && product.Stock > 0)
                 {
-                    cartProducts.Add(product);
                     var productDto = new ProductDto
                     {
                         IdProduct = product.IdProduct,
@@ -47,7 +47,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
                         Status = product.Status
                         // Map other properties as needed
                     };
-
+                    cartProducts.Add(product);
                     return Json(new { success = true, message = "Product added to cart successfully.", data = productDto });
 
                 }
@@ -56,85 +56,19 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
                     return Json(new { success = false, message = "Product not available." });
                 }
             }
-            catch (Exception ex)
+            catch (CustomDataException ex)
             {
                 return Json(new { success = false, message = ex.Message, innerExeption = ex.InnerException });
             }
-        }
-
-
-
-
-
-
-        // GET: FacturationController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: FacturationController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: FacturationController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            catch (Exception ex)
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                throw new ApplicationException("A general error occurred in ProductService.", ex);
             }
         }
 
-        // GET: FacturationController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        // POST: FacturationController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: FacturationController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: FacturationController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 
     public class ProductDto

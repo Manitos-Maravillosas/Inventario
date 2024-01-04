@@ -4,6 +4,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using SistemaInventario.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,7 +52,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication(); ;
+app.UseAuthentication();
 
 app.UseAuthorization();
 

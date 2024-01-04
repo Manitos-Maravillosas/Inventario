@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Models.Inventory
 {
