@@ -1,4 +1,4 @@
-﻿// --------------------------- Client Table Filter ---------------------------//
+﻿// --------------------------- Employee Table Filter ---------------------------//
 
 var selectedColumn = -1; // -1 representa todas las columnas
 var originalRows = []; // Almacena una copia de las filas originales
@@ -58,8 +58,6 @@ function sortAndFilterTable(columnIndex) {
 
     filterTable();
 }
-
-
 
 function filterTable() {
     var searchTerm = document.getElementById('searchInput').value.toLowerCase();

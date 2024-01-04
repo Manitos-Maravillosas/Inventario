@@ -493,7 +493,9 @@ tr.rowHover:hover {
     appearance: none;
 }
 
-/* Estilo para las filas de la tabla que elimina vertical-align */
-table#employees tbody tr {
-    vertical-align: inherit; /* Cambia el valor de vertical-align según tus necesidades */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(46%) sepia(88%) saturate(3393%) hue-rotate(166deg) brightness(102%) contrast(100%);
+    transform: scale(1.8);    
 }
+
