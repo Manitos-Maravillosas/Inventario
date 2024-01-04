@@ -8,8 +8,9 @@ using SistemaInventario.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>(); // Agrega esta línea
+
 
 var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
