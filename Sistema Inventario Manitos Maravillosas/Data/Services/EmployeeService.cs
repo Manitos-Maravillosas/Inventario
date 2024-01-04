@@ -371,5 +371,66 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return employee;
         }
 
+        //------------------------------------------------------------------------------------
+        //                              Delete                                             
+        //------------------------------------------------------------------------------------
+        public OperationResult Delete(string id)
+        {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spEmployeeCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        var parameters = new SqlParameter[]
+                        {
+                            new SqlParameter("@idEmployee", id),
+                            new SqlParameter("@name", DBNull.Value),
+                            new SqlParameter("@lastName1", DBNull.Value),
+                            new SqlParameter("@lastName2", DBNull.Value),
+                            new SqlParameter("@position", DBNull.Value),
+                            new SqlParameter("@phoneNumber", DBNull.Value),
+                            new SqlParameter("@idBusiness", DBNull.Value),
+                            new SqlParameter("@BusinessName", DBNull.Value),
+                            new SqlParameter("@email", DBNull.Value),
+                            new SqlParameter("@operation", '4')
+                        };
+
+                        command.Parameters.AddRange(parameters);
+
+                        connection.Open();
+                        command.ExecuteReader();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+
+                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                {
+                    // Handle custom error
+                    result.Success = false;
+                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    return result;
+                }
+                else
+                {
+                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+            }
+
+            return result;
+        }
     }
 }

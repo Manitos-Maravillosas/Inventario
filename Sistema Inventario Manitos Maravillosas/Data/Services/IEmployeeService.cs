@@ -11,6 +11,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         List<string> GetUserEmails();
         OperationResult Add(Employee newEmployee);
         OperationResult Update(Employee newEmployee);
+        OperationResult Delete(string id);
+
 
     }
 }

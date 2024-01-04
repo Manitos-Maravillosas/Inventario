@@ -107,6 +107,27 @@
 
 @section Scripts {
     <script src="@Url.Content("~/js/admin/Employee.js")"></script>
+    <script>
+        function confirmDelete(employeeId, employeeName) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Estás a punto de eliminar al usuario " + employeeName + ". No podrás revertir esta acción.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Construye el ID del formulario basado en el ID del cliente
+                    var formId = "deleteForm-" + employeeId;
+                    var form = document.getElementById(formId);
+                    form.submit();  // Envía el formulario
+                }
+            });
+        }
+    </script>
     
     @if (ViewData["Success"] != null)
     {

@@ -98,24 +98,21 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         }
 
         // GET: EmployeeController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
-            return View();
+            OperationResult result = _employeeService.Delete(id);
+            if (!result.Success)
+            {
+                ViewData["ErrorMessage"] = result.Message;
+            }
+            else
+            {
+                ViewData["Success"] = "Se ha eliminado al Empleado!";
+            }
+            var employees = _employeeService.GetAll();
+            return View("~/Areas/Admin/Views/Emp/Index.cshtml", employees);
         }
 
-        // POST: EmployeeController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }
