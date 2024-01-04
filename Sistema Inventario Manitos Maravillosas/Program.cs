@@ -77,6 +77,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{area=Admin}/{controller=Client}/{action=Index}/{id?}");
+
 });
 
 
