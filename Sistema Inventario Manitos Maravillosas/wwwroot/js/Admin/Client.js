@@ -1,20 +1,29 @@
 // --------------------------- Client Table Filter ---------------------------//
 
 var selectedColumn = -1; // -1 representa todas las columnas
+var originalRows = []; // Almacena una copia de las filas originales
 
-// Cambia la columna seleccionada y actualiza dropdown
-document.querySelectorAll('.custom-dropdown-item').forEach(function (item) {
-    item.addEventListener('click', function (event) {
-        event.preventDefault();
-        selectedColumn = parseInt(this.getAttribute('data-column'));
-        document.getElementById('dropdownMenuButton').textContent = this.textContent;
+document.addEventListener('DOMContentLoaded', function () {
+    // Copia las filas originales al cargar la página
+    var table = document.getElementById('clients');
+    originalRows = Array.from(table.getElementsByTagName('tr')).slice(1);
 
-        sortAndFilterTable(selectedColumn);
+    document.querySelectorAll('.custom-dropdown-item').forEach(function (item) {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
+            selectedColumn = parseInt(this.getAttribute('data-column'));
+            document.getElementById('dropdownMenuButton').textContent = this.textContent;
+
+            sortAndFilterTable(selectedColumn);
+        });
     });
 });
+
+// Resto de tu código, incluyendo las funciones sortAndFilterTable y filterTable
+
 function sortAndFilterTable(columnIndex) {
     var table = document.getElementById('clients');
-    var rows = Array.from(table.getElementsByTagName('tr')).slice(1);
+    var rows = originalRows.slice(); // Copia las filas originales
 
     if (columnIndex >= 0) {
         // Ordena filas con columna seleccionada
@@ -25,25 +34,18 @@ function sortAndFilterTable(columnIndex) {
         });
     }
 
+    // Reemplaza la tabla principal con la copia ordenada y filtrada
+    var tableBody = table.querySelector('tbody');
+    tableBody.innerHTML = ''; // Borra las filas actuales
+
     rows.forEach(function (row) {
-        table.appendChild(row);
+        tableBody.appendChild(row);
     });
 
-    if (columnIndex !== -1) {
-        rows.forEach(function (row) {
-            row.style.display = '';
-        });
-    } else {
-        rows.forEach(function (row) {
-            row.style.display = 'none';
-        });
-    }
     filterTable();
 }
 
-document.getElementById('searchInput').addEventListener('keyup', function () {
-    filterTable();
-});
+
 
 function filterTable() {
     var searchTerm = document.getElementById('searchInput').value.toLowerCase();
@@ -62,6 +64,21 @@ function filterTable() {
             }
         }
 
-        row.style.display = displayRow ? '' : 'none';
+        row.classList.toggle('d-none', !displayRow);
     }
+
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.custom-dropdown-item').forEach(function (item) {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
+            selectedColumn = parseInt(this.getAttribute('data-column'));
+            document.getElementById('dropdownMenuButton').textContent = this.textContent;
+
+            sortAndFilterTable(selectedColumn);
+        });
+    });
+});
+
+document.getElementById('searchInput').addEventListener('keyup', filterTable);

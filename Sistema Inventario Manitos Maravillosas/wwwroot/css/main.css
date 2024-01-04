@@ -482,3 +482,8 @@ tr.rowHover:hover {
     -moz-appearance: none;
     appearance: none;
 }
+
+/* Estilo para las filas de la tabla que elimina vertical-align */
+table#employees tbody tr {
+    vertical-align: inherit; /* Cambia el valor de vertical-align según tus necesidades */
+}
