@@ -493,6 +493,7 @@ tr.rowHover:hover {
     appearance: none;
 }
 
+/*------- Back Button-------*/
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     filter: invert(46%) sepia(88%) saturate(3393%) hue-rotate(166deg) brightness(102%) contrast(100%);
@@ -503,6 +504,33 @@ tr.rowHover:hover {
     cursor: pointer;
 }
 .sort-icon:hover {
-    color: #007bff; /* Color del ícono al pasar el mouse sobre él */
+    color: #007bff; 
 }
+
+/*------- Back Button-------*/
+.btn-custom {
+    background-color: transparent;
+    color: var(--colorMain);
+    border: 1px solid var(--colorMain);    
+}
+
+.btn-custom:hover {
+    background-color: var(--colorMainTrans); 
+    color: var(--colorMain); 
+}
+
+.btn-custom .bi-arrow-left-short {
+    color: inherit; 
+}
+
+    .btn-custom .bi {
+        
+        transform: scale(2.5);
+        /* Mantiene el ícono centrado después de aplicar el transform */
+        display: inline-block;
+        vertical-align: middle;
+        /* Ajusta estos valores para alinear correctamente el ícono dentro del botón */
+        margin-top: -0.50rem;
+        margin-bottom: -0.25rem;
+    }
 

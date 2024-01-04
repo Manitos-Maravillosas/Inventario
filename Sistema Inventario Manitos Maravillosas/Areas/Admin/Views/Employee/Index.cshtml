@@ -8,105 +8,136 @@
 
     <h3 style="margin-bottom: 2rem;">Empleados</h3>
 
-    <div class="card mb-2">
-        <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between">
-
-                <div class="input-group search-input">
-                    <input id="searchInput" type="text" class="form-control" placeholder="Buscar...">
-                    <span class="input-group-text">
-                        <i class="bi bi-search"></i>
-                    </span>
+    <div class="dynamicallyTable">
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="input-group search-input">
+                        <input id="searchInput" type="text" class="form-control" placeholder="Buscar...">
+                        <span class="input-group-text">
+                            <i class="bi bi-search"></i>
+                        </span>
+                    </div>
                 </div>
-
-                <div class="d-flex align-items-center ms-auto">
-                    <label class="me-2">Ordenar Por:</label>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle custom-dropdown-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Filtro
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item custom-dropdown-item" href="#" data-column="0">Identificación</a></li>
-                            <li><a class="dropdown-item custom-dropdown-item" href="#" data-column="1">Nombre</a></li>
-                            <li><a class="dropdown-item custom-dropdown-item" href="#" data-column="2">Apellido 1</a></li>
-                            <li><a class="dropdown-item custom-dropdown-item" href="#" data-column="3">Apellido 2</a></li>
-                            <li><a class="dropdown-item custom-dropdown-item" href="#" data-column="4">Puesto</a></li>
-                            <li><a class="dropdown-item custom-dropdown-item" href="#" data-column="5">Número de Contacto</a></li>
-                            <li><a class="dropdown-item custom-dropdown-item" href="#" data-column="6">Negocio</a></li>
-                            <li><a class="dropdown-item custom-dropdown-item" href="#" data-column="-1">Todas</a></li>
-                        </ul>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <label class="form-label m-0 p-0" for="rowsPerPage">Mostrar:</label>
+                        </div>
+                        <div class="col-auto">
+                            <select id="showCantRow" class="form-select form-select-sm showCantRow" aria-label="Default select example" id="rowsPerPage">
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </div>
+                <table id="table" class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
+                    <thead>
+                        <tr>
+                            <th scope="col">Identificación <i class="bi bi-sort-numeric-down sort-icon" data-column="0"></i> </th>
+                            <th scope="col">Nombre <i class="bi bi-sort-alpha-down sort-icon" data-column="1"></i></th>
+                            <th scope="col">Apellido 1 <i class="bi bi-sort-alpha-down sort-icon" data-column="2"></i></th>
+                            <th scope="col">Apellido 2 <i class="bi bi-sort-alpha-down sort-icon" data-column="3"></i></th>
+                            <th scope="col">Puesto <i class="bi bi-sort-alpha-down sort-icon" data-column="4"></i></th>
+                            <th scope="col">Número de Contacto <i class="bi bi-sort-numeric-down sort-icon" data-column="5"></i></th>
+                            <th scope="col">Negocio <i class="bi bi-sort-alpha-down sort-icon" data-column="6"></i></th>
+                            <th scope="col">Email <i class="bi bi-sort-alpha-down sort-icon" data-column="7"></i></th>
+                            <th scope="col">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var employee in Model)
+                            {
+                                <tr>
+                                    <td>@employee.IdEmployee</td>
+                                    <td>@employee.Name</td>
+                                    <td>@employee.LastName1</td>
+                                    <td>@employee.LastName2</td>
+                                    <td>@employee.Position</td>
+                                    <td>@employee.PhoneNumber</td>
+                                    <td>@employee.BusinessName</td>
+                                    <td>@employee.Email</td>
+                                    <td>
+                                        <form asp-action="Edit" method="get" style="display: inline-block;">
+                                            <input type="hidden" name="id" value="@employee.IdEmployee" />
+                                            <button type="submit" class="icon-button bi bi-pencil-square" aria-label="Modificar" style="cursor: pointer;"></button>
+                                        </form>
+                                        <form id="deleteForm-@employee.IdEmployee" asp-action="Delete" method="post" style="display: inline-block;">
+                                            <input type="hidden" name="id" value="@employee.IdEmployee" />
+                                            <button type="button" onclick="confirmDelete('@employee.IdEmployee', '@employee.IdEmployee')" class="icon-button bi bi-trash-fill" aria-label="Eliminar"></button>
+                                        </form>
 
-    <div class="card mb-2">
-        <div class="card-body">
-            <table id="employees" class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
-                <thead>
-                    <tr>
-                        <th scope="col">Identificación</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Apellido 1</th>
-                        <th scope="col">Apellido 2</th>
-                        <th scope="col">Puesto</th>
-                        <th scope="col">Número de Contacto</th>
-                        <th scope="col">Negocio</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model != null && Model.Any())
-                    {
-                        foreach (var employee in Model)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
                         {
                             <tr>
-                                <td>@employee.IdEmployee</td>
-                                <td>@employee.Name</td>
-                                <td>@employee.LastName1</td>
-                                <td>@employee.LastName2</td>
-                                <td>@employee.Position</td>
-                                <td>@employee.PhoneNumber</td>
-                                <td>@employee.BusinessName</td>
-                                <td>@employee.Email</td>
-                                <td>
-                                    <form asp-action="Edit" method="get" style="display: inline-block;">
-                                        <input type="hidden" name="id" value="@employee.IdEmployee" />
-                                        <button type="submit" class="icon-button bi bi-pencil-square" aria-label="Modificar" style="cursor: pointer;"></button>
-                                    </form>
-                                    <form id="deleteForm-@employee.IdEmployee" asp-action="Delete" method="post" style="display: inline-block;">
-                                        <input type="hidden" name="id" value="@employee.IdEmployee" />
-                                        <button type="button" onclick="confirmDelete('@employee.IdEmployee', '@employee.IdEmployee')" class="icon-button bi bi-trash-fill" aria-label="Eliminar"></button>
-                                    </form>
-
-                                </td>
+                                <td colspan="7" class="text-center">No hay empleados registrados</td>
                             </tr>
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="7" class="text-center">No hay empleados registrados</td>
-                        </tr>
-                    }
-                </tbody>
+                    </tbody>
 
-            </table>
+                </table>
 
-            <a class="btn btn-primary px-5 py-1 mt-2" asp-action="Create">
-                Agregar <i class="bi bi-plus-circle"></i>
-            </a>
+                <div class="d-flex align-items-center justify-content-between">
 
+                    <div class="d-flex align-items-center">
+                        <a class="btn btn-primary px-3 py-1 mt-2" asp-action="Create">
+                            Agregar <i class="bi bi-plus-circle"></i>
+                        </a>
+
+                    </div>
+
+                    <div class="carousel-container d-flex align-items-center px-3 py-1 mb-0">
+                        <div id="carouselExampleControlsNoTouching" class="d-flex carousel slide align-items-center" data-bs-touch="false" data-bs-interval="false" style="background-color: transparent; width: 90px; height: 35px;">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
+                                        <span class="">1</span>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
+                                        <span class="">2</span>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
+                                        <span class="">3</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev buttonSlide" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next buttonSlide" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 </section>
 
 @section Scripts {
-    <script src="@Url.Content("~/js/admin/Employee.js")"></script>
+    <script src="@Url.Content("~/js/dynamicallyTablesScript.js")"></script>
     <script>
         function confirmDelete(employeeId, employeeName) {
             Swal.fire({
