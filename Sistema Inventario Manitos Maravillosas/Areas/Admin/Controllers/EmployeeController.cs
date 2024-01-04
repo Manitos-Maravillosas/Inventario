@@ -23,8 +23,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         public ActionResult Index()
         {
             var employees = _employeeService.GetAll();
-            
-            return View("~/Areas/Admin/Views/Emp/Index.cshtml", employees);
+
+            return View(employees);
         }
 
 
@@ -38,18 +38,18 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         public ActionResult Create()
         {
             var businessNames = _employeeService.GetBusinessNames();
-            var userEmails = _employeeService.GetUserEmails(); 
+            var userEmails = _employeeService.GetUserEmails();
             ViewBag.BusinessNames = new SelectList(businessNames);
             ViewBag.UserEmails = new SelectList(userEmails);
 
-            return View("~/Areas/Admin/Views/Emp/Create.cshtml");
+            return View();
         }
 
         // POST: EmployeeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Employee employee)
-        {            
+        {
 
             if (ModelState.IsValid)
             {
@@ -59,11 +59,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                     ViewData["ErrorMessage"] = result.Message;
                 }
                 ViewData["Success"] = "Empleado agregado correctamente!";
-                
+
             }
             ViewBag.BusinessNames = new SelectList(_employeeService.GetBusinessNames());
             ViewBag.UserEmails = new SelectList(_employeeService.GetUserEmails());
-            return View("~/Areas/Admin/Views/Emp/Create.cshtml");
+            return View();
         }
 
         // GET: EmployeeController/Edit/5
@@ -76,7 +76,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
             }
             ViewBag.BusinessNames = new SelectList(_employeeService.GetBusinessNames());
             ViewBag.UserEmails = new SelectList(_employeeService.GetUserEmails());
-            return View("~/Areas/Admin/Views/Emp/Edit.cshtml",employee);
+            return View(employee);
         }
 
         // POST: EmployeeController/Edit/5
@@ -94,7 +94,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 ViewData["Success"] = "Se ha modificado los datos del empleado!";
 
             }
-            return View("~/Areas/Admin/Views/Emp/Edit.cshtml");
+            return View();
         }
 
         // GET: EmployeeController/Delete/5
@@ -110,9 +110,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 ViewData["Success"] = "Se ha eliminado al Empleado!";
             }
             var employees = _employeeService.GetAll();
-            return View("~/Areas/Admin/Views/Emp/Index.cshtml", employees);
+            return View("Index", employees);
         }
 
-        
+
     }
 }
