@@ -1,4 +1,4 @@
-// --------------------------- Client Table Filter ---------------------------//
+// --------------------------- Employee Table Filter ---------------------------//
 
 var selectedColumn = -1; // -1 representa todas las columnas
 var originalRows = []; // Almacena una copia de las filas originales
@@ -17,6 +17,20 @@ document.addEventListener('DOMContentLoaded', function () {
             sortAndFilterTable(selectedColumn);
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.custom-dropdown-item').forEach(function (item) {
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+                selectedColumn = parseInt(this.getAttribute('data-column'));
+                document.getElementById('dropdownMenuButton').textContent = this.textContent;
+
+                sortAndFilterTable(selectedColumn);
+            });
+        });
+    });
+
+    document.getElementById('searchInput').addEventListener('keyup', filterTable);
 });
 
 // Resto de tu código, incluyendo las funciones sortAndFilterTable y filterTable
@@ -45,8 +59,6 @@ function sortAndFilterTable(columnIndex) {
     filterTable();
 }
 
-
-
 function filterTable() {
     var searchTerm = document.getElementById('searchInput').value.toLowerCase();
     var tableRows = document.getElementById('clients').getElementsByTagName('tr');
@@ -69,16 +81,4 @@ function filterTable() {
 
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.custom-dropdown-item').forEach(function (item) {
-        item.addEventListener('click', function (event) {
-            event.preventDefault();
-            selectedColumn = parseInt(this.getAttribute('data-column'));
-            document.getElementById('dropdownMenuButton').textContent = this.textContent;
 
-            sortAndFilterTable(selectedColumn);
-        });
-    });
-});
-
-document.getElementById('searchInput').addEventListener('keyup', filterTable);

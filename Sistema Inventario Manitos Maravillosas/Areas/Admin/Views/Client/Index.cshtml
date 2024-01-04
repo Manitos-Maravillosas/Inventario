@@ -91,9 +91,45 @@
 
             </table>
 
-            <a class="btn btn-primary px-5 py-1 mt-2"asp-action="Create">
-                    Agregar <i class="bi bi-plus-circle"></i>
-                </a>
+            <div class="d-flex align-items-center justify-content-between">
+
+                <div class="d-flex align-items-center">
+                    <a class="btn btn-primary px-3 py-1 mt-2" asp-action="Create">
+                        Agregar <i class="bi bi-plus-circle"></i>
+                    </a>
+                   
+                </div>
+
+                <div class="carousel-container d-flex align-items-center px-3 py-1 mb-0">
+                    <div id="carouselExampleControlsNoTouching" class="d-flex carousel slide align-items-center" data-bs-touch="false" data-bs-interval="false" style="background-color: transparent; width: 90px; height: 35px;">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
+                                    <span class="">1</span>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
+                                    <span class="">2</span>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
+                                    <span class="">3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev buttonSlide" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next buttonSlide" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
