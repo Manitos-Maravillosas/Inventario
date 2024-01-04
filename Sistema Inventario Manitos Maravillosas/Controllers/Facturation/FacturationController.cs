@@ -37,7 +37,19 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
                 if (product != null && product.Stock > 0)
                 {
                     cartProducts.Add(product);
-                    return Json(new { success = true, message = "Product added to cart successfully." });
+                    var productDto = new ProductDto
+                    {
+                        IdProduct = product.IdProduct,
+                        Name = product.ProductName,
+                        Stock = product.Stock,
+                        Price = product.Cost,
+                        Description = product.Description,
+                        Status = product.Status
+                        // Map other properties as needed
+                    };
+
+                    return Json(new { success = true, message = "Product added to cart successfully.", data = productDto });
+
                 }
                 else
                 {
@@ -124,4 +136,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Controllers.Facturation
             }
         }
     }
+
+    public class ProductDto
+    {
+        public string IdProduct { get; set; }
+        public string Name { get; set; }
+        public float Stock { get; set; }
+        public float Price { get; set; }
+        public string Description { get; set; }
+        public bool Status { get; set; }
+
+        // Add any other properties needed by the client
+    }
+
 }
