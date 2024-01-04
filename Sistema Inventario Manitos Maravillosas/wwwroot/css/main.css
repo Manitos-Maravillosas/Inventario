@@ -497,3 +497,9 @@ tr.rowHover:hover {
 table#employees tbody tr {
     vertical-align: inherit; /* Cambia el valor de vertical-align según tus necesidades */
 }
+
+/***********************************************************************************************Dynamicly Tables*/
+
+.buttonSlide{
+    color: var(--colorMain) !important;
+}
