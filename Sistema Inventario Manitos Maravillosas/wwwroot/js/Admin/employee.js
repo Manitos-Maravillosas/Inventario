@@ -1,11 +1,11 @@
-// --------------------------- Client Table Filter ---------------------------//
+﻿// --------------------------- Client Table Filter ---------------------------//
 
 var selectedColumn = -1; // -1 representa todas las columnas
 var originalRows = []; // Almacena una copia de las filas originales
 
 document.addEventListener('DOMContentLoaded', function () {
     // Copia las filas originales al cargar la página
-    var table = document.getElementById('clients');
+    var table = document.getElementById('employees');
     originalRows = Array.from(table.getElementsByTagName('tr')).slice(1);
 
     document.querySelectorAll('.custom-dropdown-item').forEach(function (item) {
@@ -17,12 +17,26 @@ document.addEventListener('DOMContentLoaded', function () {
             sortAndFilterTable(selectedColumn);
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.custom-dropdown-item').forEach(function (item) {
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+                selectedColumn = parseInt(this.getAttribute('data-column'));
+                document.getElementById('dropdownMenuButton').textContent = this.textContent;
+
+                sortAndFilterTable(selectedColumn);
+            });
+        });
+    });
+
+    document.getElementById('searchInput').addEventListener('keyup', filterTable);
 });
 
 // Resto de tu código, incluyendo las funciones sortAndFilterTable y filterTable
 
 function sortAndFilterTable(columnIndex) {
-    var table = document.getElementById('clients');
+    var table = document.getElementById('employees');
     var rows = originalRows.slice(); // Copia las filas originales
 
     if (columnIndex >= 0) {
@@ -49,7 +63,7 @@ function sortAndFilterTable(columnIndex) {
 
 function filterTable() {
     var searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    var tableRows = document.getElementById('clients').getElementsByTagName('tr');
+    var tableRows = document.getElementById('employees').getElementsByTagName('tr');
 
     for (var i = 1; i < tableRows.length; i++) {
         var row = tableRows[i];
@@ -69,16 +83,4 @@ function filterTable() {
 
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.custom-dropdown-item').forEach(function (item) {
-        item.addEventListener('click', function (event) {
-            event.preventDefault();
-            selectedColumn = parseInt(this.getAttribute('data-column'));
-            document.getElementById('dropdownMenuButton').textContent = this.textContent;
 
-            sortAndFilterTable(selectedColumn);
-        });
-    });
-});
-
-document.getElementById('searchInput').addEventListener('keyup', filterTable);

@@ -98,7 +98,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@lastName2", DBNull.Value),
                             new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
-                            new SqlParameter("@operation", '4') // Operation for 'Read' is 2
+                            new SqlParameter("@operation", '4') 
                         };
 
                         command.Parameters.AddRange(parameters);
@@ -238,13 +238,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         using (SqlDataReader dataReader = command.ExecuteReader())
                         {
-                            if (!dataReader.HasRows)
-                            {
-                                // Handle the case when no data is returned
-                                // You might want to log this or handle it according to your application's logic
-                                return null; // Return the empty list
-                            }
-
+                            
                             while (dataReader.Read())
                             {   client = new Client
                                 {

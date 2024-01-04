@@ -2,27 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
     {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
         private readonly UserManager<AppUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly EmailService.Models.IEmailSender _emailSender;
 
-        public ForgotPasswordModel(UserManager<AppUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<AppUser> userManager, EmailService.Models.IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;
@@ -55,7 +55,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                //if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return RedirectToPage("./ForgotPasswordConfirmation");
@@ -71,15 +72,26 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
+                var toList = new List<(string email, string displayName)>
+                {
+                    (Input.Email, Input.Email)
+                };
+
+                var message = new Message(toList, "Reset Password", $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                await _emailSender.SendEmailAsync(message);
+
+                /*
                 await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
+                */
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 
             return Page();
         }
+
     }
 }

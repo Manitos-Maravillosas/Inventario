@@ -1,27 +1,29 @@
-﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Client
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Employee
 @{
     var action = ViewData["Action"] as string;
 }
 
+
 <div class="card">
     <div class="card-body">
 
-        <form id="clientForm" asp-controller="Client" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+        <form id="employeeForm" asp-controller="Employee" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+            @Html.AntiForgeryToken()
             <!-- Fila 1: Identificación, Nombre -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Identificación</label>
                     @if (action == "Edit")
                     {
-                        <input type="text" class="form-control" asp-for="Id" aria-label="Identificación" disabled>
-                        <input type="hidden" asp-for="Id">
+                        <input type="text" class="form-control" asp-for="IdEmployee" aria-label="Identificación" disabled>
+                        <input type="hidden" asp-for="IdEmployee">
                     }
                     else
                     {
-                        <input type="text" class="form-control" asp-for="Id" aria-label="Identificación">
+                        <input type="text" class="form-control" asp-for="IdEmployee" aria-label="Identificación">
                     }
 
-                    <span asp-validation-for="Id" class="text-danger"></span>
+                    <span asp-validation-for="IdEmployee" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Nombre</label>
@@ -45,9 +47,9 @@
             <!-- Fila 3: Correo, Número de Contacto -->
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label class="form-label">Correo</label>
-                    <input type="text" class="form-control" asp-for="Email" aria-label="Correo">
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <label class="form-label">Posición</label>
+                    <input type="text" class="form-control" asp-for="Position" aria-label="Correo">
+                    <span asp-validation-for="Position" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Número de Contacto</label>
@@ -55,10 +57,34 @@
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
+            <!-- Fila 3: Businees, Email -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="BusinessName" class="control-label mb-2">Negocio</label>
+                    <div class="select-wrapper">
+                        <select asp-for="BusinessName" class="form-control" asp-items="ViewBag.BusinessNames">
+                            <option value="">Seleccione un negocio</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="BusinessName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Email" class="control-label mb-2">Correo Electrónico</label>
+                    <div class="select-wrapper">
+                        <select asp-for="Email" class="form-control" asp-items="ViewBag.UserEmails">
+                            <option value="">Seleccione un correo electrónico</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+            </div>
+
             <!-- Botón de envío y volver -->
             <div class="d-flex justify-content-between mb-3">
-                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Client", new { area = "Admin" })'">
-                   <span>Volver <i class="bi bi-arrow-left-short"></i></span>                    
+                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Employee", new { area = "Admin" })'">
+                    <span>Volver <i class="bi bi-arrow-left-short"></i></span>
                 </button>
 
                 <button type="submit" class="btn btn-primary">
@@ -71,9 +97,9 @@
                         <span>Agregar <i class="bi bi-plus-circle"></i></span>
                     }
                 </button>
-                
+
             </div>
         </form>
-        
+
     </div>
 </div>

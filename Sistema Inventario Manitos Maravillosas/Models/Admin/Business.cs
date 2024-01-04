@@ -5,20 +5,18 @@
     public class Business
     {
         [Key]
+        [Required(ErrorMessage = "Se requiere el ID del negocio.")]
         public int IdBusiness { get; set; }
 
-        [Required]
-        [StringLength(60)]
+        [Required(ErrorMessage = "Se requiere el nombre del negocio.")]
+        [StringLength(60, ErrorMessage = "El nombre del negocio debe tener más de 1 letra.")]
         public string Name { get; set; }
 
-        [StringLength(200)]
+        [StringLength(200, ErrorMessage = "La descripción del negocio debe tener más de 1 letra.")]
         public string Description { get; set; }
 
-        [StringLength(50)]
+        [StringLength(50, ErrorMessage = "La ubicación del negocio debe tener más de 1 letra.")]
         public string Location { get; set; }
-
-        // Navigation properties
-        // Add collections for related entities if needed
     }
 
 }

@@ -3,10 +3,3 @@
 
 // Write your JavaScript code.
 
-
-
-
-
-
-
-

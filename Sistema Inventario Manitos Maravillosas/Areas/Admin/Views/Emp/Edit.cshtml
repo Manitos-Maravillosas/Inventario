@@ -1,22 +1,21 @@
-﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Client
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Employee
+
 
 @{
-    ViewData["Title"] = "Crear Cliente";
+    ViewData["Title"] = "Modificar Empleado";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    ViewData["Action"] = "Create";
+    ViewData["Action"] = "Edit";
 }
+
 <section class="container px-5 py-3">
-    <h3 style="margin-bottom: 2rem;">Agregar Cliente</h3>
-
-    <partial name="_ClientForm" model="Model" view-data="ViewData">
-
-    </partial>
+    <h3 style="margin-bottom: 2rem;">Modificar Empleado</h3>
+    <partial name="_EmployeeForm" model="Model" view-data="ViewData">
 </section>
-
 @section Scripts {
-     <script src="@Url.Content("~/js/Admin/Client.js")"></script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
     @if (ViewData["Success"] != null)
     {
@@ -28,7 +27,7 @@
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/Admin/Client/Index'; // Replace with your desired URL
+                        window.location.href = '/Admin/Employee/Index'; 
                     }
                 });
             });
@@ -47,9 +46,7 @@
             });
         </script>
 
-    ViewData["ErrorMessage"] = null;
+        ViewData["ErrorMessage"] = null;
     }
-
-
-
 }
+

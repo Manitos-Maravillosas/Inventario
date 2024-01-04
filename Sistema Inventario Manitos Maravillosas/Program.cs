@@ -1,17 +1,27 @@
+using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
-using SistemaInventario.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
+
+using SistemaInventario.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>(); // Agrega esta línea
 
+
+var emailConfig = builder.Configuration
+        .GetSection("EmailConfiguration")
+        .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -25,7 +35,7 @@ builder.Services.AddDbContext<InventarioDbContext>(options => options.UseSqlServ
     builder.Configuration.GetConnectionString("ConnectionToDataBase")));
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<InventarioDbContext>();
+    .AddEntityFrameworkStores<InventarioDbContext>().AddDefaultTokenProviders();
 
 builder.Services.AddHttpClient(); // Register HttpClient
 
@@ -37,6 +47,8 @@ builder.Services.Configure<SignInOptions>(options =>
     options.RequireConfirmedEmail = false;
 });
 
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+   opt.TokenLifespan = TimeSpan.FromHours(2));
 
 var app = builder.Build();
 
