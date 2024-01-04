@@ -119,20 +119,20 @@
                     </div>
 
                     <div class="carousel-container d-flex align-items-center px-3 py-1 mb-0">
-                        <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false" data-bs-interval="false" style="background-color: seagreen; width: 90px; height: 35px;">
-                            <div class="carousel-inner align-content-between">
+                        <div id="carouselExampleControlsNoTouching" class="d-flex carousel slide align-items-center" data-bs-touch="false" data-bs-interval="false" style="background-color: transparent; width: 90px; height: 35px;">
+                            <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <div class="d-flex justify-content-center align-items-center">
+                                    <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
                                         <span class="">1</span>
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <div class="d-flex justify-content-center align-items-center">
+                                    <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
                                         <span class="">2</span>
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <div class="d-flex justify-content-center align-items-center">
+                                    <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
                                         <span class="">3</span>
                                     </div>
                                 </div>
@@ -152,98 +152,7 @@
         </div>
     </div>
 
-    <div class="card mb-2">
-        <div class="card-body">
-            <table id="clients" class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
-                <thead>
-                    <tr>
-                        <th scope="col">Identificación</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Apellido 1</th>
-                        <th scope="col">Apellido 2</th>
-                        <th scope="col">Correo</th>
-                        <th scope="col">Número de Contacto</th>
-                        <th scope="col">Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model != null && Model.Any())
-                    {
-                        foreach (var client in Model)
-                        {
-                            <tr>
-                                <td>@client.Id</td>
-                                <td>@client.Name</td>
-                                <td>@client.LastName1</td>
-                                <td>@client.LastName2</td>
-                                <td>@client.Email</td>
-                                <td>@client.PhoneNumber</td>
-                                <td>
-                                    <form asp-action="Edit" method="get" style="display: inline-block;">
-                                        <input type="hidden" name="id" value="@client.Id" />
-                                        <button type="submit" class="icon-button bi bi-pencil-square" aria-label="Modificar" style="cursor: pointer;"></button>
-                                    </form>
-                                    <form id="deleteForm-@client.Id" asp-action="Delete" method="post" style="display: inline-block;">
-                                        <input type="hidden" name="id" value="@client.Id" />
-                                        <button type="button" onclick="confirmDelete('@client.Id', '@client.Name')" class="icon-button bi bi-trash-fill" aria-label="Eliminar"></button>
-                                    </form>
 
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="7" class="text-center">No hay clientes registrados</td>
-                        </tr>
-                    }
-                </tbody>
-
-            </table>
-
-            <div class="d-flex align-items-center justify-content-between">
-
-                <div class="d-flex align-items-center">
-                    <a class="btn btn-primary px-3 py-1 mt-2" asp-action="Create">
-                        Agregar <i class="bi bi-plus-circle"></i>
-                    </a>
-                   
-                </div>
-
-                <div class="carousel-container d-flex align-items-center px-3 py-1 mb-0">
-                    <div id="carouselExampleControlsNoTouching" class="d-flex carousel slide align-items-center" data-bs-touch="false" data-bs-interval="false" style="background-color: transparent; width: 90px; height: 35px;">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
-                                    <span class="">1</span>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
-                                    <span class="">2</span>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
-                                    <span class="">3</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev buttonSlide" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next buttonSlide" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
 </section>
 
 
@@ -251,6 +160,8 @@
 
 @section Scripts {
     <script src="@Url.Content("~/js/admin/client.js")"></script>
+    <script src="@Url.Content("~/js/dynamicallyTables.js")"></script>
+
     <script>
         function confirmDelete(clientId, clientName) {
             Swal.fire({
