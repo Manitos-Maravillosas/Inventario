@@ -499,3 +499,10 @@ tr.rowHover:hover {
     transform: scale(1.8);    
 }
 
+.sort-icon {
+    cursor: pointer;
+}
+.sort-icon:hover {
+    color: #007bff; /* Color del ícono al pasar el mouse sobre él */
+}
+

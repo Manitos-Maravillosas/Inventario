@@ -2,7 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-
+var selectedColumn = -1; // -1 representa todas las columnas
+var originalRows = []; // Almacena una copia de las filas originales
 document.addEventListener('DOMContentLoaded', function () {
 
     var table = document.getElementsByClassName('dynamicallyTable');
@@ -50,7 +51,18 @@ document.addEventListener('DOMContentLoaded', function () {
     applyShowRows(10, tableBody)
     updateCarousel(tableBody, 10);
 
+    var tableFilter = document.getElementById('table');
+    originalRows = Array.from(tableFilter.getElementsByTagName('tr')).slice(1);
+        
+    document.getElementById('searchInput').addEventListener('keyup', filterTable);
 
+    document.querySelectorAll('.sort-icon').forEach(function (icon, index) {
+        icon.addEventListener('click', function () {
+            const tableId = 'table'; // Asegúrate de que este sea el ID de tu tabla
+            const currentIsAscending = icon.classList.contains("th-sort-asc");
+            sortTableByColumn(tableId, index, !currentIsAscending);
+        });
+    });
 });
 
 function applyShowRows(cant, tableBody) {
@@ -110,3 +122,72 @@ function updateTableRows(page, cant, tableBody) {
     });
 }
 
+function sortAndFilterTable(columnIndex) {
+    var tableFilter = document.getElementById('table');
+    var rows = originalRows.slice(); // Copia las filas originales
+
+    if (columnIndex >= 0) {
+        // Ordena filas con columna seleccionada
+        rows.sort(function (a, b) {
+            var cellA = a.cells[columnIndex].textContent.trim().toLowerCase();
+            var cellB = b.cells[columnIndex].textContent.trim().toLowerCase();
+            return cellA.localeCompare(cellB);
+        });
+    }
+
+    // Reemplaza la tabla principal con la copia ordenada y filtrada
+    var tableBody = tableFilter.querySelector('tbody');
+    tableBody.innerHTML = ''; // Borra las filas actuales
+
+    rows.forEach(function (row) {
+        tableBody.appendChild(row);
+    });
+
+    filterTable();
+}
+
+function filterTable() {
+    var searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    var tableRows = document.getElementById('table').getElementsByTagName('tr');
+
+    for (var i = 1; i < tableRows.length; i++) {
+        var row = tableRows[i];
+        var displayRow = false;
+
+        for (var j = 0; j < row.cells.length; j++) {
+            
+            if (row.cells[j].textContent.toLowerCase().includes(searchTerm)) {
+                displayRow = true;
+                break; 
+            }
+        }
+
+        row.style.display = displayRow ? "" : "none"; 
+    }
+}
+
+function sortTableByColumn(tableId, column, asc = true) {
+    const dirModifier = asc ? 1 : -1;
+    const table = document.getElementById(tableId);
+    let tbody = table.querySelector("tbody");
+
+    
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+        
+    const sortedRows = rows.sort((a, b) => {
+        const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+        const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+
+        return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+    });
+        
+    while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+    }
+
+    tbody.append(...sortedRows);
+       
+    table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
+    table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
+    table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
+}
