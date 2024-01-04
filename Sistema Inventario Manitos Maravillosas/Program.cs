@@ -4,12 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
+
 using SistemaInventario.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IClientService, ClientService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>(); // Agrega esta línea
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>(); // Agrega esta lÃ­nea
 
 
 var emailConfig = builder.Configuration
@@ -59,7 +64,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication(); ;
+app.UseAuthentication();
 
 app.UseAuthorization();
 

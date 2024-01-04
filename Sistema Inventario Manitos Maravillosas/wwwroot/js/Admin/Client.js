@@ -4,7 +4,7 @@ var selectedColumn = -1; // -1 representa todas las columnas
 var originalRows = []; // Almacena una copia de las filas originales
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Copia las filas originales al cargar la p·gina
+    // Copia las filas originales al cargar la p√°gina
     var table = document.getElementById('clients');
     originalRows = Array.from(table.getElementsByTagName('tr')).slice(1);
 
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Resto de tu cÛdigo, incluyendo las funciones sortAndFilterTable y filterTable
+// Resto de tu c√≥digo, incluyendo las funciones sortAndFilterTable y filterTable
 
 function sortAndFilterTable(columnIndex) {
     var table = document.getElementById('clients');

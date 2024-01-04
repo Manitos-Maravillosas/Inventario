@@ -6,10 +6,6 @@
 
 <h3>Venta de Productos</h3>
 
-@foreach (var item in Model)
-{
-    <p>@item.ProductName</p>
-}
 
 <section class="mb-3">
 
@@ -17,18 +13,21 @@
         <div class="col-sm">
             <div class="card">
                 <div class="card-body">
-                    <div class="row ">
-                        <form class="col-11 ">
+                    <div class="row">
+                        <form class="col-10 ">
                             <div class="input-group flex-nowrap">
-                                <input id="idProducto" as type="text" class="form-control" placeholder="Código del Producto" aria-label="Código del Producto" aria-describedby="addon-wrapping" onchange="addProductToCart()">
+                                <input id="idProduct" type="text" class="form-control" placeholder="Código del Producto" aria-label="Código del Producto" aria-describedby="addon-wrapping" oninput="addProductToCart()">
+
                                 <span class="input-group-text" id="addon-wrapping"><i class="pbi bi-search"></i></span>
+                                
                             </div>
+                            <span id="prductValidadtion" class="field-validation-error text d-none">Manito matinez</span>
 
                         </form>
 
-                        <div class="col-1 d-flex align-items-center">
+                        <div class="col-2 justify-content-center d-flex align-items-center">
                             <div class="custom-icon-btn">
-                                <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-plus-square"></i></button>
+                                <button id="addRowButton" type="button" class="btn btn-primary btn-sm"><i class="bi bi-plus-square"></i></button>
                                 <span class="custom-tooltip">Agregar Manualmente</span>
                             </div>
                         </div>
@@ -46,8 +45,8 @@
                         <div class="col-auto">
                             <button id="assignClient" type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-check"></i>   Asignar Cliente</i></button>
                         </div>
-                        <label for="idProduct" class="col-sm col-form-label">155582647</label>
-                        <label for="idProduct" class="col-sm col-form-label">Maynor Martínez</label>
+                        <label class="col-sm col-form-label">155582647</label>
+                        <label class="col-sm col-form-label">Maynor Martínez</label>
                     </form>
                 </div>
             </div>
@@ -60,7 +59,7 @@
         <div class="card-body">
 
 
-            <table class="table">
+            <table id="productsTable" class="table">
                 <thead>
                     <tr>
                         <th scope="col">Código</th>
@@ -68,39 +67,39 @@
                         <th scope="col">Descripción</th>
                         <th scope="col">Precio $</th>
                         <th scope="col">Cantidad</th>
-                        <th scope="col">Subtotal $</th>
+                        <th scope="col">Sub Total $</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="rowHover">
-                        <th scope="row">1</th>
-                        <td>Mark</td>
+                <tbody id="noProducts">
+                    <tr>
+                        <td colspan="7" class="text-center">Empiece el escaneo de productos</td>
+                    </tr>
+                </tbody>
+                <tbody id="productsBody" class="d-none">
+
+                    <tr class="rowHover d-none">
+                        <th scope="row"></th>
+                        <td contenteditable="true">Mark</td>
                         <td>Otto</td>
                         <td>50 $</td>
-                        <td class="w-20">
+                        <td class="w-15">
                             <div class="editableCell">21</div>
                             <input class="editableInput" type="number">
                         </td>
                         <td>50 $</td>
                         <td>asdf</td>
                     </tr>
-                    <tr class="rowHover">
-                        <th scope="row">1</th>
-                        <td>
-                            <div class="editableCell">21</div>
-                            <input class="editableInput" type="text">
-                        </td>
-                        <td>
-                            <div class="editableCell">21</div>
-                            <input class="editableInput" type="text">
-                        </td>
-                        <td>
-                            <div class="editableCell">21</div>
+                    <tr class="rowHover editableRow d-none">
+                        <th scope="row"></th>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td >
+                            <div class="editableCell" data-price>0 $</div>                            
                             <input class="editableInput" type="number">
                         </td>
-                        <td class="w-20">
-                            <div class="editableCell">21</div>
+                        <td class="w-15">
+                            <div class="editableCell">0</div>
                             <input class="editableInput" type="number">
                         </td>
                         <td>50 $</td>
