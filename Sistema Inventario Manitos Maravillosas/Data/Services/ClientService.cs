@@ -30,7 +30,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        // Configure parameters
                         command.Parameters.Add(new SqlParameter("@idClient", string.IsNullOrEmpty(newClient.Id) ? DBNull.Value : newClient.Id));
                         command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newClient.Name) ? DBNull.Value : newClient.Name));
                         command.Parameters.Add(new SqlParameter("@lastName1", string.IsNullOrEmpty(newClient.LastName1) ? DBNull.Value : newClient.LastName1));
@@ -47,19 +46,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (SqlException sqlEx)
             {
-                // Check if the error is a custom error thrown using RAISEERROR
-                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                if (sqlEx.Number == 50000) 
                 {
-                    // Handle custom error
                     result.Success = false;
-                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    result.Message = sqlEx.Message; 
                     return result;
                 }
                 else
                 {
-                    // You can use different strategies to relay this message back to the user.
-                    // For example, you might throw a new exception with the user-friendly message,
-                    // or you could return an error response that your frontend can use to display the alert.
                     throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
 
@@ -67,8 +61,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Handle non-SQL exceptions here
-                // Log the exception, and/or rethrow, or return a specific error message
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
@@ -111,20 +103,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (SqlException sqlEx)
             {
-                
-                // Check if the error is a custom error thrown using RAISEERROR
-                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                if (sqlEx.Number == 50000) 
                 {
-                    // Handle custom error
                     result.Success = false;
-                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    result.Message = sqlEx.Message; 
                     return result;
                 }
                 else
-                {
-                    // You can use different strategies to relay this message back to the user.
-                    // For example, you might throw a new exception with the user-friendly message,
-                    // or you could return an error response that your frontend can use to display the alert.
+                {                    
                     throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
 
@@ -132,8 +118,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Handle non-SQL exceptions here
-                // Log the exception, and/or rethrow, or return a specific error message
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
@@ -163,7 +147,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@lastName2", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
                             new SqlParameter("@idAddress", DBNull.Value),
-                            new SqlParameter("@operation", '2') // Operation for 'Read' is 2
+                            new SqlParameter("@operation", '2') 
                         };
 
                         command.Parameters.AddRange(parameters);
@@ -172,13 +156,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         using (SqlDataReader dataReader = command.ExecuteReader())
                         {
-                            if (!dataReader.HasRows)
-                            {
-                                // Handle the case when no data is returned
-                                // You might want to log this or handle it according to your application's logic
-                                return null; // Return the empty list
-                            }
-
+                            
                             while (dataReader.Read())
                             {
                                 Client client = new Client
@@ -199,9 +177,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Log the exception here
-                // Handle the exception as per your application's policy
-                clients.Clear(); // This will return an empty list in case of an error.
+                clients.Clear(); 
             }
 
             return clients;
@@ -230,7 +206,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@lastName2", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
                             new SqlParameter("@idAddress", DBNull.Value),
-                            new SqlParameter("@operation", '2') // Operation for 'Read' is 2
+                            new SqlParameter("@operation", '2') 
                         };
 
                         command.Parameters.AddRange(parameters);
@@ -257,8 +233,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Log the exception here
-                // Handle the exception as per your application's policy
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
@@ -280,7 +254,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        // Configure parameters
                         command.Parameters.Add(new SqlParameter("@idClient", string.IsNullOrEmpty(newClient.Id) ? DBNull.Value : newClient.Id));
                         command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newClient.Name) ? DBNull.Value : newClient.Name));
                         command.Parameters.Add(new SqlParameter("@lastName1", string.IsNullOrEmpty(newClient.LastName1) ? DBNull.Value : newClient.LastName1));
@@ -299,19 +272,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 string userMessage = "An error occurred while processing your request.";
 
-                // Check if the error is a custom error thrown using RAISEERROR
-                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                if (sqlEx.Number == 50000) 
                 {
-                    // Handle custom error
                     result.Success = false;
-                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    result.Message = sqlEx.Message; 
                     return result;
                 }
                 else
                 {
-                    // You can use different strategies to relay this message back to the user.
-                    // For example, you might throw a new exception with the user-friendly message,
-                    // or you could return an error response that your frontend can use to display the alert.
                     throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
 
@@ -319,8 +287,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Handle non-SQL exceptions here
-                // Log the exception, and/or rethrow, or return a specific error message
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
