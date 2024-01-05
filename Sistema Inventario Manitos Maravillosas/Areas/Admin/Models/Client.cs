@@ -17,16 +17,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
 
         [StringLength(50, ErrorMessage = "El segundo apellido del cliente debe tener más de 1 letra.")]
         public string LastName2 { get; set; }
-
-        [Required(ErrorMessage = "Se requiere el correo del cliente.")]
-        //[EmailAddress(ErrorMessage = "Invalid email address.")]
-        [StringLength(150, ErrorMessage = "El correo del cliente debe tener más de 1 letra.")]
-        public string Email { get; set; }
-
+        
         [Required(ErrorMessage = "El número de contacto del cliente es requerido.")]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }               
 
-        [Required(ErrorMessage = "Se requiere la direccion del cliente.")]
-        public string AddressName { get; set; }
+        public int IdAddress { get; set; }
+        public string DepartmentName { get; set; }
+        public string CityName { get; set; }
+        public string Signs { get; set; }
+        
     }
 }
