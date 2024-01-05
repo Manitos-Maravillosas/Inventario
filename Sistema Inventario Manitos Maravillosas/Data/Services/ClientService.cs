@@ -161,8 +161,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@name", DBNull.Value),
                             new SqlParameter("@lastName1", DBNull.Value),
                             new SqlParameter("@lastName2", DBNull.Value),
-                            new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
+                            new SqlParameter("@idAddress", DBNull.Value),
                             new SqlParameter("@operation", '2') // Operation for 'Read' is 2
                         };
 
@@ -187,8 +187,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     Name = dataReader["name"].ToString(),
                                     LastName1 = dataReader["lastName1"].ToString(),
                                     LastName2 = dataReader["lastName2"].ToString(),
-                                    Email = dataReader["email"].ToString(),
-                                    PhoneNumber = dataReader["phoneNumber"].ToString()
+                                    PhoneNumber = dataReader["phoneNumber"].ToString(),
+                                    AddressName = dataReader["signs"].ToString(),
+
                                 };
                                 clients.Add(client);
                             }
@@ -227,8 +228,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@name", DBNull.Value),
                             new SqlParameter("@lastName1", DBNull.Value),
                             new SqlParameter("@lastName2", DBNull.Value),
-                            new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
+                            new SqlParameter("@idAddress", DBNull.Value),
                             new SqlParameter("@operation", '2') // Operation for 'Read' is 2
                         };
 
@@ -246,9 +247,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     Name = dataReader["name"].ToString(),
                                     LastName1 = dataReader["lastName1"].ToString(),
                                     LastName2 = dataReader["lastName2"].ToString(),
-                                    Email = dataReader["email"].ToString(),
-                                    PhoneNumber = dataReader["phoneNumber"].ToString()
-                                };
+                                    PhoneNumber = dataReader["phoneNumber"].ToString(),
+                                    AddressName = dataReader["signs"].ToString(),
+                            };
                             }
                         }
                     }

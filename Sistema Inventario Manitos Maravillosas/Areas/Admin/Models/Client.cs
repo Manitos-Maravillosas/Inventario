@@ -25,5 +25,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
 
         [Required(ErrorMessage = "El número de contacto del cliente es requerido.")]
         public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Se requiere la direccion del cliente.")]
+        public string AddressName { get; set; }
     }
 }

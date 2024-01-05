@@ -46,8 +46,8 @@
                             <th scope="col">Nombre <i class="bi bi-sort-alpha-down sort-icon" data-column="1"></i></th>
                             <th scope="col">Apellido 1 <i class="bi bi-sort-alpha-down sort-icon" data-column="2"></i></th>
                             <th scope="col">Apellido 2 <i class="bi bi-sort-alpha-down sort-icon" data-column="3"></i></th>
-                            <th scope="col">Correo <i class="bi bi-sort-alpha-down sort-icon" data-column="4"></i></th>
                             <th scope="col">Número de Contacto <i class="bi bi-sort-numeric-down sort-icon" data-column="5"></i></th>
+                            <th scope="col">Dirección <i class="bi bi-sort-alpha-down sort-icon" data-column="4"></i></th>
                             <th scope="col">Opciones</th>
                         </tr>
                     </thead>
@@ -62,8 +62,8 @@
                                     <td>@client.Name</td>
                                     <td>@client.LastName1</td>
                                     <td>@client.LastName2</td>
-                                    <td>@client.Email</td>
                                     <td>@client.PhoneNumber</td>
+                                    <td>@client.AddressName</td>
                                     <td>
                                         <form asp-action="Edit" method="get" style="display: inline-block;">
                                             <input type="hidden" name="id" value="@client.Id" />
