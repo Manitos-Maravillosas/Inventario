@@ -36,8 +36,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // GET: Admin/Client/Create
         public ActionResult Create()
         {
+            var departmentNames = _clientService.GetDepartmentNames();
+            ViewBag.DepartmentNames = departmentNames;
+            
             return View();
         }
+        public JsonResult GetCitiesByDepartment(string departmentName)
+        {
+            var cityNames = _clientService.GetCitiesByDepartmentName(departmentName);
+            return Json(cityNames);
+        }
+
 
         // POST: Admin/Client/Create/
         [HttpPost]

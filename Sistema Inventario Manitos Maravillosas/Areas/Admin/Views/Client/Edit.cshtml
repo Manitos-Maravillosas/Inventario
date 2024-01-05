@@ -12,6 +12,7 @@
     <partial name="_ClientForm" model="Model" view-data="ViewData">
 </section>
 @section Scripts {
+    <script src="@Url.Content("~/js/Admin/client.js")"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     @if (ViewData["Success"] != null)

@@ -51,10 +51,14 @@
             </div>
             <!-- Fila 3: Correo, Número de Contacto -->
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Correo</label>
-                    <input type="text" class="form-control" asp-for="Email" aria-label="Correo">
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="col-sm">
+                    <div class="card">
+                        <div class="card-body">                            
+                            <div class="col-auto">
+                                <button id="assignAddress" type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-check"></i>   Asignar Dirección</i></button>
+                            </div>                            
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Número de Contacto</label>
@@ -80,3 +84,39 @@
         
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" id="modalAddress">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Dirección</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center mb-3">
+                    <!-- Selector de Departamento -->
+                    <select class="form-select my-2" id="departmentSelect" aria-label="Selector de Departamento">
+                        <option value="">Elige un Departamento</option>
+                        @foreach (var department in ViewBag.DepartmentNames)
+                        {
+                            <option value="@department">@department</option>
+                        }
+                    </select>
+
+                    <select class="form-select my-2" id="citySelect" aria-label="Selector de Ciudad" disabled>
+                        <option value="">Primero selecciona un Departamento</option>
+                    </select>
+
+                    <!-- Input para otra información (por ejemplo, dirección) -->
+                    <input type="text" class="form-control my-2" id="additionalInfoInput" placeholder="Direccion" aria-label="Información Adicional">
+                </div>
+                                
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

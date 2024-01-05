@@ -63,6 +63,8 @@ document.addEventListener('DOMContentLoaded', function () {
             sortTableByColumn(tableId, index, !currentIsAscending);
         });
     });
+
+    
 });
 
 function applyShowRows(cant, tableBody) {
