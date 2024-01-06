@@ -2,14 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.Manage
 {
@@ -48,6 +45,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.M
             /// </summary>
             [Required]
             [DataType(DataType.Password)]
+            [Display(Name = "Contraseña")]
             public string Password { get; set; }
         }
 

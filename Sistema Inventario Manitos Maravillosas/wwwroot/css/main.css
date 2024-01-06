@@ -319,10 +319,11 @@ img {
     margin-top: 150px;
 }
 
-
-
+.manage-account-container{
+    width: 720px;
+    margin-top: 50px;
+}
 /* ------------------------------------------------- Facturation---------------------------------------      */
-
 /*-------- Word Ballon-------*/
 .custom-icon-btn {
     position: relative;
