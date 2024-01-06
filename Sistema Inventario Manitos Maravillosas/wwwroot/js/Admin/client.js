@@ -1,45 +1,44 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    // Variables para almacenar las selecciones actuales
-    var selectedDepartment = '@Model.DepartmentName';
-    var selectedCity = '@Model.CityName';
+﻿document.addEventListener('DOMContentLoaded', function () {   
+    var selectedDepartment = document.getElementById('departmentInfo').dataset.department;
+    var selectedCity = document.getElementById('cityInfo').dataset.city;    
+    var selectedAddress = document.getElementById('addressInfo').dataset.address;
 
     var modalAddress = new bootstrap.Modal(document.getElementById('modalAddress'));
     var departmentSelect = document.getElementById('departmentSelect');
     var citySelect = document.getElementById('citySelect');
     var addressInput = document.getElementById('additionalInfoInput');
 
+    document.getElementById('displayDepartment').textContent = selectedDepartment;
+    document.getElementById('displayCity').textContent = selectedCity;
+    document.getElementById('displayAddress').textContent = selectedAddress;
+
     cargarDepartamentos();
-    if (selectedDepartment) {
-        // En lugar de usar option.selected, seleccionamos la opción por su índice
+    if (selectedDepartment) {       
         for (var i = 0; i < departmentSelect.options.length; i++) {
             if (departmentSelect.options[i].value === selectedDepartment) {
                 departmentSelect.selectedIndex = i;
-                break;  // Salir del bucle una vez que se haya encontrado la coincidencia
+                break;  
             }
         }
         cargarCiudades(selectedDepartment);
     }
     
-    // Evento para abrir el modal y cargar los departamentos
     document.getElementById('assignAddress').addEventListener('click', function () {
         cargarDepartamentos();
         modalAddress.show();
     });
 
-    // Evento para manejar el cambio en el departamento
     departmentSelect.addEventListener('change', function () {
         selectedDepartment = this.value;
         cargarCiudades(selectedDepartment);
     });
 
-    // Evento para manejar el cambio en la ciudad
     citySelect.addEventListener('change', function () {
         selectedCity = this.value;
         addressInput.disabled = selectedCity === '';
         addressInput.placeholder = selectedCity ? "Dirección Exacta" : "Primero seleccione un municipio";
     });
 
-    // Función para cargar departamentos
     function cargarDepartamentos() {
         fetch('/Admin/Client/GetDepartmentNames')
             .then(response => response.json())
@@ -47,9 +46,11 @@
                 departmentSelect.innerHTML = '<option value="">Selecciona un Departamento</option>';
                 data.forEach(function (department) {
                     var option = new Option(department, department);
-                    option.selected = department === selectedDepartment;
+                    if (department === selectedDepartment) {
+                        option.selected = true;
+                    }
                     departmentSelect.add(option);
-                });
+                });                
                 if (selectedDepartment) {
                     cargarCiudades(selectedDepartment);
                 }
@@ -58,8 +59,6 @@
                 console.error('Error al obtener los departamentos:', error);
             });
     }
-
-    // Función para cargar ciudades
     function cargarCiudades(departmentName) {
         fetch('/Admin/Client/GetCitiesByDepartment?departmentName=' + encodeURIComponent(departmentName))
             .then(response => response.json())
@@ -68,7 +67,7 @@
                 data.forEach(function (city) {
                     var option = new Option(city, city);
                     if (city === selectedCity) {
-                        option.selected = true; // Selecciona la ciudad que corresponde al cliente
+                        option.selected = true;
                     }
                     citySelect.add(option);
                 });

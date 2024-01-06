@@ -3,6 +3,12 @@
     var action = ViewData["Action"] as string;
 }
 
+<!-- Divs ocultos para transferir datos del modelo a JavaScript -->
+<div id="departmentInfo" data-department="@Model.DepartmentName" style="display:none;"></div>
+<div id="cityInfo" data-city="@Model.CityName" style="display:none;"></div>
+<div id="addressInfo" data-address="@Model.Signs" style="display:none;"></div>
+<div id="actionInfo" data-action="@action" style="display:none;"></div>
+
 <div class="card">
     <div class="card-body">
         <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "Client", new { area = "Admin" })'">
