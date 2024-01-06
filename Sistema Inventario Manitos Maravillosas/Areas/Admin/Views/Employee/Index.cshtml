@@ -1,12 +1,12 @@
-﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Client>
+﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Employee>
 
 @{
-    ViewData["Title"] = "Clientes";
+    ViewData["Title"] = "Empleados";
 }
 
 <section class="container px-5 py-3">
 
-    <h3 style="margin-bottom: 2rem;">Clientes</h3>
+    <h3 style="margin-bottom: 2rem;">Empleados</h3>
 
     <div class="dynamicallyTable">
         <div class="card mb-2">
@@ -42,36 +42,39 @@
                 <table id="table" class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
                     <thead>
                         <tr>
-                            <th scope="col">Identificación <i class="bi bi-sort-numeric-down sort-icon" data-column="0"></i></th>
+                            <th scope="col">Identificación <i class="bi bi-sort-numeric-down sort-icon" data-column="0"></i> </th>
                             <th scope="col">Nombre <i class="bi bi-sort-alpha-down sort-icon" data-column="1"></i></th>
                             <th scope="col">Apellido 1 <i class="bi bi-sort-alpha-down sort-icon" data-column="2"></i></th>
                             <th scope="col">Apellido 2 <i class="bi bi-sort-alpha-down sort-icon" data-column="3"></i></th>
+                            <th scope="col">Puesto <i class="bi bi-sort-alpha-down sort-icon" data-column="4"></i></th>
                             <th scope="col">Número de Contacto <i class="bi bi-sort-numeric-down sort-icon" data-column="5"></i></th>
-                            <th scope="col">Dirección <i class="bi bi-sort-alpha-down sort-icon" data-column="4"></i></th>
+                            <th scope="col">Negocio <i class="bi bi-sort-alpha-down sort-icon" data-column="6"></i></th>
+                            <th scope="col">Email <i class="bi bi-sort-alpha-down sort-icon" data-column="7"></i></th>
                             <th scope="col">Opciones</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @if (Model != null && Model.Any())
                         {
-                            foreach (var client in Model)
+                            foreach (var employee in Model)
                             {
                                 <tr>
-                                    <td>@client.Id</td>
-                                    <td>@client.Name</td>
-                                    <td>@client.LastName1</td>
-                                    <td>@client.LastName2</td>
-                                    <td>@client.PhoneNumber</td>
-                                    <td>@client.Signs</td>
+                                    <td>@employee.IdEmployee</td>
+                                    <td>@employee.Name</td>
+                                    <td>@employee.LastName1</td>
+                                    <td>@employee.LastName2</td>
+                                    <td>@employee.Position</td>
+                                    <td>@employee.PhoneNumber</td>
+                                    <td>@employee.BusinessName</td>
+                                    <td>@employee.Email</td>
                                     <td>
                                         <form asp-action="Edit" method="get" style="display: inline-block;">
-                                            <input type="hidden" name="id" value="@client.Id" />
+                                            <input type="hidden" name="id" value="@employee.IdEmployee" />
                                             <button type="submit" class="icon-button bi bi-pencil-square" aria-label="Modificar" style="cursor: pointer;"></button>
                                         </form>
-                                        <form id="deleteForm-@client.Id" asp-action="Delete" method="post" style="display: inline-block;">
-                                            <input type="hidden" name="id" value="@client.Id" />
-                                            <button type="button" onclick="confirmDelete('@client.Id', '@client.Name')" class="icon-button bi bi-trash-fill" aria-label="Eliminar"></button>
+                                        <form id="deleteForm-@employee.IdEmployee" asp-action="Delete" method="post" style="display: inline-block;">
+                                            <input type="hidden" name="id" value="@employee.IdEmployee" />
+                                            <button type="button" onclick="confirmDelete('@employee.IdEmployee', '@employee.IdEmployee')" class="icon-button bi bi-trash-fill" aria-label="Eliminar"></button>
                                         </form>
 
                                     </td>
@@ -81,7 +84,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="7" class="text-center">No hay clientes registrados</td>
+                                <td colspan="7" class="text-center">No hay empleados registrados</td>
                             </tr>
                         }
                     </tbody>
@@ -131,18 +134,15 @@
         </div>
     </div>
 
-
 </section>
 
-
-@section Scripts {    
+@section Scripts {
     <script src="@Url.Content("~/js/dynamicallyTablesScript.js")"></script>
-
     <script>
-        function confirmDelete(clientId, clientName) {
+        function confirmDelete(employeeId, employeeName) {
             Swal.fire({
                 title: '¿Estás seguro?',
-                text: "Estás a punto de eliminar al usuario " + clientName + ". No podrás revertir esta acción.",
+                text: "Estás a punto de eliminar al usuario " + employeeName + ". No podrás revertir esta acción.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -152,14 +152,14 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Construye el ID del formulario basado en el ID del cliente
-                    var formId = "deleteForm-" + clientId;
+                    var formId = "deleteForm-" + employeeId;
                     var form = document.getElementById(formId);
                     form.submit();  // Envía el formulario
                 }
             });
         }
     </script>
-
+    
     @if (ViewData["Success"] != null)
     {
         <script>
@@ -170,7 +170,7 @@
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/Admin/Client/Index'; // Replace with your desired URL
+                        window.location.href = '/Admin/Employee/Index'; 
                     }
                 });
             });

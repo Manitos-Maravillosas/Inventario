@@ -493,9 +493,41 @@ tr.rowHover:hover {
     appearance: none;
 }
 
+/*------- Back Button-------*/
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     filter: invert(46%) sepia(88%) saturate(3393%) hue-rotate(166deg) brightness(102%) contrast(100%);
     transform: scale(1.8);    
+}
+
+.sort-icon {
+    cursor: pointer;
+}
+.sort-icon:hover {
+    color: #007bff; 
+}
+
+/*------- Back Button-------*/
+.btn-custom {
+    background-color: transparent;
+    color: var(--colorMain);
+    border: 1px solid var(--colorMain);    
+}
+
+.btn-custom:hover {
+    background-color: var(--colorMainTrans); 
+    color: var(--colorMain); 
+}
+
+.btn-custom .bi-arrow-left-short {
+    color: inherit; 
+}
+
+.btn-custom .bi {        
+    transform: scale(2.5);    
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -0.75rem;
+    margin-bottom: -0.25rem;
 }
 

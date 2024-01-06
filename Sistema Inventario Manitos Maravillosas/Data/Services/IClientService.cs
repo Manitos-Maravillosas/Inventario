@@ -10,6 +10,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         OperationResult Add(Client newClient);
         OperationResult Update(Client newClient);
         OperationResult Delete(string id);
+        List<string> GetDepartmentNames();
+        List<string> GetCitiesByDepartmentName(string idDepartment);
 
     }
 }

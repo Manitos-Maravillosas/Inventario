@@ -3,10 +3,35 @@
     var action = ViewData["Action"] as string;
 }
 
+<!-- Divs ocultos para transferir datos del modelo a JavaScript -->
+@{
+    string department = Model?.DepartmentName ?? string.Empty;
+    string city = Model?.CityName ?? string.Empty;
+    string address = Model?.Signs ?? string.Empty;
+}
+
+<div id="departmentInfo" data-department="@department" style="display:none;"></div>
+<div id="cityInfo" data-city="@city" style="display:none;"></div>
+<div id="addressInfo" data-address="@address" style="display:none;"></div>
+
+
+<div id="actionInfo" data-action="@action" style="display:none;"></div>
+
 <div class="card">
     <div class="card-body">
-
+        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "Client", new { area = "Admin" })'">
+            <span> <i class="bi bi-arrow-left-short"></i></span>
+        </button>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        
         <form id="clientForm" asp-controller="Client" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+            <input type="hidden" id="hiddenCityField" name="CityName">
+            <input type="hidden" id="hiddenAddressField" name="Signs">
+            <input type="hidden" id="hiddenDepartmentField" name="DepartmentName">
+
             <!-- Fila 1: Identificación, Nombre -->
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -44,10 +69,41 @@
             </div>
             <!-- Fila 3: Correo, Número de Contacto -->
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Correo</label>
-                    <input type="text" class="form-control" asp-for="Email" aria-label="Correo">
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="col-sm">
+                    <div class="card">
+                        <div class="card-body">                            
+                            <div class="col-auto mb-2">
+                                <button id="assignAddress" type="button" class="btn btn-outline-primary"><i class="bi bi-geo-alt"></i>   Asignar Dirección</i></button>
+                            </div>  
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <div>
+                                        <label>Departamento:</label>
+                                    </div>
+                                    <div>
+                                        <span id="displayDepartment"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div>
+                                        <label>Municipio:</label>
+                                    </div>
+                                    <div>
+                                        <span id="displayCity"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div>
+                                        <label>Dirección:</label>
+                                    </div>
+                                    <div>
+                                        <span id="displayAddress"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Número de Contacto</label>
@@ -56,11 +112,7 @@
                 </div>
             </div>
             <!-- Botón de envío y volver -->
-            <div class="d-flex justify-content-between mb-3">
-                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Client", new { area = "Admin" })'">
-                   <span>Volver <i class="bi bi-arrow-left-short"></i></span>                    
-                </button>
-
+            <div class="d-flex justify-content-end mb-3">                
                 <button type="submit" class="btn btn-primary">
                     @if (action == "Edit")
                     {
@@ -77,3 +129,34 @@
         
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" id="modalAddress">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Dirección</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-start mb-3">                   
+                    <label class="form-label">Departmento</label>
+                    <select class="form-select my-2" id="departmentSelect" aria-label="Selector de Departamento">
+                        <option value="">Selecciona un Departamento</option>
+                    </select>
+
+                    <label class="form-label">Municipio</label>
+                    <select class="form-select my-2" asp-for="CityName" id="citySelect" aria-label="Selector de Ciudad" disabled>
+                        <option value="">Primero seleccione un Departamento</option>
+                    </select>
+                    <label class="form-label">Dirección Exacta</label>
+                    <textarea class="form-control my-2" asp-for="Signs" id="additionalInfoInput" placeholder="Primero seleccione un municipio" aria-label="Información Adicional" disabled></textarea>
+                </div>                                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveAddress()">Aceptar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
