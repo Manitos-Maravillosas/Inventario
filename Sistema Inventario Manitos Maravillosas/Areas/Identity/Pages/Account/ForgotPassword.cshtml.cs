@@ -45,8 +45,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Se requiere el campo de correo")]
             [EmailAddress]
+            [Display(Name = "Correo")]
             public string Email { get; set; }
         }
 
@@ -77,7 +78,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
                     (Input.Email, Input.Email)
                 };
 
-                var message = new Message(toList, "Reset Password", $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                var message = new Message(toList, "Reestablece tu contraseña", $"Por favor reestablece tu contraseña haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click aquí</a>.");
 
                 await _emailSender.SendEmailAsync(message);
 
