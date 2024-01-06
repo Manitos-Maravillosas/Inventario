@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
-using System.Data.SqlClient;
-using Sistema_Inventario_Manitos_Maravillosas.Models;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Models;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
     [Area("Facturation")]
+    [Authorize]
     public class PurcharseController : Controller
     {
         private readonly IProductService _productService;

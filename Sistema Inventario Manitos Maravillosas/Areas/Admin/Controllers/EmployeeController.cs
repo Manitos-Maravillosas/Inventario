@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
@@ -7,6 +8,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Models;
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class EmployeeController : Controller
 
     {
