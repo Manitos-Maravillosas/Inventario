@@ -1,12 +1,10 @@
 using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
-
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
-
 using SistemaInventario.Data;
 
 

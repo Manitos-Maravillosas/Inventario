@@ -8,15 +8,22 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.Manage
 {
-    public class ResetPasswordModel : PageModel
+    public class ChangePasswordModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly ILogger<ChangePasswordModel> _logger;
 
-        public ResetPasswordModel(UserManager<AppUser> userManager)
+        public ChangePasswordModel(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            ILogger<ChangePasswordModel> logger)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -30,60 +37,59 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        [TempData]
+        public string StatusMessage { get; set; }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public class InputModel
         {
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Se requiere el campo de correo")]
-            [EmailAddress]
-            [Display(Name = "Correo")]
-            public string Email { get; set; }
-
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required(ErrorMessage = "Se requiere el campo de contraseña")]
-            [StringLength(100, ErrorMessage = "La {0} debe ser de al menos {2}, y como máximo {1} caracteres de largo.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Contraseña")]
-            public string Password { get; set; }
-
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [DataType(DataType.Password)]
-            [Display(Name = "Confirmar contraseña")]
-            [Compare("Password", ErrorMessage = "La contraseña y contraseña de confirmación no son iguales.")]
-            public string ConfirmPassword { get; set; }
+            [Display(Name = "Contraseña actual")]
+            public string OldPassword { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            public string Code { get; set; }
+            [StringLength(100, ErrorMessage = "La {0} debe ser de al menos {2}, y como máximo {1} caracteres de largo.", MinimumLength = 6)]
+            [DataType(DataType.Password)]
+            [Display(Name = "Nueva contraseña")]
+            public string NewPassword { get; set; }
 
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
+            [DataType(DataType.Password)]
+            [Display(Name = "Confirmar nueva contraseña")]
+            [Compare("NewPassword", ErrorMessage = "La contraseña y contraseña de confirmación no son iguales.")]
+            public string ConfirmPassword { get; set; }
         }
 
-        public IActionResult OnGet(string code = null)
+        public async Task<IActionResult> OnGetAsync()
         {
-            /*
-            if (code == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-            else
+
+            var hasPassword = await _userManager.HasPasswordAsync(user);
+            if (!hasPassword)
             {
-            Input = new InputModel
-            {
-                Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
-            };*/
+                return RedirectToPage("./SetPassword");
+            }
+
             return Page();
-            //}
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -93,24 +99,27 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
                 return Page();
             }
 
-            var user = await _userManager.FindByEmailAsync(Input.Email);
+            var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
-                return RedirectToPage("./ResetPasswordConfirmation");
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
-            if (result.Succeeded)
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
+            if (!changePasswordResult.Succeeded)
             {
-                return RedirectToPage("./ResetPasswordConfirmation");
+                foreach (var error in changePasswordResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return Page();
             }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-            return Page();
+            await _signInManager.RefreshSignInAsync(user);
+            _logger.LogInformation("User changed their password successfully.");
+            StatusMessage = "Your password has been changed.";
+
+            return RedirectToPage();
         }
     }
 }

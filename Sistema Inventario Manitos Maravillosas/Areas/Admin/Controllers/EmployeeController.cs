@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
-using System.Diagnostics;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 {
@@ -38,9 +36,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         public ActionResult Create()
         {
             var businessNames = _employeeService.GetBusinessNames();
-            var userEmails = _employeeService.GetUserEmails();
-            ViewBag.BusinessNames = new SelectList(businessNames);
-            ViewBag.UserEmails = new SelectList(userEmails);
+            //var userEmails = _employeeService.GetUserEmails();
+            //ViewBag.BusinessNames = new SelectList(businessNames);
+            //ViewBag.UserEmails = new SelectList(userEmails);
 
             return View();
         }

@@ -2,17 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.Manage
 {
@@ -20,12 +18,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.M
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IEmailSender _emailSender;
+        private readonly EmailService.Models.IEmailSender _emailSender;
 
         public EmailModel(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            IEmailSender emailSender)
+            EmailService.Models.IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -36,6 +34,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.M
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        [Display(Name = "Correo")]
         public string Email { get; set; }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.M
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "New email")]
+            [Display(Name = "Nuevo correo")]
             public string NewEmail { get; set; }
         }
 
@@ -92,7 +91,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.M
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"No fue posible cargar usuario con ID '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);
@@ -104,7 +103,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.M
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"No fue posible cargar usuario con ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -124,16 +123,22 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.M
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
                     protocol: Request.Scheme);
-                await _emailSender.SendEmailAsync(
-                    Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+
+                var toList = new List<(string email, string displayName)>
+                {
+                    (email, email)
+                };
+
+                var message = new Message(toList, "Confirma tu correo", $"Por favor confirma tu correo haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click aquí</a>.");
+
+                await _emailSender.SendEmailAsync(message);
+
+                StatusMessage = "El mensaje de verificación de cambio ha sido enviado. Por favor revise su correo electrónico.";
                 return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = "Tu correo electrónico no ha sido cambiado.";
             return RedirectToPage();
         }
 
@@ -142,7 +147,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.M
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"No fue posible cargar usuario con ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -160,12 +165,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account.M
                 pageHandler: null,
                 values: new { area = "Identity", userId = userId, code = code },
                 protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            var toList = new List<(string email, string displayName)>
+                {
+                    (email, email)
+                };
+
+            var message = new Message(toList, "Confirma tu correo", $"Por favor confirma tu correo haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click aquí</a>.");
+
+            await _emailSender.SendEmailAsync(message);
+
+            StatusMessage = "El mensaje de verificación ha sido enviado. Por favor revise su correo electrónico.";
             return RedirectToPage();
         }
     }
