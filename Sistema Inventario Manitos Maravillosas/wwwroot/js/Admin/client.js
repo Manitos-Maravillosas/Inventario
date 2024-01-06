@@ -10,17 +10,20 @@
     var addressInput = document.getElementById('additionalInfoInput');
 
     cargarDepartamentos();
+
     // Inicializar deshabilitados para el modo "Crear"
-    if (action === 'Create') {
-        citySelect.disabled = true;
-        addressInput.disabled = true;
-    }
+    citySelect.disabled = true;
+    addressInput.disabled = true;
+
     if (action === 'Edit') {
         document.getElementById('displayDepartment').textContent = selectedDepartment;
         document.getElementById('displayCity').textContent = selectedCity;
         document.getElementById('displayAddress').textContent = selectedAddress;
 
-        // Permitir la edición del address sin cambiar departamento o ciudad
+        cargarDepartamentos(selectedDepartment);
+        cargarCiudades(selectedDepartment, selectedCity);
+        // Habilitar los campos en el modo "Editar"
+        citySelect.disabled = false;
         addressInput.disabled = false;
     }
 
@@ -32,12 +35,16 @@
     departmentSelect.addEventListener('change', function () {
         selectedDepartment = this.value;
         cargarCiudades(selectedDepartment);
-        // Habilita la entrada de la dirección después de seleccionar un departamento
-        addressInput.disabled = false;
+        // No habilitar el campo de dirección aquí para el modo "Crear"
+        if (action === 'Edit') {
+            addressInput.disabled = false;
+        }
     });
 
     citySelect.addEventListener('change', function () {
         selectedCity = this.value;
+        // Habilitar el campo de dirección solo después de seleccionar una ciudad en el modo "Crear"
+        addressInput.disabled = selectedCity === '';
         addressInput.placeholder = selectedCity ? "Dirección Exacta" : "Primero seleccione un municipio";
     });
 
