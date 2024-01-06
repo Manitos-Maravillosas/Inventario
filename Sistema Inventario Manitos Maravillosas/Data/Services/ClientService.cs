@@ -1,4 +1,5 @@
-﻿using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+﻿using Microsoft.IdentityModel.Tokens;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 using System.Data;
 using System.Data.SqlClient;
@@ -30,13 +31,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        // Configure parameters
                         command.Parameters.Add(new SqlParameter("@idClient", string.IsNullOrEmpty(newClient.Id) ? DBNull.Value : newClient.Id));
                         command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newClient.Name) ? DBNull.Value : newClient.Name));
                         command.Parameters.Add(new SqlParameter("@lastName1", string.IsNullOrEmpty(newClient.LastName1) ? DBNull.Value : newClient.LastName1));
-                        command.Parameters.Add(new SqlParameter("@lastName2", string.IsNullOrEmpty(newClient.LastName2) ? DBNull.Value : newClient.LastName2));
-                        command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(newClient.Email) ? DBNull.Value : newClient.Email));
+                        command.Parameters.Add(new SqlParameter("@lastName2", string.IsNullOrEmpty(newClient.LastName2) ? DBNull.Value : newClient.LastName2));                        
                         command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(newClient.PhoneNumber) ? DBNull.Value : newClient.PhoneNumber));
+                        command.Parameters.Add(new SqlParameter("@idAddress", newClient.IdAddress != 0 ? (object)newClient.IdAddress : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@signs", string.IsNullOrEmpty(newClient.Signs) ? DBNull.Value : newClient.Signs));
+                        command.Parameters.Add(new SqlParameter("@cityName", string.IsNullOrEmpty(newClient.CityName) ? DBNull.Value : newClient.CityName));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
                         connection.Open();
@@ -47,19 +49,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (SqlException sqlEx)
             {
-                // Check if the error is a custom error thrown using RAISEERROR
-                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                if (sqlEx.Number == 50000) 
                 {
-                    // Handle custom error
                     result.Success = false;
-                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    result.Message = sqlEx.Message; 
                     return result;
                 }
                 else
                 {
-                    // You can use different strategies to relay this message back to the user.
-                    // For example, you might throw a new exception with the user-friendly message,
-                    // or you could return an error response that your frontend can use to display the alert.
                     throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
 
@@ -67,8 +64,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Handle non-SQL exceptions here
-                // Log the exception, and/or rethrow, or return a specific error message
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
@@ -96,8 +91,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@name", DBNull.Value),
                             new SqlParameter("@lastName1", DBNull.Value),
                             new SqlParameter("@lastName2", DBNull.Value),
-                            new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
+                            new SqlParameter("@idAddress", DBNull.Value),
+                            new SqlParameter("@signs", DBNull.Value),
+                            new SqlParameter("@cityName", DBNull.Value),
+                            new SqlParameter("@departmentName", DBNull.Value),
                             new SqlParameter("@operation", '4') 
                         };
 
@@ -111,20 +109,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (SqlException sqlEx)
             {
-                
-                // Check if the error is a custom error thrown using RAISEERROR
-                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                if (sqlEx.Number == 50000) 
                 {
-                    // Handle custom error
                     result.Success = false;
-                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    result.Message = sqlEx.Message; 
                     return result;
                 }
                 else
-                {
-                    // You can use different strategies to relay this message back to the user.
-                    // For example, you might throw a new exception with the user-friendly message,
-                    // or you could return an error response that your frontend can use to display the alert.
+                {                    
                     throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
 
@@ -132,8 +124,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Handle non-SQL exceptions here
-                // Log the exception, and/or rethrow, or return a specific error message
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
@@ -161,9 +151,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@name", DBNull.Value),
                             new SqlParameter("@lastName1", DBNull.Value),
                             new SqlParameter("@lastName2", DBNull.Value),
-                            new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
-                            new SqlParameter("@operation", '2') // Operation for 'Read' is 2
+                            new SqlParameter("@idAddress", DBNull.Value),
+                            new SqlParameter("@operation", '2') 
                         };
 
                         command.Parameters.AddRange(parameters);
@@ -172,13 +162,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         using (SqlDataReader dataReader = command.ExecuteReader())
                         {
-                            if (!dataReader.HasRows)
-                            {
-                                // Handle the case when no data is returned
-                                // You might want to log this or handle it according to your application's logic
-                                return null; // Return the empty list
-                            }
-
+                            
                             while (dataReader.Read())
                             {
                                 Client client = new Client
@@ -187,8 +171,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     Name = dataReader["name"].ToString(),
                                     LastName1 = dataReader["lastName1"].ToString(),
                                     LastName2 = dataReader["lastName2"].ToString(),
-                                    Email = dataReader["email"].ToString(),
-                                    PhoneNumber = dataReader["phoneNumber"].ToString()
+                                    PhoneNumber = dataReader["phoneNumber"].ToString(),
+                                    Signs = dataReader["signs"].ToString(),
+
                                 };
                                 clients.Add(client);
                             }
@@ -198,9 +183,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Log the exception here
-                // Handle the exception as per your application's policy
-                clients.Clear(); // This will return an empty list in case of an error.
+                clients.Clear(); 
             }
 
             return clients;
@@ -227,9 +210,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@name", DBNull.Value),
                             new SqlParameter("@lastName1", DBNull.Value),
                             new SqlParameter("@lastName2", DBNull.Value),
-                            new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
-                            new SqlParameter("@operation", '2') // Operation for 'Read' is 2
+                            new SqlParameter("@idAddress", DBNull.Value),
+                            new SqlParameter("@signs", DBNull.Value),
+                            new SqlParameter("@cityName", DBNull.Value),
+                            new SqlParameter("@departmentName", DBNull.Value),
+                            new SqlParameter("@operation", '2')
                         };
 
                         command.Parameters.AddRange(parameters);
@@ -242,13 +228,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             while (dataReader.Read())
                             {   client = new Client
                                 {
-                                    Id = dataReader["idClient"].ToString(),
-                                    Name = dataReader["name"].ToString(),
-                                    LastName1 = dataReader["lastName1"].ToString(),
-                                    LastName2 = dataReader["lastName2"].ToString(),
-                                    Email = dataReader["email"].ToString(),
-                                    PhoneNumber = dataReader["phoneNumber"].ToString()
-                                };
+                                Id = dataReader["idClient"].ToString(),
+                                Name = dataReader["name"].ToString(),
+                                LastName1 = dataReader["lastName1"].ToString(),
+                                LastName2 = dataReader["lastName2"].ToString(),
+                                PhoneNumber = dataReader["phoneNumber"].ToString(),
+                                Signs = dataReader["signs"].ToString(),
+                                CityName = dataReader["cityName"].ToString(),
+                                DepartmentName = dataReader["departmentName"].ToString(),
+                            };
                             }
                         }
                     }
@@ -256,8 +244,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Log the exception here
-                // Handle the exception as per your application's policy
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
@@ -279,13 +265,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        // Configure parameters
                         command.Parameters.Add(new SqlParameter("@idClient", string.IsNullOrEmpty(newClient.Id) ? DBNull.Value : newClient.Id));
                         command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newClient.Name) ? DBNull.Value : newClient.Name));
                         command.Parameters.Add(new SqlParameter("@lastName1", string.IsNullOrEmpty(newClient.LastName1) ? DBNull.Value : newClient.LastName1));
                         command.Parameters.Add(new SqlParameter("@lastName2", string.IsNullOrEmpty(newClient.LastName2) ? DBNull.Value : newClient.LastName2));
-                        command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(newClient.Email) ? DBNull.Value : newClient.Email));
                         command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(newClient.PhoneNumber) ? DBNull.Value : newClient.PhoneNumber));
+                        command.Parameters.Add(new SqlParameter("@idAddress", newClient.IdAddress != 0 ? (object)newClient.IdAddress : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@signs", string.IsNullOrEmpty(newClient.Signs) ? DBNull.Value : newClient.Signs));
+                        command.Parameters.Add(new SqlParameter("@cityName", string.IsNullOrEmpty(newClient.CityName) ? DBNull.Value : newClient.CityName));
                         command.Parameters.Add(new SqlParameter("@operation", 3));
 
                         connection.Open();
@@ -298,19 +285,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 string userMessage = "An error occurred while processing your request.";
 
-                // Check if the error is a custom error thrown using RAISEERROR
-                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                if (sqlEx.Number == 50000) 
                 {
-                    // Handle custom error
                     result.Success = false;
-                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    result.Message = sqlEx.Message; 
                     return result;
                 }
                 else
                 {
-                    // You can use different strategies to relay this message back to the user.
-                    // For example, you might throw a new exception with the user-friendly message,
-                    // or you could return an error response that your frontend can use to display the alert.
                     throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
 
@@ -318,12 +300,85 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Handle non-SQL exceptions here
-                // Log the exception, and/or rethrow, or return a specific error message
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
             return result;
         }
+
+        //------------------------------------------------------------------------------------
+        //                              GetDeparments                                             
+        //------------------------------------------------------------------------------------
+        public List<string> GetDepartmentNames()
+        {
+            List<string> departmentNames = new List<string>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null;
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand getDepartmentsCommand = new SqlCommand("spGetDepartment", connection))
+                {
+                    getDepartmentsCommand.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataReader departmentDataReader = getDepartmentsCommand.ExecuteReader())
+                    {
+                        while (departmentDataReader.Read())
+                        {
+                            string departmentName = departmentDataReader["name"].ToString();
+                            departmentNames.Add(departmentName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones
+                throw new Exception("Error al obtener nombres de departamentos.", ex);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+            return departmentNames;
+        }
+
+        //------------------------------------------------------------------------------------
+        //                              GetCityNamesByDepartment                                             
+        //------------------------------------------------------------------------------------
+        public List<string> GetCitiesByDepartmentName(string departmentName)
+        {
+            List<string> cityNames = new List<string>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("spGetCityByDepartment", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@departmentName", departmentName);
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string cityName = reader["name"].ToString();
+                            cityNames.Add(cityName);
+                        }
+                    }
+                }
+            }
+            return cityNames;
+        }
+
+
+
     }
 }

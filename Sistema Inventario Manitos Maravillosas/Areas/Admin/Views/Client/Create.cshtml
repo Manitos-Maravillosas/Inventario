@@ -15,7 +15,8 @@
 </section>
 
 @section Scripts {
-     <script src="@Url.Content("~/js/Admin/Client.js")"></script>
+     <script src="@Url.Content("~/js/Admin/client.js")"></script>
+    
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     @if (ViewData["Success"] != null)
