@@ -4,9 +4,17 @@
 }
 
 <!-- Divs ocultos para transferir datos del modelo a JavaScript -->
-<div id="departmentInfo" data-department="@Model.DepartmentName" style="display:none;"></div>
-<div id="cityInfo" data-city="@Model.CityName" style="display:none;"></div>
-<div id="addressInfo" data-address="@Model.Signs" style="display:none;"></div>
+@{
+    string department = Model?.DepartmentName ?? string.Empty;
+    string city = Model?.CityName ?? string.Empty;
+    string address = Model?.Signs ?? string.Empty;
+}
+
+<div id="departmentInfo" data-department="@department" style="display:none;"></div>
+<div id="cityInfo" data-city="@city" style="display:none;"></div>
+<div id="addressInfo" data-address="@address" style="display:none;"></div>
+
+
 <div id="actionInfo" data-action="@action" style="display:none;"></div>
 
 <div class="card">
