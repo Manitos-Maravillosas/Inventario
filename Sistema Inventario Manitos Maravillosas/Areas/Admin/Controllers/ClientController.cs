@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
-using Sistema_Inventario_Manitos_Maravillosas.Data;
-using System.Data;
-using System.Data.SqlClient;
-using System.Runtime.InteropServices;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class ClientController : Controller
     {
 
@@ -35,7 +27,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 
         // GET: Admin/Client/Create
         public ActionResult Create()
-        {            
+        {
             return View();
         }
         public JsonResult GetDepartmentNames()
@@ -63,9 +55,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                     ViewData["ErrorMessage"] = result.Message;
                 }
                 ViewData["Success"] = "Cliente agregado correctamente!";
-               
+
             }
-            return View(client); 
+            return View(client);
         }
 
         // POST: ClientController/Edit/5
@@ -95,12 +87,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 ViewData["Success"] = "Se ha modificado los datos del cliente!";
 
             }
-            return View(client); 
+            return View(client);
         }
 
         public ActionResult Delete(string id)
         {
-            
+
             OperationResult result = _clientService.Delete(id);
             if (!result.Success)
             {
