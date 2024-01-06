@@ -380,7 +380,6 @@ img {
 }
 
 
-
 .w-15 {
     width: 15%;
 }
@@ -474,6 +473,13 @@ tr.rowHover:hover {
 
 }
 
+#modalClient .modal-dialog {
+    max-width: 50%;
+}
+#addClient .modal-dialog {
+    max-width: 80%;
+}
+/* ------------------------------------------------- Admin---------------------------------------      */
 /*------- Search Input-------*/
 .search-input {
     margin-right: 25px;

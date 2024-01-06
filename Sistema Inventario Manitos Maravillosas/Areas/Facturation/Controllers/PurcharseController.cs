@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
@@ -12,20 +13,22 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
     public class PurcharseController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IClientService _clientService;
 
         private List<Product> cartProducts = new List<Product>();
 
-        public PurcharseController(IProductService productService)
+        public PurcharseController(IProductService productService, IClientService clientService)
         {
             _productService = productService;
+            _clientService = clientService;
         }
 
         // GET: FacturationController
         public ActionResult Index()
         {
-
+            List<Client> clients = _clientService.GetAll();
             ViewBag.Title = "Facturaasdfasdftion";
-            return View();
+            return View(clients);
         }
 
         // POST: Facturation/Purcharse/AddProductToCart
@@ -66,10 +69,55 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetClients()
+        {
+            try
+            {
+                List<Client> clients= _clientService.GetAll();
+                if (clients.Count != 0)
+                {
+                    
+                    return Json(new { success = true, message = "Product added to cart successfully."});
+
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Product not available." });
+                }
+            }
+            catch (CustomDataException ex)
+            {
+                return Json(new { success = false, message = ex.Message, innerExeption = ex.InnerException });
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("A general error occurred in ProductService.", ex);
+            }
+        }
 
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateClient(Client client)
+        {
+            if (ModelState.IsValid)
+            {
+                OperationResult result = _clientService.Add(client);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Cliente agregado correctamente!";
+
+            }
+            return RedirectToAction("Index");
+        }
 
     }
+
+    
 
     public class ProductDto
     {

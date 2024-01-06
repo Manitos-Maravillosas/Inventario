@@ -172,6 +172,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     LastName1 = dataReader["lastName1"].ToString(),
                                     LastName2 = dataReader["lastName2"].ToString(),
                                     PhoneNumber = dataReader["phoneNumber"].ToString(),
+                                    IdAddress = Convert.ToInt32(dataReader["idAddress"]),
+                                    CityName = dataReader["cityName"].ToString(),
+                                    DepartmentName = dataReader["departmentName"].ToString(),
                                     Signs = dataReader["signs"].ToString(),
 
                                 };
@@ -183,7 +186,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                clients.Clear(); 
+                clients.Clear();
+                throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
             return clients;

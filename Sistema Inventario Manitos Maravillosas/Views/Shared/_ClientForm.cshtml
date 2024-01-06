@@ -1,6 +1,7 @@
 ﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Client
 @{
     var action = ViewData["Action"] as string;
+    var controllerCall = ViewData["Controller"] as string;
 }
 
 <!-- Divs ocultos para transferir datos del modelo a JavaScript -->
@@ -19,15 +20,8 @@
 
 <div class="card">
     <div class="card-body">
-        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "Client", new { area = "Admin" })'">
-            <span> <i class="bi bi-arrow-left-short"></i></span>
-        </button>
-    </div>
-</div>
-<div class="card">
-    <div class="card-body">
         
-        <form id="clientForm" asp-controller="Client" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+        <form id="clientForm" asp-controller="@(controllerCall)" asp-action="@action" method="post">
             <input type="hidden" id="hiddenCityField" name="CityName">
             <input type="hidden" id="hiddenAddressField" name="Signs">
             <input type="hidden" id="hiddenDepartmentField" name="DepartmentName">
@@ -78,7 +72,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <div>
-                                        <label>Departamento:</label>
+                                        <label class="fw-bold">Departamento:</label>
                                     </div>
                                     <div>
                                         <span id="displayDepartment"></span>
@@ -86,7 +80,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div>
-                                        <label>Municipio:</label>
+                                        <label class="fw-bold">Municipio:</label>
                                     </div>
                                     <div>
                                         <span id="displayCity"></span>
@@ -94,7 +88,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div>
-                                        <label>Dirección:</label>
+                                        <label class="fw-bold">Dirección:</label>
                                     </div>
                                     <div>
                                         <span id="displayAddress"></span>

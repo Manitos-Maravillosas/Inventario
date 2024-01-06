@@ -1,16 +1,37 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
 
 
-    // Modal handling
+    //-------------------------------------------------------------------------------------//
+    //                                  Client Modal                                       //
+    //-------------------------------------------------------------------------------------//
     var assignClient = document.querySelector('#assignClient');
-    assignClient.addEventListener('click', function () {
-        var clientModal = new bootstrap.Modal(document.getElementById('modalClient'));
+
+    // modals
+    var clientModal = new bootstrap.Modal(document.getElementById('modalClient'));
+    var newClient = new bootstrap.Modal(document.getElementById('addClient'));
+    var deliveryModal = new bootstrap.Modal(document.getElementById('modalDelivery'));
+    
+    assignClient.addEventListener('click', function () {        
         clientModal.show();
     });
 
+    var openNewClient = document.querySelector('#openNewClient');
+
+    if (openNewClient) {
+        openNewClient.addEventListener('click', function () {
+
+            clientModal.hide();
+            
+            newClient.show();
+        });
+    }
+ 
+    //-------------------------------------------------------------------------------------//
+    //                                  Delevery Modal                                       //
+    //-------------------------------------------------------------------------------------//
     var assignDelivery = document.querySelector('#assignDelivery');
     assignDelivery.addEventListener('click', function () {
-        var deliveryModal = new bootstrap.Modal(document.getElementById('modalDelivery'));
+        
         deliveryModal.show();
     });
 
@@ -71,9 +92,12 @@
         noProductsVisibleFalse();
     });
 
-    
 
 });
+
+
+
+
 
 function noProductsVisibleFalse() {
     var noProducts = document.getElementById('noProducts');
@@ -171,7 +195,3 @@ function addProductToCart() {
             }
         })
 }
-
-
-
-
