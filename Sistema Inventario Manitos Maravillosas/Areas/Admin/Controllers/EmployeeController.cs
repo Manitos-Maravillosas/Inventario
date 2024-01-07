@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using EmailService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,11 +10,12 @@ using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Helpers;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Administrador")]
     public class EmployeeController : Controller
 
     {
@@ -107,6 +109,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 
                 await _userStore.SetUserNameAsync(user, employee.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, employee.Email, CancellationToken.None);
+
                 var _generateRandomPassword = new GenerateRandomPassword();
                 var password = _generateRandomPassword.GenerateRandomPasswordMethod(new PasswordOptions()
                 {
@@ -121,6 +124,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    var confirmation = await AssignUserToRoleAsync(user, employee.Role);
+
+                    if (!confirmation)
+                    {
+                        ViewData["ErrorMessage"] = "No se pudo asignar el rol al usuario";
+                    }
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -130,8 +140,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    //await _emailSender.SendEmailAsync(employee.Email, "Confirm your email",
-                    //$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    var toList = new List<(string email, string displayName)>
+                    {
+                        (employee.Email, employee.Email)
+                    };
+
+                    var message = new Message(toList, "Confirma tu cuenta", $"Por favor confirma tu cuenta haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click aquí</a>.<br>Tu contraseña temporal es: {password}");
+
+                    await _emailSender.SendEmailAsync(message);
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -139,7 +155,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -149,6 +164,21 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 }
             }
             return View();
+        }
+
+        public async Task<bool> AssignUserToRoleAsync(AppUser user, string roleName)
+        {
+
+            var result = await _userManager.AddToRoleAsync(user, roleName);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+            return false;
         }
 
         private AppUser CreateUser()
