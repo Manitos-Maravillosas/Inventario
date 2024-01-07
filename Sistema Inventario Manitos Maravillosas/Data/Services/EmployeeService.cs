@@ -51,7 +51,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                     using (SqlDataReader dataReader = command.ExecuteReader())
                     {
-                       
+
 
                         while (dataReader.Read())
                         {
@@ -134,6 +134,52 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
 
             return businessNames;
+        }
+
+        //------------------------------------------------------------------------------------
+        //                              GetRoleNames                                             
+        //------------------------------------------------------------------------------------
+        public List<string> GetRoleNames()
+        {
+            List<string> roleNames = new List<string>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null; // Declarar la conexión fuera del bloque try-catch
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand getBusinessNamesCommand = new SqlCommand("spGetRoleNames", connection))
+                {
+                    getBusinessNamesCommand.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataReader businessDataReader = getBusinessNamesCommand.ExecuteReader())
+                    {
+                        while (businessDataReader.Read())
+                        {
+                            string businessName = businessDataReader["Name"].ToString();
+                            roleNames.Add(businessName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones
+                // Puedes lanzar una excepción personalizada o registrar el error según tus necesidades
+                throw new Exception("Error al obtener nombres de roles.", ex);
+            }
+            finally
+            {
+                // Asegurarse de cerrar la conexión en caso de excepción o no
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+            return roleNames;
         }
 
         //------------------------------------------------------------------------------------
@@ -283,7 +329,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 string userMessage = "An error occurred while processing your request.";
 
-                
+
                 if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
                 {
                     // Handle custom error
@@ -299,7 +345,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
             }
             catch (Exception ex)
-            {                
+            {
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
@@ -341,10 +387,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         using (SqlDataReader dataReader = command.ExecuteReader())
                         {
-                            
+
                             while (dataReader.Read())
                             {
-                                 employee = new Employee
+                                employee = new Employee
                                 {
                                     IdEmployee = dataReader["idEmployee"].ToString(),
                                     Name = dataReader["name"].ToString(),
@@ -355,7 +401,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     BusinessName = dataReader["businessName"].ToString(),
                                     Email = dataReader["email"].ToString(),
                                 };
-                               
+
                             }
                         }
                     }

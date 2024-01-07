@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.WebUtilities;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Helpers;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
+using System.Text;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 {
@@ -13,10 +18,34 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 
     {
         private readonly IEmployeeService _employeeService;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public EmployeeController(IEmployeeService employeeService)
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IUserStore<AppUser> _userStore;
+        private readonly IUserEmailStore<AppUser> _emailStore;
+        private readonly ILogger<EmployeeController> _logger;
+        private readonly EmailService.Models.IEmailSender _emailSender;
+        private readonly IGenerateRandomPassword _generateRandomPassword;
+
+        public EmployeeController(
+            IEmployeeService employeeService,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<AppUser> userManager,
+            IUserStore<AppUser> userStore,
+            SignInManager<AppUser> signInManager,
+            ILogger<EmployeeController> logger,
+            EmailService.Models.IEmailSender emailSender)
         {
             _employeeService = employeeService;
+
+            _roleManager = roleManager;
+            _userManager = userManager;
+            _userStore = userStore;
+            _emailStore = GetEmailStore();
+            _signInManager = signInManager;
+            _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: EmployeeController
@@ -38,9 +67,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         public ActionResult Create()
         {
             var businessNames = _employeeService.GetBusinessNames();
-            //var userEmails = _employeeService.GetUserEmails();
-            //ViewBag.BusinessNames = new SelectList(businessNames);
-            //ViewBag.UserEmails = new SelectList(userEmails);
+            var roleNames = _employeeService.GetRoleNames();
+
+            ViewBag.BusinessNames = new SelectList(businessNames);
+            ViewBag.RoleNames = new SelectList(roleNames);
 
             return View();
         }
@@ -48,7 +78,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // POST: EmployeeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Employee employee)
+        public async Task<ActionResult> CreateAsync(Employee employee)
         {
 
             if (ModelState.IsValid)
@@ -58,12 +88,90 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 {
                     ViewData["ErrorMessage"] = result.Message;
                 }
+                await CreateUserAndRoleAsync(employee);
                 ViewData["Success"] = "Empleado agregado correctamente!";
 
             }
             ViewBag.BusinessNames = new SelectList(_employeeService.GetBusinessNames());
-            ViewBag.UserEmails = new SelectList(_employeeService.GetUserEmails());
+            ViewBag.RoleNames = new SelectList(_employeeService.GetRoleNames());
             return View();
+        }
+
+        public async Task<IActionResult> CreateUserAndRoleAsync(Employee employee)
+        {
+            string returnUrl = null;
+            returnUrl ??= Url.Content("~/");
+            if (ModelState.IsValid)
+            {
+                var user = CreateUser();
+
+                await _userStore.SetUserNameAsync(user, employee.Email, CancellationToken.None);
+                await _emailStore.SetEmailAsync(user, employee.Email, CancellationToken.None);
+                var _generateRandomPassword = new GenerateRandomPassword();
+                var password = _generateRandomPassword.GenerateRandomPasswordMethod(new PasswordOptions()
+                {
+                    RequireDigit = true,
+                    RequiredLength = 9,
+                    RequireLowercase = true,
+                    RequireUppercase = true
+                });
+                var result = await _userManager.CreateAsync(user, password);
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User created a new account with password.");
+
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        protocol: Request.Scheme);
+
+                    //await _emailSender.SendEmailAsync(employee.Email, "Confirm your email",
+                    //$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    {
+                        return RedirectToPage("RegisterConfirmation", new { email = employee.Email, returnUrl = returnUrl });
+                    }
+                    else
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return LocalRedirect(returnUrl);
+                    }
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return View();
+        }
+
+        private AppUser CreateUser()
+        {
+            try
+            {
+                return Activator.CreateInstance<AppUser>();
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(AppUser)}'. " +
+                    $"Ensure that '{nameof(AppUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+            }
+        }
+
+        private IUserEmailStore<AppUser> GetEmailStore()
+        {
+            if (!_userManager.SupportsUserEmail)
+            {
+                throw new NotSupportedException("The default UI requires a user store with email support.");
+            }
+            return (IUserEmailStore<AppUser>)_userStore;
         }
 
         // GET: EmployeeController/Edit/5
@@ -75,7 +183,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 return NotFound();
             }
             ViewBag.BusinessNames = new SelectList(_employeeService.GetBusinessNames());
-            ViewBag.UserEmails = new SelectList(_employeeService.GetUserEmails());
             return View(employee);
         }
 

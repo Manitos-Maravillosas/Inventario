@@ -8,6 +8,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         List<Employee> GetAll();
         Employee GetById(string id);
         List<string> GetBusinessNames();
+
+        List<string> GetRoleNames();
         List<string> GetUserEmails();
         OperationResult Add(Employee newEmployee);
         OperationResult Update(Employee newEmployee);
