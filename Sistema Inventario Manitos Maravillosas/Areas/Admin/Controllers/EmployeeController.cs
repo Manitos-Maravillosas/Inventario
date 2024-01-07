@@ -235,17 +235,25 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         }
 
         // GET: EmployeeController/Delete/5
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> DeleteAsync(string id)
         {
+            string userId = _employeeService.GetUserId(id);
             OperationResult result = _employeeService.Delete(id);
             if (!result.Success)
             {
                 ViewData["ErrorMessage"] = result.Message;
             }
-            else
+
+            var user = _userManager.FindByIdAsync(userId).Result;
+            var resultUser = await _userManager.DeleteAsync(user);
+            if (!resultUser.Succeeded)
             {
-                ViewData["Success"] = "Se ha eliminado al Empleado!";
+                throw new InvalidOperationException($"Unexpected error occurred deleting user.");
             }
+
+            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+            ViewData["Success"] = "Se ha eliminado al Empleado!";
+
             var employees = _employeeService.GetAll();
             return View("Index", employees);
         }

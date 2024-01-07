@@ -183,6 +183,54 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         }
 
         //------------------------------------------------------------------------------------
+        //                              GetUserId                                             
+        //------------------------------------------------------------------------------------
+        public string GetUserId(string employeeId)
+        {
+            string userId = string.Empty;
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null; // Declarar la conexión fuera del bloque try-catch
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand command = new SqlCommand("spGetUserId", connection))
+                {
+
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add(new SqlParameter("@idEmployee", string.IsNullOrEmpty(employeeId) ? DBNull.Value : employeeId));
+
+                    connection.Open();
+
+                    using (SqlDataReader dataReader = command.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            userId = dataReader["Id"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones
+                // Puedes lanzar una excepción personalizada o registrar el error según tus necesidades
+                throw new Exception("Error al obtener nombres de roles.", ex);
+            }
+            finally
+            {
+                // Asegurarse de cerrar la conexión en caso de excepción o no
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+            return userId;
+        }
+        //------------------------------------------------------------------------------------
         //                              GetUserEmails                                             
         //------------------------------------------------------------------------------------
         public List<string> GetUserEmails()
