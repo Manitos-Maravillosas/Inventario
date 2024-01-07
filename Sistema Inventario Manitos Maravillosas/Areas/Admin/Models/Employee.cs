@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
 {
@@ -34,14 +32,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
         // Clave foránea y propiedad de navegación para Business
         [Required(ErrorMessage = "Se requiere el ID del negocio.")]
         public int IdBusiness { get; set; }
-       
+
         // Clave foránea y propiedad de navegación para User
         [Required(ErrorMessage = "Se requiere el correo del empleado.")]
         [StringLength(100, ErrorMessage = "El correo del empleado debe tener más de 1 letra.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Se requiere el neogcio del empleado.")]
+        [Required(ErrorMessage = "Se requiere el negocio del empleado.")]
         public string BusinessName { get; set; }
-                            
+
+        [Required(ErrorMessage = "Se requiere el rol del empleado.")]
+        public string Role { get; set; }
+
     }
 }

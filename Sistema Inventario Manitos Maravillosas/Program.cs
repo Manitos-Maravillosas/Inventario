@@ -33,6 +33,7 @@ builder.Services.AddDbContext<InventarioDbContext>(options => options.UseSqlServ
     builder.Configuration.GetConnectionString("ConnectionToDataBase")));
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<InventarioDbContext>()
     .AddDefaultTokenProviders();
 
