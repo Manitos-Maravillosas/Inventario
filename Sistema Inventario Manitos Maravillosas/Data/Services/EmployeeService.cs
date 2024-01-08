@@ -23,7 +23,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         {
             List<Employee> employees = new List<Employee>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null; // Declarar la conexión fuera del bloque try-catch
+            SqlConnection connection = null; 
 
             try
             {
@@ -74,13 +74,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones
-                // Puedes lanzar una excepción personalizada o registrar el error según tus necesidades
                 throw new Exception("Error al leer datos del SqlDataReader.", ex);
             }
             finally
             {
-                // Asegurarse de cerrar la conexión en caso de excepción o no
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
                     connection.Close();
@@ -97,7 +94,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         {
             List<string> businessNames = new List<string>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null; // Declarar la conexión fuera del bloque try-catch
+            SqlConnection connection = null; 
 
             try
             {
@@ -120,19 +117,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones
-                // Puedes lanzar una excepción personalizada o registrar el error según tus necesidades
                 throw new Exception("Error al obtener nombres de negocios.", ex);
             }
             finally
             {
-                // Asegurarse de cerrar la conexión en caso de excepción o no
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
             }
-
             return businessNames;
         }
 
@@ -143,7 +136,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         {
             List<string> roleNames = new List<string>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null; // Declarar la conexión fuera del bloque try-catch
+            SqlConnection connection = null;
 
             try
             {
@@ -166,19 +159,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones
-                // Puedes lanzar una excepción personalizada o registrar el error según tus necesidades
                 throw new Exception("Error al obtener nombres de roles.", ex);
             }
             finally
             {
-                // Asegurarse de cerrar la conexión en caso de excepción o no
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
             }
-
             return roleNames;
         }
 
@@ -189,7 +178,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         {
             string userId = string.Empty;
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null; // Declarar la conexión fuera del bloque try-catch
+            SqlConnection connection = null; 
 
             try
             {
@@ -215,13 +204,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones
-                // Puedes lanzar una excepción personalizada o registrar el error según tus necesidades
                 throw new Exception("Error al obtener nombres de roles.", ex);
             }
             finally
             {
-                // Asegurarse de cerrar la conexión en caso de excepción o no
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
                     connection.Close();
@@ -237,7 +223,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         {
             List<string> userEmails = new List<string>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null; // Declarar la conexión fuera del bloque try-catch
+            SqlConnection connection = null; 
 
             try
             {
@@ -260,22 +246,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones
-                // Puedes lanzar una excepción personalizada o registrar el error según tus necesidades
                 throw new Exception("Error al obtener correos electrónicos de usuarios.", ex);
             }
             finally
             {
-                // Asegurarse de cerrar la conexión en caso de excepción o no
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
             }
-
             return userEmails;
         }
-
 
         //------------------------------------------------------------------------------------
         //                              Add                                             
@@ -292,7 +273,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        // Configure parameters
                         command.Parameters.Add(new SqlParameter("@idEmployee", string.IsNullOrEmpty(newEmployee.IdEmployee) ? DBNull.Value : newEmployee.IdEmployee));
                         command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newEmployee.Name) ? DBNull.Value : newEmployee.Name));
                         command.Parameters.Add(new SqlParameter("@lastName1", string.IsNullOrEmpty(newEmployee.LastName1) ? DBNull.Value : newEmployee.LastName1));
@@ -312,28 +292,19 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (SqlException sqlEx)
             {
-                // Check if the error is a custom error thrown using RAISEERROR
-                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                if (sqlEx.Number == 50000) 
                 {
-                    // Handle custom error
                     result.Success = false;
-                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    result.Message = sqlEx.Message; 
                     return result;
                 }
                 else
                 {
-                    // You can use different strategies to relay this message back to the user.
-                    // For example, you might throw a new exception with the user-friendly message,
-                    // or you could return an error response that your frontend can use to display the alert.
                     throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
-
-
             }
             catch (Exception ex)
             {
-                // Handle non-SQL exceptions here
-                // Log the exception, and/or rethrow, or return a specific error message
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
@@ -355,7 +326,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        // Configure parameters
                         command.Parameters.Add(new SqlParameter("@idEmployee", string.IsNullOrEmpty(newEmployee.IdEmployee) ? DBNull.Value : newEmployee.IdEmployee));
                         command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newEmployee.Name) ? DBNull.Value : newEmployee.Name));
                         command.Parameters.Add(new SqlParameter("@lastName1", string.IsNullOrEmpty(newEmployee.LastName1) ? DBNull.Value : newEmployee.LastName1));
@@ -377,20 +347,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 string userMessage = "An error occurred while processing your request.";
 
-
-                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                if (sqlEx.Number == 50000) 
                 {
-                    // Handle custom error
                     result.Success = false;
-                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    result.Message = sqlEx.Message; 
                     return result;
                 }
                 else
                 {
                     throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -457,8 +423,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Log the exception here
-                // Handle the exception as per your application's policy
                 throw new ApplicationException("An error occurred: " + ex.Message, ex);
             }
 
@@ -505,19 +469,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             catch (SqlException sqlEx)
             {
 
-                if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
+                if (sqlEx.Number == 50000) 
                 {
-                    // Handle custom error
                     result.Success = false;
-                    result.Message = sqlEx.Message; // This will contain the custom message from RAISEERROR
+                    result.Message = sqlEx.Message; 
                     return result;
                 }
                 else
                 {
                     throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
-
-
             }
             catch (Exception ex)
             {

@@ -12,11 +12,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
     {
 
         private readonly IClientService _clientService;
-
-        public ClientController(IClientService clientService)
+        private readonly IAddressService _addressService;
+        public ClientController(IClientService clientService, IAddressService addressService)
         {
             _clientService = clientService;
+            _addressService = addressService;
         }
+
 
         // GET: Admin/Client
         public ActionResult Index()
@@ -32,13 +34,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         }
         public JsonResult GetDepartmentNames()
         {
-            var departmentNames = _clientService.GetDepartmentNames();
+            var departmentNames = _addressService.GetDepartmentNames();
             return Json(departmentNames);
         }
 
         public JsonResult GetCitiesByDepartment(string departmentName)
         {
-            var cityNames = _clientService.GetCitiesByDepartmentName(departmentName);
+            var cityNames = _addressService.GetCitiesByDepartmentName(departmentName);
             return Json(cityNames);
         }
 

@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>(); // Agrega esta línea
+builder.Services.AddScoped<IAddressService, AddressService>(); // Agrega esta línea
 
 
 var emailConfig = builder.Configuration
