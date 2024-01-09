@@ -11,7 +11,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
     [Area("Facturation")]
     [Authorize]
-    public class PurcharseController : Controller
+    public class PurchaseController : Controller
     {
         private readonly IProductService _productService;
         private readonly IClientService _clientService;
@@ -19,7 +19,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private List<Product> cartProducts = new List<Product>();
         private List<Bill> bills = new List<Bill>();
 
-        public PurcharseController(IProductService productService, IClientService clientService)
+        public PurchaseController(IProductService productService, IClientService clientService)
         {
             _productService = productService;
             _clientService = clientService;
@@ -78,6 +78,33 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             }
         }
 
+        [HttpPost]
+        public void AssingClientToBill(string id)
+        {
+            updateClientBill(id);
+
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateClient(Client client)
+        {
+            if (ModelState.IsValid)
+            {
+                OperationResult result = _clientService.Add(client);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Cliente agregado correctamente!";
+
+            }
+            return RedirectToAction("Index");
+        }
+
+
         private void addProductToCartXBill(Product product)
         {
             Bill bill = GetBill();
@@ -111,7 +138,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                     }
                 }
 
-                if(!flagProductFound)
+                if (!flagProductFound)
                 {
                     bill.CartXProducts.Add(new CartXProduct
                     {
@@ -131,70 +158,30 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private void updatePriceBill()
         {
             Bill bill = GetBill();
-           
+
             //Update bill
             bill.SubTotal = bill.CartXProducts.Sum(x => x.SubTotal);
             bill.TotalCost = bill.SubTotal - (bill.SubTotal * (bill.PercentDiscount / 100));
             SaveBill(bill);
         }
 
-        private Bill GetBill()
+        private void updateClientBill(string id)
+        {
+            Bill bill = GetBill();
+            bill.IdClient = id;
+            SaveBill(bill);
+        }
+
+        private Bill? GetBill()
         {
             var sessionData = HttpContext.Session.GetString("Bill");
-            return string.IsNullOrEmpty(sessionData)
-                ? new Bill()
-                : JsonConvert.DeserializeObject<Bill>(sessionData);
+            return string.IsNullOrEmpty(sessionData)  ? new Bill() : JsonConvert.DeserializeObject<Bill>(sessionData);
         }
 
         private void SaveBill(Bill bill)
         {
             var sessionData = JsonConvert.SerializeObject(bill);
             HttpContext.Session.SetString("Bill", sessionData);
-        }
-        [HttpGet]
-        public IActionResult GetClients()
-        {
-            try
-            {
-                List<Client> clients= _clientService.GetAll();
-                if (clients.Count != 0)
-                {
-                    
-                    return Json(new { success = true, message = "Product added to cart successfully."});
-
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Product not available." });
-                }
-            }
-            catch (CustomDataException ex)
-            {
-                return Json(new { success = false, message = ex.Message, innerExeption = ex.InnerException });
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("A general error occurred in ProductService.", ex);
-            }
-        }
-
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateClient(Client client)
-        {
-            if (ModelState.IsValid)
-            {
-                OperationResult result = _clientService.Add(client);
-                if (!result.Success)
-                {
-                    ViewData["ErrorMessage"] = result.Message;
-                }
-                ViewData["Success"] = "Cliente agregado correctamente!";
-
-            }
-            return RedirectToAction("Index");
         }
 
     }

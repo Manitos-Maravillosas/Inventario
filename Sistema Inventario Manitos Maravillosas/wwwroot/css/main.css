@@ -330,6 +330,19 @@ img {
     display: inline-block;
 }
 
+/**/
+#clientDataInput {
+    font-size: 16px;
+    color: #333;
+    border: 2px solid transparent; /* Borde transparente */
+    border-radius: 5px;
+    outline: none; /* Elimina el resalte al estar en foco */
+}
+
+    #clientDataInput:focus {
+        border: 2px solid transparent; /* Mantiene el borde transparente al enfocarse */
+        box-shadow: none; /* Elimina cualquier sombra al enfocarse */
+    }
 .custom-icon-btn .custom-tooltip {
     visibility: hidden;
     width: 120px;

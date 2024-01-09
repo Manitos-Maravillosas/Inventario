@@ -30,16 +30,46 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('identificationClientFilter').addEventListener('input', function () {
         var inputVal = this.value;
         var listItems = document.querySelectorAll('#listClient .list-group-item');
-
-        listItems.forEach(function (item) {
-            var clientId = item.getAttribute('data-id');
-            if (clientId.includes(inputVal)) {
-                item.style.display = ''; // Show the item if it matches
-            } else {
-                item.style.display = 'none'; // Hide the item if it doesn't match
-            }
-        });
+        if (listItems.length > 0) {
+            listItems.forEach(function (item) {
+                var clientId = item.getAttribute('data-id');
+                if (clientId.includes(inputVal)) {
+                    item.style.display = ''; // Show the item if it matches
+                } else {
+                    item.style.display = 'none'; // Hide the item if it doesn't match
+                }
+            });
+        }
+        
     });
+
+    //select client
+    var listClient = document.getElementById('listClient');
+    if (listClient) {
+
+        var elements = listClient.getElementsByTagName('li');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].addEventListener('click', function () {
+                //for (let j = 0; j < elements.length; j++) {
+                //    elements[j].classList.remove('active');
+                //}
+
+                //// Add 'active' class to the clicked element
+                //this.classList.add('active');
+
+                var id = this.getAttribute('data-id');
+                var name = this.getAttribute('data-name');
+                var idAddress = this.getAttribute('data-idAddress');
+
+                document.getElementById('clientDataInput').value = id + ' - '+name;
+                document.getElementById('idAddressClient').value = idAddress;
+
+                assignClientToBill(id);
+
+                clientModal.hide();
+            });
+        }       
+    }
 
  
     //-------------------------------------------------------------------------------------//
@@ -106,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     function addProductToCart() {
         var productId = document.getElementById('idProductField').value;
-        fetch('/Facturation/Purcharse/AddProductToCart', {
+        fetch('/Facturation/Purchase/AddProductToCart', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -128,8 +158,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 noProductsVisibleFalse()
                 applyEventListenersToRow();
             })
+    }
 
-
+    function assignClientToBill(idClient) {
+        fetch('/Facturation/Purchase/AssingClientToBill', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `id=${encodeURIComponent(idClient)}`
+        })
+            .then(response => {
+                // Asegúrate de que la respuesta esté bien antes de intentar leerla
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text(); // Usa response.text() ya que esperas HTML como respuesta
+            })
+            .catch(error => {
+                console.error('Error al obtener los departamentos:', error);
+            });
     }
 
 });
