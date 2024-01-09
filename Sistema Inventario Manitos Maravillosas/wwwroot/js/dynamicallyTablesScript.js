@@ -2,12 +2,13 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-var selectedColumn = -1; // -1 representa todas las columnas
-var originalRows = []; // Almacena una copia de las filas originales
+
+var selectedColumn = -1; 
+var originalRows = [];
 document.addEventListener('DOMContentLoaded', function () {
 
     var table = document.getElementsByClassName('dynamicallyTable');
-    var currentPage = 1; // Keeps track of the current page
+    var currentPage = 1; 
     if (table.length > 0) {
         var dynamicallyTable = table[0];
         var exitsShow = dynamicallyTable.getElementsByClassName('showCantRow');
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (currentPage > 1) {
                     currentPage--;
                 } else {
-                    currentPage = totalPages; // Wrap to last page if on the first page
+                    currentPage = totalPages; 
                 }
                 updateTableRows(currentPage, showCantRow.value, tableBody);
             });
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (currentPage < totalPages) {
                     currentPage++;
                 } else {
-                    currentPage = 1; // Wrap to first page if on the last page
+                    currentPage = 1; 
                 }
                 updateTableRows(currentPage, showCantRow.value, tableBody);
             });
@@ -58,25 +59,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.sort-icon').forEach(function (icon, index) {
         icon.addEventListener('click', function () {
-            const tableId = 'table'; // Asegúrate de que este sea el ID de tu tabla
+            const tableId = 'table'; 
             const currentIsAscending = icon.classList.contains("th-sort-asc");
             sortTableByColumn(tableId, index, !currentIsAscending);
         });
-    });
-
-    
+    });    
 });
 
 function applyShowRows(cant, tableBody) {
     var allRows = tableBody.querySelectorAll('tr');
     var totalRows = allRows.length;
 
-    // Hide all rows
     allRows.forEach(function (row) {
         row.style.display = 'none';
     });
 
-    // Show only the number of rows selected by the user
     for (var i = 0; i < cant && i < totalRows; i++) {
         allRows[i].style.display = '';
     }
@@ -87,7 +84,7 @@ function updateCarousel(tableBody, cant) {
     var totalPages = Math.ceil(allRows / cant);
 
     var carouselInner = document.querySelector('.carousel-inner');
-    carouselInner.innerHTML = ''; // Clear existing carousel items
+    carouselInner.innerHTML = ''; 
 
     for (var i = 1; i <= totalPages; i++) {
         var carouselItem = document.createElement('div');
@@ -97,8 +94,6 @@ function updateCarousel(tableBody, cant) {
         carouselInner.appendChild(carouselItem);
     }
 
-    // Optionally, handle the display of carousel controls based on the number of pages
-    // For example, hide them if there's only one page
     var prevButton = document.querySelector('.carousel-control-prev');
     var nextButton = document.querySelector('.carousel-control-next');
     if (totalPages <= 1) {
@@ -117,35 +112,11 @@ function updateTableRows(page, cant, tableBody) {
 
     allRows.forEach(function (row, index) {
         if (index >= start && index < end) {
-            row.style.display = ''; // Show row
+            row.style.display = ''; 
         } else {
-            row.style.display = 'none'; // Hide row
+            row.style.display = 'none'; 
         }
     });
-}
-
-function sortAndFilterTable(columnIndex) {
-    var tableFilter = document.getElementById('table');
-    var rows = originalRows.slice(); // Copia las filas originales
-
-    if (columnIndex >= 0) {
-        // Ordena filas con columna seleccionada
-        rows.sort(function (a, b) {
-            var cellA = a.cells[columnIndex].textContent.trim().toLowerCase();
-            var cellB = b.cells[columnIndex].textContent.trim().toLowerCase();
-            return cellA.localeCompare(cellB);
-        });
-    }
-
-    // Reemplaza la tabla principal con la copia ordenada y filtrada
-    var tableBody = tableFilter.querySelector('tbody');
-    tableBody.innerHTML = ''; // Borra las filas actuales
-
-    rows.forEach(function (row) {
-        tableBody.appendChild(row);
-    });
-
-    filterTable();
 }
 
 function filterTable() {
@@ -177,8 +148,8 @@ function sortTableByColumn(tableId, column, asc = true) {
     const rows = Array.from(tbody.querySelectorAll("tr"));
         
     const sortedRows = rows.sort((a, b) => {
-        const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
-        const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+        const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim().toLowerCase();
+        const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim().toLowerCase();
 
         return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
     });

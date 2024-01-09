@@ -6,6 +6,11 @@ using System.Data.SqlClient;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
+    public interface IAddressService
+    {
+        List<string> GetDepartmentNames();
+        List<string> GetCitiesByDepartmentName(string idDepartment);
+    }
     public class AddressService : IAddressService
     {
         private readonly IConfiguration _configuration;
@@ -47,7 +52,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones
                 throw new Exception("Error al obtener nombres de departamentos.", ex);
             }
             finally

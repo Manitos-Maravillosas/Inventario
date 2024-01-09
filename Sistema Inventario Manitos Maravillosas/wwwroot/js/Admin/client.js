@@ -27,17 +27,7 @@
     }
 
     document.getElementById('assignAddress').addEventListener('click', function () {
-        if (action === 'Edit') {
-            departmentSelect.value = selectedDepartment;
-            citySelect.value = selectedCity;
-            addressInput.value = selectedAddress;
-        } else {
-            departmentSelect.value = '';
-            citySelect.value = '';
-            addressInput.value = '';
-        }
-
-        cargarDepartamentos(selectedDepartment); 
+        cargarDepartamentos();
         modalAddress.show();
     });
 

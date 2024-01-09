@@ -142,13 +142,16 @@
                     <select class="form-select my-2" id="departmentSelect" aria-label="Selector de Departamento">
                         <option value="">Selecciona un Departamento</option>
                     </select>
+                    <span asp-validation-for="DepartmentName" class="text-danger"></span>
 
                     <label class="form-label">Municipio</label>
                     <select class="form-select my-2" asp-for="CityName" id="citySelect" aria-label="Selector de Ciudad" disabled>
                         <option value="">Primero seleccione un Departamento</option>
                     </select>
+                    <span asp-validation-for="CityName" class="text-danger"></span>
                     <label class="form-label">Dirección Exacta</label>
                     <textarea class="form-control my-2" asp-for="Signs" id="additionalInfoInput" placeholder="Primero seleccione un municipio" aria-label="Información Adicional" disabled></textarea>
+                    <span asp-validation-for="Signs" class="text-danger"></span>
                 </div>                                
             </div>
             <div class="modal-footer">
