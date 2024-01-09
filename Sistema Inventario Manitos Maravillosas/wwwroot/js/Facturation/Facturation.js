@@ -59,7 +59,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 var id = this.getAttribute('data-id');
                 var name = this.getAttribute('data-name');
-                var idAddress = this.getAttribute('data-idAddress');
+                var idAddress = this.getAttribute('data-idaddress');
+
+                console.log(id + ' - ' + name)
+                console.log(idAddress)
+
 
                 document.getElementById('clientDataInput').value = id + ' - '+name;
                 document.getElementById('idAddressClient').value = idAddress;

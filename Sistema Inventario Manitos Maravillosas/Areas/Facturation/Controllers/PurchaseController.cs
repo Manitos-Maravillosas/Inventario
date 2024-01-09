@@ -29,6 +29,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         public ActionResult Index()
         {
             List<Client> clients = _clientService.GetAll();
+            var sessionData = HttpContext.Session.GetString("Bill");
+            if (!string.IsNullOrEmpty(sessionData))
+            {
+                ViewData["isBill"] = true;
+                ViewData["bill"] = GetBill();
+            }
 
             return View(clients);
         }
@@ -57,7 +63,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                     addProductToCartXBill(product);
 
                     updatePriceBill();
-                    Bill asdf = GetBill();
                     return PartialView("_tableProducts", GetBill());
 
                     //return Json(new { success = true, message = "Product added to cart successfully.", data = productDto });
@@ -169,10 +174,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         {
             Bill bill = GetBill();
             bill.IdClient = id;
+            bill.Client = _clientService.GetById(id);
             SaveBill(bill);
         }
 
-        private Bill? GetBill()
+        private Bill GetBill()
         {
             var sessionData = HttpContext.Session.GetString("Bill");
             return string.IsNullOrEmpty(sessionData)  ? new Bill() : JsonConvert.DeserializeObject<Bill>(sessionData);
