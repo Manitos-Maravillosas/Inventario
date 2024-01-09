@@ -1,21 +1,4 @@
-﻿//Json Structure of a billData
-
-//{
-//    "IdBill": 0,
-//        "Date": "2024-01-09T07:08:41.182531",
-//            "PercentDiscount": 0.0,
-//                "SubTotal": 0.0,
-//                    "TotalCost": 0.0,
-//                        "IdEmployee": "defaultEmployeeId",
-//                            "Employee": null,
-//                                "IdClient": "defaultClientId",
-//                                    "Client": null,
-//                                        "IdBusiness": 1,
-//                                            "Business": null,
-//                                                "CartXProducts": []
-//}
-
-
+﻿
 document.addEventListener('DOMContentLoaded', function () {
 
 
@@ -38,11 +21,26 @@ document.addEventListener('DOMContentLoaded', function () {
     if (openNewClient) {
         openNewClient.addEventListener('click', function () {
 
-            clientModal.hide();
-            
+            clientModal.hide();            
             newClient.show();
         });
     }
+
+    //filter identification
+    document.getElementById('identificationClientFilter').addEventListener('input', function () {
+        var inputVal = this.value;
+        var listItems = document.querySelectorAll('#listClient .list-group-item');
+
+        listItems.forEach(function (item) {
+            var clientId = item.getAttribute('data-id');
+            if (clientId.includes(inputVal)) {
+                item.style.display = ''; // Show the item if it matches
+            } else {
+                item.style.display = 'none'; // Hide the item if it doesn't match
+            }
+        });
+    });
+
  
     //-------------------------------------------------------------------------------------//
     //                                  Delevery Modal                                      //
@@ -126,65 +124,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 // 'html' es el HTML de tu PartialView
                 // Inserta este HTML en la tabla o donde necesites actualizar
 
-                console.log(tableBodyHtml);
-                var table = document.getElementById('productsTable');
-                var last = document.getElementById('productsBody');
-                if (last != null) {
-                    table.removeChild(last)
-                }
-                table.innerHTML += tableBodyHtml; // Esto agregará la fila al final de tu tabla
+                addRow(tableBodyHtml);
                 noProductsVisibleFalse()
+                applyEventListenersToRow();
             })
-            //.then(response => response.json())
-            //.then(data => {
-            //    console.log(data)
-            //    if (data.success) {
-            //        console.log(data.data);
-            //    } else {
-            //        var validation = document.getElementById('prductValidadtion');
-            //        validation.textContent = data.innerExeption;
-            //        validation.classList.remove('d-none');
-            //    }
-            //})
+
 
     }
 
 });
 
-function addRow(table, newRow, billData) {
 
-    // Find the Subtotal row
-    var subtotalRow = Array.from(table.getElementsByTagName('tr')).find(row => {
-        var cells = row.getElementsByTagName('td');
-        return cells.length > 0 && cells[0].textContent.trim() === 'Subtotal';
-    });
-
-    //apply data to row
-    var cells = newRow.getElementsByTagName('td');
-    var id = newRow.getElementsByTagName('th');
-
-    id[0].textContent = JsonData.idProduct;
-    cells[0].textContent = JsonData.name;
-    cells[1].textContent = JsonData.description;
-    cells[2].textContent = JsonData.price;
-    cells[4].textContent = JsonData.price * 1;
-
-
-    // Insert the new row before the Subtotal row
-    if (subtotalRow) {
-        table.insertBefore(newRow, subtotalRow);
-    } else {
-        // Fallback in case Subtotal row is not found
-        table.appendChild(newRow);
+function addRow(tableBodyHtml) {
+    var table = document.getElementById('productsTable');
+    var last = document.getElementById('productsBody');
+    if (last != null) {
+        table.removeChild(last)
     }
-
-
-
-    noProductsVisibleFalse();
+    table.innerHTML += tableBodyHtml; // Esto agregará la fila al final de tu tabla
 }
-
-
-
 
 function noProductsVisibleFalse() {
     var noProducts = document.getElementById('noProducts');
@@ -193,41 +151,10 @@ function noProductsVisibleFalse() {
     noProducts.classList.add('d-none');
 }
 
-// Function to add a new non-editable row
-function addNonEditableRow(JsonData) {
 
-    
-    var cells = newRow.getElementsByTagName('td');
-    var id = newRow.getElementsByTagName('th');
-    id[0].textContent = JsonData.idProduct;
-    cells[0].textContent = JsonData.name;
-    cells[1].textContent = JsonData.description;
-    cells[2].textContent = JsonData.price;
-    cells[4].textContent = JsonData.price * 1;
-
-    var cantCell = newRow.getElementsByClassName('editableCell')[0];
-    cantCell.textContent = 1;
-
-    applyEventListenersToRow(newRow); // Apply event listeners to the new row)
-    // Find the Subtotal row
-    var subtotalRow = Array.from(table.getElementsByTagName('tr')).find(row => {
-        var cells = row.getElementsByTagName('td');
-        return cells.length > 0 && cells[0].textContent.trim() === 'Subtotal';
-    });
-
-    // Insert the new row before the Subtotal row
-    if (subtotalRow) {
-        table.insertBefore(newRow, subtotalRow);
-    } else {
-        // Fallback in case Subtotal row is not found
-        table.appendChild(newRow);
-    }
-
-    noProductsVisibleFalse();
-}
-function applyEventListenersToRow(row) {
-    var editableCells = row.querySelectorAll('.editableCell');
-    var editableInputs = row.querySelectorAll('.editableInput');
+function applyEventListenersToRow() {
+    var editableCells = document.querySelectorAll('.editableCell');
+    var editableInputs = document.querySelectorAll('.editableInput');
 
     editableCells.forEach(function (cell) {
         cell.addEventListener('dblclick', function () {
@@ -259,3 +186,6 @@ function applyEventListenersToRow(row) {
     });
 }
 
+//-------------------------------------------------------------------------------------//
+//                                  Product into row                                   //
+//-------------------------------------------------------------------------------------//

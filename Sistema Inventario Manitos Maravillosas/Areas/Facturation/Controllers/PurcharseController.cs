@@ -81,7 +81,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private void addProductToCartXBill(Product product)
         {
             Bill bill = GetBill();
-
+            var flagProductFound = false;
             if (bill.CartXProducts == null)
             {
                 bill.CartXProducts = new List<CartXProduct>();
@@ -106,8 +106,22 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                     {
                         item.Quantity += 1;
                         item.SubTotal = item.Quantity * item.Price;
+                        flagProductFound = true;
                         break;
                     }
+                }
+
+                if(!flagProductFound)
+                {
+                    bill.CartXProducts.Add(new CartXProduct
+                    {
+                        IdProduct = product.IdProduct,
+                        Quantity = 1,
+                        Cost = product.Cost,
+                        Price = product.Price,
+                        SubTotal = product.Price,
+                        Product = product
+                    });
                 }
             }
 
