@@ -1,10 +1,12 @@
 using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Filters;
 using SistemaInventario.Data;
 
 
@@ -13,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>(); // Agrega esta línea
+builder.Services.AddSingleton<IFileLogger, FileLogger>();
 
 
 var emailConfig = builder.Configuration
@@ -22,7 +25,11 @@ builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<CustomExceptionFilter>();
+});
+
 
 builder.Services.AddRazorPages();
 
@@ -33,7 +40,9 @@ builder.Services.AddDbContext<InventarioDbContext>(options => options.UseSqlServ
     builder.Configuration.GetConnectionString("ConnectionToDataBase")));
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<InventarioDbContext>().AddDefaultTokenProviders();
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<InventarioDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddHttpClient(); // Register HttpClient
 
@@ -57,6 +66,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseStatusCodePagesWithReExecute("/Error/Index/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

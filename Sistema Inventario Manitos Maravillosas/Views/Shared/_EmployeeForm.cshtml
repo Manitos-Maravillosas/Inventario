@@ -78,14 +78,22 @@
 
                 <div class="col-md-6">
                     <label asp-for="Email" class="control-label mb-2">Correo Electrónico</label>
-                    <div class="select-wrapper">
-                        <select asp-for="Email" class="form-control" asp-items="ViewBag.UserEmails">
-                            <option value="">Seleccione un correo electrónico</option>
-                        </select>
-                    </div>
+                    <input type="email" class="form-control" asp-for="Email" aria-label="Correo electrónico">
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
+            </div>
 
+            <!-- Fila 4: Roles -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Role" class="control-label mb-2">Rol</label>
+                    <div class="select-wrapper">
+                        <select asp-for="Role" class="form-control" asp-items="ViewBag.RoleNames">
+                            <option value="">Seleccione un rol</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
             </div>
 
             <!-- Botón de envío y volver -->

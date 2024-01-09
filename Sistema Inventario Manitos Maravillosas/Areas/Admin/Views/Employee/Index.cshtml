@@ -74,9 +74,8 @@
                                         </form>
                                         <form id="deleteForm-@employee.IdEmployee" asp-action="Delete" method="post" style="display: inline-block;">
                                             <input type="hidden" name="id" value="@employee.IdEmployee" />
-                                            <button type="button" onclick="confirmDelete('@employee.IdEmployee', '@employee.IdEmployee')" class="icon-button bi bi-trash-fill" aria-label="Eliminar"></button>
+                                            <button type="button" onclick="confirmDelete('@employee.IdEmployee', '@employee.Name')" class="icon-button bi bi-trash-fill" aria-label="Eliminar"></button>
                                         </form>
-
                                     </td>
                                 </tr>
                             }
