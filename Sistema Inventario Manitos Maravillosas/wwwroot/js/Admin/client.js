@@ -21,18 +21,30 @@
 
         cargarDepartamentos(selectedDepartment);
         cargarCiudades(selectedDepartment, selectedCity);
+        
         citySelect.disabled = false;
         addressInput.disabled = false;
     }
 
     document.getElementById('assignAddress').addEventListener('click', function () {
-        cargarDepartamentos();
+        if (action === 'Edit') {
+            departmentSelect.value = selectedDepartment;
+            citySelect.value = selectedCity;
+            addressInput.value = selectedAddress;
+        } else {
+            departmentSelect.value = '';
+            citySelect.value = '';
+            addressInput.value = '';
+        }
+
+        cargarDepartamentos(selectedDepartment); 
         modalAddress.show();
     });
 
     departmentSelect.addEventListener('change', function () {
         selectedDepartment = this.value;
         cargarCiudades(selectedDepartment);
+        // No habilitar el campo de dirección aquí para el modo "Crear"
         if (action === 'Edit') {
             addressInput.disabled = false;
         }
@@ -40,7 +52,7 @@
 
     citySelect.addEventListener('change', function () {
         selectedCity = this.value;
-        
+        // Habilitar el campo de dirección solo después de seleccionar una ciudad en el modo "Crear"
         addressInput.disabled = selectedCity === '';
         addressInput.placeholder = selectedCity ? "Dirección Exacta" : "Primero seleccione un municipio";
     });
@@ -84,12 +96,14 @@
                 console.error('Error al obtener las ciudades:', error);
             });
     }
+
     window.saveAddress = function () {
         var department = departmentSelect.value;
         var city = citySelect.value;
         var address = addressInput.value;
 
-        if (action === 'Create' && (!department || !city || !address)) {            
+        if (action === 'Create' && (!department || !city || !address)) {
+            // En modo 'Crear', no permitir guardar sin todos los campos
             return;
         }
 
