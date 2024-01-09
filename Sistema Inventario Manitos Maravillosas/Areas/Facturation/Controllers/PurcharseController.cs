@@ -4,6 +4,8 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Newtonsoft.Json;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
@@ -15,6 +17,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly IClientService _clientService;
 
         private List<Product> cartProducts = new List<Product>();
+        private List<Bill> bills = new List<Bill>();
 
         public PurcharseController(IProductService productService, IClientService clientService)
         {
@@ -26,7 +29,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         public ActionResult Index()
         {
             List<Client> clients = _clientService.GetAll();
-            ViewBag.Title = "Facturaasdfasdftion";
+
             return View(clients);
         }
 
@@ -49,8 +52,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                         Status = product.Status
                         // Map other properties as needed
                     };
-                    cartProducts.Add(product);
-                    return Json(new { success = true, message = "Product added to cart successfully.", data = productDto });
+
+                    // Add the new product to the cart
+                    addProductToCartXBill(product);
+
+                    updatePriceBill();
+                    Bill asdf = GetBill();
+                    return PartialView("_tableProducts", GetBill());
+
+                    //return Json(new { success = true, message = "Product added to cart successfully.", data = productDto });
 
                 }
                 else
@@ -60,14 +70,73 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             }
             catch (CustomDataException ex)
             {
-                return Json(new { success = false, message = ex.Message, innerExeption = ex.InnerException });
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("A general error occurred in ProductService.", ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
         }
 
+        private void addProductToCartXBill(Product product)
+        {
+            Bill bill = GetBill();
+
+            if (bill.CartXProducts == null)
+            {
+                bill.CartXProducts = new List<CartXProduct>();
+            }
+            else if (bill.CartXProducts.Count == 0)
+            {
+                bill.CartXProducts.Add(new CartXProduct
+                {
+                    IdProduct = product.IdProduct,
+                    Quantity = 1,
+                    Cost = product.Cost,
+                    Price = product.Price,
+                    SubTotal = product.Price,
+                    Product = product
+                });
+            }
+            else
+            {
+                foreach (var item in bill.CartXProducts)
+                {
+                    if (item.IdProduct == product.IdProduct)
+                    {
+                        item.Quantity += 1;
+                        item.SubTotal = item.Quantity * item.Price;
+                        break;
+                    }
+                }
+            }
+
+            SaveBill(bill);
+        }
+
+        private void updatePriceBill()
+        {
+            Bill bill = GetBill();
+           
+            //Update bill
+            bill.SubTotal = bill.CartXProducts.Sum(x => x.SubTotal);
+            bill.TotalCost = bill.SubTotal - (bill.SubTotal * (bill.PercentDiscount / 100));
+            SaveBill(bill);
+        }
+
+        private Bill GetBill()
+        {
+            var sessionData = HttpContext.Session.GetString("Bill");
+            return string.IsNullOrEmpty(sessionData)
+                ? new Bill()
+                : JsonConvert.DeserializeObject<Bill>(sessionData);
+        }
+
+        private void SaveBill(Bill bill)
+        {
+            var sessionData = JsonConvert.SerializeObject(bill);
+            HttpContext.Session.SetString("Bill", sessionData);
+        }
         [HttpGet]
         public IActionResult GetClients()
         {

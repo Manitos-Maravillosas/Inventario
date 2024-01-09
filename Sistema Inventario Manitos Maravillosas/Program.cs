@@ -76,6 +76,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseSession(); // Add this line to use session middleware
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(

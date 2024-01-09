@@ -13,6 +13,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 
         private readonly IClientService _clientService;
 
+
+
         public ClientController(IClientService clientService)
         {
             _clientService = clientService;
