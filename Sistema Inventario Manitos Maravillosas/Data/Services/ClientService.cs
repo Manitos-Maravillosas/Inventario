@@ -141,7 +141,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("spClienatCRUD", connection))
+                    using (SqlCommand command = new SqlCommand("spClientCRUD", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 

@@ -31,7 +31,7 @@
                 {
                     Directory.CreateDirectory(_logDirectoryPath);
                 }
-                string logFilePath = Path.Combine(_logDirectoryPath, $"ErrorLog_{DateTime.Now:yyyyMMdd}.txt");
+                string logFilePath = Path.Combine(_logDirectoryPath, $"ErrorLog_{DateTime.Now:yyyy-MM-dd}.txt");
 
                 // Append the message to the log file
                 File.AppendAllText(logFilePath, messageToLog);
