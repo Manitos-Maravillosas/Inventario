@@ -6,6 +6,19 @@ using System.Data.SqlClient;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
+
+    public interface IClientService
+    {
+        List<Client> GetAll();
+        Client GetById(string id);
+        OperationResult Add(Client newClient);
+        OperationResult Update(Client newClient);
+        OperationResult Delete(string id);
+        List<string> GetDepartmentNames();
+        List<string> GetCitiesByDepartmentName(string idDepartment);
+
+    }
+
     public class ClientService : IClientService
     {
         private readonly IConfiguration _configuration;
