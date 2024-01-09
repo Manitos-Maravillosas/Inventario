@@ -16,6 +16,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public float Stock { get; set; }
         public float Cost { get; set; }
+        public float Price { get; set; }
 
         [StringLength(150)]
         public string Description { get; set; }

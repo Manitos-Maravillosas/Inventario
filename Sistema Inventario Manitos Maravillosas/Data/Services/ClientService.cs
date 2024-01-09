@@ -6,6 +6,19 @@ using System.Data.SqlClient;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
+
+    public interface IClientService
+    {
+        List<Client> GetAll();
+        Client GetById(string id);
+        OperationResult Add(Client newClient);
+        OperationResult Update(Client newClient);
+        OperationResult Delete(string id);
+        List<string> GetDepartmentNames();
+        List<string> GetCitiesByDepartmentName(string idDepartment);
+
+    }
+
     public class ClientService : IClientService
     {
         private readonly IConfiguration _configuration;
@@ -57,14 +70,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 }
                 else
                 {
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                    throw new CustomDataException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
 
-                
+
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return result;
@@ -116,15 +129,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     return result;
                 }
                 else
-                {                    
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                {
+                    throw new CustomDataException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
 
 
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return result;
@@ -183,7 +196,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                clients.Clear(); 
+                clients.Clear();
+                throw new CustomDataException(ex.Message, ex);
             }
 
             return clients;
@@ -244,7 +258,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred while fetching the client by ID.", ex);
             }
 
             return client;
@@ -293,14 +307,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 }
                 else
                 {
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                    throw new CustomDataException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
 
 
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return result;

@@ -28,6 +28,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Controllers\Inventory\" />
+    <Folder Include="Logs\" />
   </ItemGroup>
 
   <ItemGroup>

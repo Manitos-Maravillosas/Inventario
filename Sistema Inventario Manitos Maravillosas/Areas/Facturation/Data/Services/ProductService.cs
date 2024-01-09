@@ -132,7 +132,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                             while (dataReader.Read())
                             {
                                 product.IdProduct = Convert.ToString(dataReader["IdProduct"]);
-                                product.ProductName = Convert.ToString(dataReader["Product"]);
+                                product.ProductName = Convert.ToString(dataReader["name"]);
                                 product.Stock = Convert.ToInt32(dataReader["Stock"]);
                                 product.Cost = Convert.ToInt32(dataReader["Cost"]);
                                 product.Description = Convert.ToString(dataReader["Description"]);
