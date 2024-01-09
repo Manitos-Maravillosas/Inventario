@@ -1,10 +1,12 @@
 using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Filters;
 using SistemaInventario.Data;
 
 
@@ -15,6 +17,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>(); 
 builder.Services.AddScoped<IAddressService, AddressService>(); 
 builder.Services.AddScoped<IBusinessService, BusinessService>();
+builder.Services.AddSingleton<IFileLogger, FileLogger>();
+
 
 var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
@@ -23,7 +27,11 @@ builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<CustomExceptionFilter>();
+});
+
 
 builder.Services.AddRazorPages();
 

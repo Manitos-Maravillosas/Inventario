@@ -8,7 +8,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
     public interface IEmployeeService
     {
         List<Employee> GetAll();
-        Employee GetById(string id);        
+        Employee GetById(string id);       
         List<string> GetRoleNames();
         public string GetUserId(string employeeId);
         List<string> GetUserEmails();
@@ -97,9 +97,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
             return employees;
         }
-
         
-
         //------------------------------------------------------------------------------------
         //                              GetRoleNames                                             
         //------------------------------------------------------------------------------------
