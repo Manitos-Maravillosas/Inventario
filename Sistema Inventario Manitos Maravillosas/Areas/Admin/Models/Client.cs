@@ -19,12 +19,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
         public string LastName2 { get; set; }
         
         [Required(ErrorMessage = "El número de contacto del cliente es requerido.")]
-        public string PhoneNumber { get; set; }               
+        public string PhoneNumber { get; set; }           
 
         public int IdAddress { get; set; }
+        [Required(ErrorMessage = "Debe elegir un departamento.")]
         public string DepartmentName { get; set; }
+        [Required(ErrorMessage = "Debe elegir un municipio.")]
         public string CityName { get; set; }
-        public string Signs { get; set; }
-        
+        [Required(ErrorMessage = "Debe ingresar la dirección exacta.")]
+        public string Signs { get; set; }        
     }
 }

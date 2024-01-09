@@ -14,7 +14,6 @@
 <div id="cityInfo" data-city="@city" style="display:none;"></div>
 <div id="addressInfo" data-address="@address" style="display:none;"></div>
 
-
 <div id="actionInfo" data-action="@action" style="display:none;"></div>
 
 <div class="card">
@@ -28,9 +27,9 @@
     <div class="card-body">
         
         <form id="clientForm" asp-controller="Client" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
-            <input type="hidden" id="hiddenCityField" name="CityName">
-            <input type="hidden" id="hiddenAddressField" name="Signs">
-            <input type="hidden" id="hiddenDepartmentField" name="DepartmentName">
+            <input type="hidden" id="hiddenCityField" asp-for="CityName" name="CityName">
+            <input type="hidden" id="hiddenAddressField" asp-for="Signs" name="Signs">
+            <input type="hidden" id="hiddenDepartmentField" asp-for="DepartmentName" name="DepartmentName">
 
             <!-- Fila 1: Identificación, Nombre -->
             <div class="row mb-3">
@@ -143,13 +142,16 @@
                     <select class="form-select my-2" id="departmentSelect" aria-label="Selector de Departamento">
                         <option value="">Selecciona un Departamento</option>
                     </select>
+                    <span asp-validation-for="DepartmentName" class="text-danger"></span>
 
                     <label class="form-label">Municipio</label>
                     <select class="form-select my-2" asp-for="CityName" id="citySelect" aria-label="Selector de Ciudad" disabled>
                         <option value="">Primero seleccione un Departamento</option>
                     </select>
+                    <span asp-validation-for="CityName" class="text-danger"></span>
                     <label class="form-label">Dirección Exacta</label>
                     <textarea class="form-control my-2" asp-for="Signs" id="additionalInfoInput" placeholder="Primero seleccione un municipio" aria-label="Información Adicional" disabled></textarea>
+                    <span asp-validation-for="Signs" class="text-danger"></span>
                 </div>                                
             </div>
             <div class="modal-footer">
