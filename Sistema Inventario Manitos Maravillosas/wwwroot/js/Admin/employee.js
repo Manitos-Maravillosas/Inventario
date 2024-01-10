@@ -33,14 +33,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('searchInput').addEventListener('keyup', filterTable);
 });
 
-// Resto de tu código, incluyendo las funciones sortAndFilterTable y filterTable
 
 function sortAndFilterTable(columnIndex) {
     var table = document.getElementById('employees');
-    var rows = originalRows.slice(); // Copia las filas originales
+    var rows = originalRows.slice(); 
 
     if (columnIndex >= 0) {
-        // Ordena filas con columna seleccionada
         rows.sort(function (a, b) {
             var cellA = a.cells[columnIndex].textContent.trim().toLowerCase();
             var cellB = b.cells[columnIndex].textContent.trim().toLowerCase();
@@ -48,9 +46,8 @@ function sortAndFilterTable(columnIndex) {
         });
     }
 
-    // Reemplaza la tabla principal con la copia ordenada y filtrada
     var tableBody = table.querySelector('tbody');
-    tableBody.innerHTML = ''; // Borra las filas actuales
+    tableBody.innerHTML = ''; 
 
     rows.forEach(function (row) {
         tableBody.appendChild(row);

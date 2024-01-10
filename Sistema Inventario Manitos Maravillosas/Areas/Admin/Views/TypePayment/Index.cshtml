@@ -58,7 +58,6 @@
                                 <tr>
                                     <td>@typePayment.Id</td>
                                     <td>@typePayment.Name</td>
-                                    <td>@typePayment.CoinName</td>
                                     <td>@typePayment.CoinDescription</td>
                                     <td>
                                         <form asp-action="Edit" method="get" style="display: inline-block;">
@@ -145,10 +144,10 @@
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Construye el ID del formulario basado en el ID del cliente
+                    
                     var formId = "deleteForm-" + typePaymentId;
                     var form = document.getElementById(formId);
-                    form.submit();  // Envía el formulario
+                    form.submit();  
                 }
             });
         }

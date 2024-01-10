@@ -6,26 +6,26 @@ using System.Data.SqlClient;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
-    public interface IBusinessService
+    public interface ICoinService
     {
-        List<string> GetBusinessNames();
+        List<string> GetCoinDescriptions();
     }
-    public class BusinessService : IBusinessService
+    public class CoinService : ICoinService
     {
         private readonly IConfiguration _configuration;
 
         private OperationResult result = new OperationResult(true, "");
 
-        public BusinessService(IConfiguration configuration)
+        public CoinService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
         //------------------------------------------------------------------------------------
-        //                              GetBusinessNames                                             
+        //                              GetCoinDescriptions                                             
         //------------------------------------------------------------------------------------
-        public List<string> GetBusinessNames()
+        public List<string> GetCoinDescriptions()
         {
-            List<string> businessNames = new List<string>();
+            List<string> coinDescriptions = new List<string>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
             SqlConnection connection = null;
 
@@ -33,24 +33,24 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 connection = new SqlConnection(connectionString);
 
-                using (SqlCommand getBusinessNamesCommand = new SqlCommand("spGetBusinessNames", connection))
+                using (SqlCommand getCoinDescriptionsCommand = new SqlCommand("spGetCoinDescriptions", connection))
                 {
-                    getBusinessNamesCommand.CommandType = CommandType.StoredProcedure;
+                    getCoinDescriptionsCommand.CommandType = CommandType.StoredProcedure;
                     connection.Open();
 
-                    using (SqlDataReader businessDataReader = getBusinessNamesCommand.ExecuteReader())
+                    using (SqlDataReader coinDataReader = getCoinDescriptionsCommand.ExecuteReader())
                     {
-                        while (businessDataReader.Read())
+                        while (coinDataReader.Read())
                         {
-                            string businessName = businessDataReader["name"].ToString();
-                            businessNames.Add(businessName);
+                            string coinDescription = coinDataReader["description"].ToString();
+                            coinDescriptions.Add(coinDescription);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener nombres de negocios.", ex);
+                throw new Exception("Error al obtener descripciones de monedas.", ex);
             }
             finally
             {
@@ -59,8 +59,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     connection.Close();
                 }
             }
-            return businessNames;
+            return coinDescriptions;
         }
+
 
     }
 }

@@ -17,6 +17,7 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IAddressService, AddressService>(); 
 builder.Services.AddScoped<IBusinessService, BusinessService>();
 builder.Services.AddScoped<ITypePaymentService, TypePaymentService>();
+builder.Services.AddScoped<ICoinService, CoinService>();
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
 
 var emailConfig = builder.Configuration

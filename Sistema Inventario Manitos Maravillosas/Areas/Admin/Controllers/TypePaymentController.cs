@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 
@@ -9,12 +11,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
     public class TypePaymentController : Controller
     {
         private readonly ITypePaymentService _TypePaymentService;
-        public TypePaymentController(ITypePaymentService typePaymentService)
+        private readonly ICoinService _CoinService;
+        public TypePaymentController(ITypePaymentService typePaymentService, ICoinService coinService)
         {
             _TypePaymentService = typePaymentService;
+            _CoinService = coinService;
         }
 
         // GET: TypePaymentController
+        
         public ActionResult Index()
         {
             var typePayments = _TypePaymentService.GetAll();
@@ -31,22 +36,28 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // GET: TypePaymentController/Create
         public ActionResult Create()
         {
+            var coinDescriptions = _CoinService.GetCoinDescriptions();
+            ViewBag.CoinDescriptions = new SelectList(coinDescriptions);
             return View();
         }
 
         // POST: TypePaymentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(TypePayment typePayment)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _TypePaymentService.Add(typePayment);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Tipo de pago agregado correctamente!";
+
             }
-            catch
-            {
-                return View();
-            }
+            ViewBag.CoinDescriptions = new SelectList(_CoinService.GetCoinDescriptions());
+            return View(typePayment);
         }
 
         // GET: TypePaymentController/Edit/5

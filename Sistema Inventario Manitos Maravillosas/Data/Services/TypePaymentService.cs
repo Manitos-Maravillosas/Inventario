@@ -3,15 +3,17 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
     public interface ITypePaymentService
     {
         List<TypePayment> GetAll();
+        OperationResult Add(TypePayment newTypePayment);
         OperationResult Delete(string id);
-
     }
+
 
     public class TypePaymentService : ITypePaymentService
     {
@@ -23,7 +25,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         {
             _configuration = configuration;
         }
-        
+
         //------------------------------------------------------------------------------------
         //                              GetAll                                             
         //------------------------------------------------------------------------------------
@@ -44,9 +46,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         {
                             new SqlParameter("@idTypePayment", DBNull.Value),
                             new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@idCoin", DBNull.Value),
-                            new SqlParameter("@coinName", DBNull.Value),
-                            new SqlParameter("@operation", '2') 
+                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@operation", '2')
                         };
 
                         command.Parameters.AddRange(parameters);
@@ -55,15 +56,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         using (SqlDataReader dataReader = command.ExecuteReader())
                         {
-                            
+
                             while (dataReader.Read())
                             {
                                 TypePayment typePayment = new TypePayment
                                 {
                                     Id = Convert.ToInt32(dataReader["idTypePayment"]),
                                     Name = dataReader["name"].ToString(),
-                                    CoinName = dataReader["coinName"].ToString(),
-                                    CoinDescription = dataReader["coinDescription"].ToString()                                    
+                                    CoinDescription = dataReader["coinDescription"].ToString(),                                    
                                 };
                                 typePayments.Add(typePayment);
                             }
@@ -78,6 +78,54 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
 
             return typePayments;
+        }
+
+
+        //------------------------------------------------------------------------------------
+        //                              Add                                             
+        //------------------------------------------------------------------------------------
+        public OperationResult Add(TypePayment newTypePayment)
+        {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spTypePaymentCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.Add(new SqlParameter("@idTypePayment", newTypePayment.Id != 0 ? (object)newTypePayment.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newTypePayment.Name) ? DBNull.Value : newTypePayment.Name));
+                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newTypePayment.CoinDescription) ? DBNull.Value : newTypePayment.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@operation", 1));
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                if (sqlEx.Number == 50000)
+                {
+                    result.Success = false;
+                    result.Message = sqlEx.Message;
+                    return result;
+                }
+                else
+                {
+                    throw new CustomDataException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+
+            return result;
         }
 
         //------------------------------------------------------------------------------------
@@ -99,8 +147,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         {
                             new SqlParameter("@idTypePayment", id),
                             new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@idCoin", DBNull.Value),
-                            new SqlParameter("@coinName", DBNull.Value),
+                            new SqlParameter("@coinDescription", DBNull.Value),
                             new SqlParameter("@operation", '4')
                         };
 
@@ -124,14 +171,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 {
                     throw new CustomDataException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
-
-
             }
             catch (Exception ex)
             {
                 throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
-
             return result;
         }
 
