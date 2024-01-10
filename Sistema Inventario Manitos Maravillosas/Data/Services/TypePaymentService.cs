@@ -9,7 +9,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
     public interface ITypePaymentService
     {
-        List<TypePayment> GetAll();
+        List<TypePaymentViewModel> GetAll();
         OperationResult Add(TypePayment newTypePayment);
         OperationResult Delete(string id);
     }
@@ -29,9 +29,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         //------------------------------------------------------------------------------------
         //                              GetAll                                             
         //------------------------------------------------------------------------------------
-        public List<TypePayment> GetAll()
+        public List<TypePaymentViewModel> GetAll()
         {
-            List<TypePayment> typePayments = new List<TypePayment>();
+            List<TypePaymentViewModel> typePayments = new List<TypePaymentViewModel>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
             try
@@ -44,10 +44,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         var parameters = new SqlParameter[]
                         {
-                            new SqlParameter("@idTypePayment", DBNull.Value),
-                            new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
-                            new SqlParameter("@operation", '2')
+                    new SqlParameter("@idTypePayment", DBNull.Value),
+                    new SqlParameter("@name", DBNull.Value),
+                    new SqlParameter("@coinDescription", DBNull.Value),
+                    new SqlParameter("@operation", '2')
                         };
 
                         command.Parameters.AddRange(parameters);
@@ -56,14 +56,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         using (SqlDataReader dataReader = command.ExecuteReader())
                         {
-
                             while (dataReader.Read())
                             {
-                                TypePayment typePayment = new TypePayment
+                                TypePaymentViewModel typePayment = new TypePaymentViewModel
                                 {
                                     Id = Convert.ToInt32(dataReader["idTypePayment"]),
                                     Name = dataReader["name"].ToString(),
-                                    CoinDescription = dataReader["coinDescription"].ToString(),                                    
+                                    CoinDescription = dataReader["coinDescription"].ToString(),
+                                    CoinName = dataReader["coinName"].ToString(),
                                 };
                                 typePayments.Add(typePayment);
                             }
@@ -79,6 +79,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
             return typePayments;
         }
+
 
 
         //------------------------------------------------------------------------------------

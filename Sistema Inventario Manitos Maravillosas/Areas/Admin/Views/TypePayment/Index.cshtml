@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.TypePayment>
+﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.TypePaymentViewModel>
+
 
 @{
     ViewData["Title"] = "Tipos de Pago";
@@ -58,6 +59,7 @@
                                 <tr>
                                     <td>@typePayment.Id</td>
                                     <td>@typePayment.Name</td>
+                                    <td>@typePayment.CoinName</td>
                                     <td>@typePayment.CoinDescription</td>
                                     <td>
                                         <form asp-action="Edit" method="get" style="display: inline-block;">
@@ -76,7 +78,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="7" class="text-center">No hay clientes registrados</td>
+                                <td colspan="7" class="text-center">No hay tipos de pago registrados</td>
                             </tr>
                         }
                         
