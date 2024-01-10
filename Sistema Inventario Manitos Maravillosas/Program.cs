@@ -9,7 +9,6 @@ using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Filters;
 using SistemaInventario.Data;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IClientService, ClientService>();
@@ -17,8 +16,9 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>(); 
 builder.Services.AddScoped<IAddressService, AddressService>(); 
 builder.Services.AddScoped<IBusinessService, BusinessService>();
+builder.Services.AddScoped<ITypePaymentService, TypePaymentService>();
+builder.Services.AddScoped<ICoinService, CoinService>();
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
-
 
 var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
