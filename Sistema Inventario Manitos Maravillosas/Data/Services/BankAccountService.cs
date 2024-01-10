@@ -10,6 +10,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
     public interface IBankAccountService
     {
         List<BankAccount> GetAll();
+        OperationResult Delete(string id);
     }
 
 
@@ -77,6 +78,58 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
 
             return bankAccounts;
+        }
+
+        //------------------------------------------------------------------------------------
+        //                              Delete                                             
+        //------------------------------------------------------------------------------------
+        public OperationResult Delete(string id)
+        {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spBankAccountCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        var parameters = new SqlParameter[]
+                        {
+                            new SqlParameter("@idBankAccount", id),
+                            new SqlParameter("@accountNumber", DBNull.Value),
+                            new SqlParameter("@bankName", DBNull.Value),
+                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@operation", '4')
+                        };
+
+                        command.Parameters.AddRange(parameters);
+
+                        connection.Open();
+                        command.ExecuteReader();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                if (sqlEx.Number == 50000)
+                {
+                    result.Success = false;
+                    result.Message = sqlEx.Message;
+                    return result;
+                }
+                else
+                {
+                    throw new CustomDataException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+            return result;
         }
 
 

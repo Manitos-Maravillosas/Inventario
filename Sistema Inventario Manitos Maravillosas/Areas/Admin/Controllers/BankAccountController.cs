@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Models;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 {
@@ -79,16 +80,19 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // POST: BankAccountController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(string id)
         {
-            try
+            OperationResult result = _BankAccountService.Delete(id);
+            if (!result.Success)
             {
-                return RedirectToAction(nameof(Index));
+                ViewData["ErrorMessage"] = result.Message;
             }
-            catch
+            else
             {
-                return View();
+                ViewData["Success"] = "Se ha eliminado la cuenta de banco!";
             }
+            var bankAccounts = _BankAccountService.GetAll();
+            return View("Index", bankAccounts);
         }
     }
 }
