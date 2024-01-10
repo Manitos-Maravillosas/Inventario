@@ -63,22 +63,31 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // GET: TypePaymentController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            TypePayment typePayment = _TypePaymentService.GetById(id);
+            if (typePayment == null)
+            {
+                return NotFound();
+            }
+            ViewBag.CoinDescriptions = new SelectList(_CoinService.GetCoinDescriptions());
+            return View(typePayment);
         }
 
         // POST: TypePaymentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(TypePayment typePayment)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _TypePaymentService.Update(typePayment);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Se ha modificado los datos del tipo de pago!";
+
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
         // GET: TypePaymentController/Delete/5
