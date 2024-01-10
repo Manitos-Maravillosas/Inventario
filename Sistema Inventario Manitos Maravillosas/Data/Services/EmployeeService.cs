@@ -111,17 +111,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 connection = new SqlConnection(connectionString);
 
-                using (SqlCommand getBusinessNamesCommand = new SqlCommand("spGetRoleNames", connection))
+                using (SqlCommand getRolNamesCommand = new SqlCommand("spGetRoleNames", connection))
                 {
-                    getBusinessNamesCommand.CommandType = CommandType.StoredProcedure;
+                    getRolNamesCommand.CommandType = CommandType.StoredProcedure;
                     connection.Open();
 
-                    using (SqlDataReader businessDataReader = getBusinessNamesCommand.ExecuteReader())
+                    using (SqlDataReader rolDataReader = getRolNamesCommand.ExecuteReader())
                     {
-                        while (businessDataReader.Read())
+                        while (rolDataReader.Read())
                         {
-                            string businessName = businessDataReader["Name"].ToString();
-                            roleNames.Add(businessName);
+                            string rolName = rolDataReader["Name"].ToString();
+                            roleNames.Add(rolName);
                         }
                     }
                 }

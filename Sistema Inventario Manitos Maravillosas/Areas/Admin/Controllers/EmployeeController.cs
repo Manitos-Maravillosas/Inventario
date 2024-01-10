@@ -215,6 +215,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 return NotFound();
             }
             ViewBag.BusinessNames = new SelectList(_businessService.GetBusinessNames());
+            ViewBag.RoleNames = new SelectList(_employeeService.GetRoleNames());
+            
             return View(employee);
         }
 
