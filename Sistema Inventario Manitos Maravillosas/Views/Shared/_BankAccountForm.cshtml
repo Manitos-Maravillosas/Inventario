@@ -14,7 +14,7 @@
 <div class="card">
     <div class="card-body">
 
-        <form id="bankAccountForm" asp-controller="TypePayment" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+        <form id="bankAccountForm" asp-controller="BankAccount" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
             <!-- Fila 1: Nombre, Descripcion Moneda -->
             <div class="row mb-3">

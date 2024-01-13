@@ -12,8 +12,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         List<BankAccount> GetAll();
         OperationResult Delete(string id);
         List<string> GetBankNames();
+        OperationResult Add(BankAccount newBankAccount);
+        BankAccount GetById(int id);
+        OperationResult Update(BankAccount newBankAccount);
     }
-
 
     public class BankAccountService : IBankAccountService
     {
@@ -178,6 +180,163 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return BankNames;
         }
 
+        //------------------------------------------------------------------------------------
+        //                              Add                                             
+        //------------------------------------------------------------------------------------
+        public OperationResult Add(BankAccount newBankAccount)
+        {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spBankAccountCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.Add(new SqlParameter("@idBankAccount", newBankAccount.Id != 0 ? (object)newBankAccount.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@accountNumber", string.IsNullOrEmpty(newBankAccount.AccountNumber) ? DBNull.Value : newBankAccount.AccountNumber));
+                        command.Parameters.Add(new SqlParameter("@bankName", string.IsNullOrEmpty(newBankAccount.BankName) ? DBNull.Value : newBankAccount.BankName));
+                        command.Parameters.Add(new SqlParameter("@typePaymentName", string.IsNullOrEmpty(newBankAccount.TypePaymentName) ? DBNull.Value : newBankAccount.TypePaymentName));
+                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newBankAccount.CoinDescription) ? DBNull.Value : newBankAccount.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@operation", 1));
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                if (sqlEx.Number == 50000)
+                {
+                    result.Success = false;
+                    result.Message = sqlEx.Message;
+                    return result;
+                }
+                else
+                {
+                    throw new CustomDataException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+
+            return result;
+        }
+
+        //------------------------------------------------------------------------------------
+        //                              GetById                                             
+        //------------------------------------------------------------------------------------
+        public BankAccount GetById(int id)
+        {
+            BankAccount bankAccount = null;
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spBankAccountCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        var parameters = new SqlParameter[]
+                        {
+                            new SqlParameter("@idBankAccount", id),
+                            new SqlParameter("@accountNumber", DBNull.Value),
+                            new SqlParameter("@bankName", DBNull.Value),
+                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@typePaymentName", DBNull.Value),
+                            new SqlParameter("@operation", '2')
+                        };
+
+                        command.Parameters.AddRange(parameters);
+
+                        connection.Open();
+
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+                            if (dataReader.Read())
+                            {
+                                bankAccount = new BankAccount
+                                {
+                                    Id = Convert.ToInt32(dataReader["iBankAccount"]),
+                                    AccountNumber = dataReader["accountNumber"].ToString(),
+                                    BankName = dataReader["bankName"].ToString(),
+                                    CoinDescription = dataReader["coinDescription"].ToString(),
+                                    TypePaymentName = dataReader["typePaymentName"].ToString(),
+
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred while fetching the type payment by ID.", ex);
+            }
+
+            return bankAccount;
+        }
+
+        //------------------------------------------------------------------------------------
+        //                              Update                                             
+        //------------------------------------------------------------------------------------
+        public OperationResult Update(BankAccount newBankAccount)
+        {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spBankAccountCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.Add(new SqlParameter("@idBankAccount", newBankAccount.Id != 0 ? (object)newBankAccount.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@accountNumber", string.IsNullOrEmpty(newBankAccount.AccountNumber) ? DBNull.Value : newBankAccount.AccountNumber));
+                        command.Parameters.Add(new SqlParameter("@bankName", string.IsNullOrEmpty(newBankAccount.BankName) ? DBNull.Value : newBankAccount.BankName));
+                        command.Parameters.Add(new SqlParameter("@typePaymentName", string.IsNullOrEmpty(newBankAccount.TypePaymentName) ? DBNull.Value : newBankAccount.TypePaymentName));
+                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newBankAccount.CoinDescription) ? DBNull.Value : newBankAccount.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@operation", 3));
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                string userMessage = "An error occurred while processing your request.";
+
+                if (sqlEx.Number == 50000)
+                {
+                    result.Success = false;
+                    result.Message = sqlEx.Message;
+                    return result;
+                }
+                else
+                {
+                    throw new CustomDataException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+
+            return result;
+        }
 
 
     }

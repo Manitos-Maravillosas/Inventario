@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 
@@ -49,37 +50,54 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // POST: BankAccountController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(BankAccount bankAccount)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _BankAccountService.Add(bankAccount);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Cuenta de Banco agregada correctamente!";
+
             }
-            catch
-            {
-                return View();
-            }
+            ViewBag.CoinDescriptions = new SelectList(_CoinService.GetCoinDescriptions());
+            ViewBag.TypePaymentNames = new SelectList(_TypePaymentService.GetTypePayments());
+            ViewBag.BankNames = new SelectList(_BankAccountService.GetBankNames());
+            return View(bankAccount);
         }
 
         // GET: BankAccountController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            BankAccount bankAccount = _BankAccountService.GetById(id);
+            if (bankAccount == null)
+            {
+                return NotFound();
+            }
+            ViewBag.CoinDescriptions = new SelectList(_CoinService.GetCoinDescriptions());
+            ViewBag.TypePaymentNames = new SelectList(_TypePaymentService.GetTypePayments());
+            ViewBag.BankNames = new SelectList(_BankAccountService.GetBankNames());
+            return View(bankAccount);
         }
 
         // POST: BankAccountController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(BankAccount bankAccount)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _BankAccountService.Update(bankAccount);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Se ha modificado los datos de la cuenta de Banco!";
+
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
         // GET: BankAccountController/Delete/5
