@@ -16,6 +16,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
         [Required(ErrorMessage = "Se requiere la moneda de la cuenta de banco.")]
         public string CoinDescription { get; set; }
 
+        [Required(ErrorMessage = "Se requiere el tipo de pago de la cuenta de banco.")]
+        public string TypePaymentName { get; set; }
+
     }
 
 }

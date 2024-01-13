@@ -11,6 +11,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
     {
         List<BankAccount> GetAll();
         OperationResult Delete(string id);
+        List<string> GetBankNames();
     }
 
 
@@ -47,6 +48,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@accountNumber", DBNull.Value),
                             new SqlParameter("@bankName", DBNull.Value),
                             new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@typePaymentName", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -64,6 +66,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     AccountNumber = dataReader["accountNumber"].ToString(),
                                     BankName = dataReader["bankName"].ToString(),
                                     CoinDescription = dataReader["coinDescription"].ToString(),
+                                    TypePaymentName = dataReader["typePaymentName"].ToString(),
                                 };
                                 bankAccounts.Add(bankAccount);
                             }
@@ -101,6 +104,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@accountNumber", DBNull.Value),
                             new SqlParameter("@bankName", DBNull.Value),
                             new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@typePaymentName", DBNull.Value),
                             new SqlParameter("@operation", '4')
                         };
 
@@ -130,6 +134,48 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
             return result;
+        }
+
+        //------------------------------------------------------------------------------------
+        //                              GetBankNmaes                                             
+        //------------------------------------------------------------------------------------
+        public List<string> GetBankNames()
+        {
+            List<string> BankNames = new List<string>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null;
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand GetBankNamesCommand = new SqlCommand("spGetBankNames", connection))
+                {
+                    GetBankNamesCommand.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataReader bankNameDataReader = GetBankNamesCommand.ExecuteReader())
+                    {
+                        while (bankNameDataReader.Read())
+                        {
+                            string bankName = bankNameDataReader["name"].ToString();
+                            BankNames.Add(bankName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener descripciones de monedas.", ex);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            return BankNames;
         }
 
 

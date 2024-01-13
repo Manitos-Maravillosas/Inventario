@@ -14,6 +14,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         TypePayment GetById(int id);
         OperationResult Delete(string id);
         OperationResult Update(TypePayment newTypePayment);
+        List<string> GetTypePayments();
     }
 
 
@@ -283,6 +284,48 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
 
             return result;
+        }
+
+        //------------------------------------------------------------------------------------
+        //                              GetTypePayments                                             
+        //------------------------------------------------------------------------------------
+        public List<string> GetTypePayments()
+        {
+            List<string> TypePaymentNames = new List<string>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null;
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand GetTypePaymentsCommand = new SqlCommand("spGetTypePaymentNames", connection))
+                {
+                    GetTypePaymentsCommand.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataReader typePaymentDataReader = GetTypePaymentsCommand.ExecuteReader())
+                    {
+                        while (typePaymentDataReader.Read())
+                        {
+                            string typePaymentName = typePaymentDataReader["name"].ToString();
+                            TypePaymentNames.Add(typePaymentName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener descripciones de monedas.", ex);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            return TypePaymentNames;
         }
 
     }

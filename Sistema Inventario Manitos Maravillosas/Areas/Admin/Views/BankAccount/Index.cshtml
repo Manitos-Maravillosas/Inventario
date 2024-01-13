@@ -46,6 +46,7 @@
                             <th scope="col">Cuenta <i class="bi bi-sort-alpha-down sort-icon" data-column="1"></i></th>
                             <th scope="col">Banco <i class="bi bi-sort-alpha-down sort-icon" data-column="2"></i></th>
                             <th scope="col">Moneda <i class="bi bi-sort-alpha-down sort-icon" data-column="3"></i></th>
+                            <th scope="col">Tipo de Pago<i class="bi bi-sort-alpha-down sort-icon" data-column="3"></i></th>
                             <th scope="col">Opciones</th>
                         </tr>
                     </thead>
@@ -60,6 +61,7 @@
                                     <td>@bankAccount.AccountNumber</td>
                                     <td>@bankAccount.BankName</td>
                                     <td>@bankAccount.CoinDescription</td>
+                                    <td>@bankAccount.TypePaymentName</td>
                                     <td>
                                         <form asp-action="Edit" method="get" style="display: inline-block;">
                                             <input type="hidden" name="id" value="@bankAccount.Id" />

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 
@@ -10,10 +11,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
     {
         private readonly IBankAccountService _BankAccountService;
         private readonly ICoinService _CoinService;
-        public BankAccountController(IBankAccountService bankAccountService, ICoinService coinService)
+        private readonly ITypePaymentService _TypePaymentService;
+        public BankAccountController(IBankAccountService bankAccountService, ICoinService coinService, ITypePaymentService typePaymentService)
         {
             _BankAccountService = bankAccountService;
             _CoinService = coinService;
+            _TypePaymentService = typePaymentService;
         }
         // GET: BankAccountController
         public ActionResult Index()
@@ -32,6 +35,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // GET: BankAccountController/Create
         public ActionResult Create()
         {
+            var coinDescriptions = _CoinService.GetCoinDescriptions();
+            ViewBag.CoinDescriptions = new SelectList(coinDescriptions);
+
+            var typePaymentNames = _TypePaymentService.GetTypePayments();
+            ViewBag.TypePaymentNames = new SelectList(typePaymentNames);
+
+            var bankNames = _BankAccountService.GetBankNames();
+            ViewBag.BankNames = new SelectList(bankNames);
             return View();
         }
 
