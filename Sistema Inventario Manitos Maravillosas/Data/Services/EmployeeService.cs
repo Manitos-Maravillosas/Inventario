@@ -85,14 +85,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al leer datos del SqlDataReader.", ex);
-            }
-            finally
-            {
-                if (connection != null && connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                employees.Clear();
+                throw new CustomDataException(ex.Message, ex);
             }
 
             return employees;
@@ -128,7 +122,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener nombres de roles.", ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
             finally
             {
@@ -173,7 +167,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener nombres de roles.", ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
             finally
             {
@@ -215,7 +209,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener correos electrónicos de usuarios.", ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
             finally
             {
@@ -269,12 +263,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 }
                 else
                 {
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                    throw new CustomDataException("An error occurred: " + sqlEx.Message, sqlEx);
                 }
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return result;
@@ -324,12 +318,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 }
                 else
                 {
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                    throw new CustomDataException("An error occurred: " + sqlEx.Message, sqlEx);
                 }
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return result;
@@ -392,7 +386,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return employee;
@@ -446,12 +440,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 }
                 else
                 {
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                    throw new CustomDataException("An error occurred: " + sqlEx.Message, sqlEx);
                 }
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return result;
