@@ -1,6 +1,5 @@
 ﻿using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
-using Sistema_Inventario_Manitos_Maravillosas.Models.Inventory;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
