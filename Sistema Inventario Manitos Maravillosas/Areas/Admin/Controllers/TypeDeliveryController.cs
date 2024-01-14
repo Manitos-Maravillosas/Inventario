@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 
@@ -37,37 +39,49 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // POST: TypeDeliveryController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(TypeDelivery typeDelivery)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _TypeDeliveryService.Add(typeDelivery);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Tipo de envio agregado correctamente!";
+
             }
-            catch
-            {
-                return View();
-            }
+            
+            return View(typeDelivery);
         }
 
         // GET: TypeDeliveryController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            TypeDelivery typeDelivery = _TypeDeliveryService.GetById(id);
+            if (typeDelivery == null)
+            {
+                return NotFound();
+            }
+            return View(typeDelivery);
         }
 
         // POST: TypeDeliveryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(TypeDelivery typeDelivery)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _TypeDeliveryService.Update(typeDelivery);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Se ha modificado los datos del tipo de envio!";
+
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
         // GET: TypeDeliveryController/Delete/5
