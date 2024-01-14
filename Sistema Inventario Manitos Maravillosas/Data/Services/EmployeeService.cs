@@ -243,7 +243,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         command.Parameters.Add(new SqlParameter("@position", string.IsNullOrEmpty(newEmployee.Position) ? DBNull.Value : newEmployee.Position));
                         command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(newEmployee.PhoneNumber) ? DBNull.Value : newEmployee.PhoneNumber));
                         command.Parameters.Add(new SqlParameter("@idBusiness", newEmployee.IdBusiness != 0 ? (object)newEmployee.IdBusiness : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@BusinessName", string.IsNullOrEmpty(newEmployee.BusinessName) ? DBNull.Value : newEmployee.BusinessName));
+                        command.Parameters.Add(new SqlParameter("@businessName", string.IsNullOrEmpty(newEmployee.BusinessName) ? DBNull.Value : newEmployee.BusinessName));
                         command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(newEmployee.Email) ? DBNull.Value : newEmployee.Email));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
@@ -296,7 +296,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         command.Parameters.Add(new SqlParameter("@position", string.IsNullOrEmpty(newEmployee.Position) ? DBNull.Value : newEmployee.Position));
                         command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(newEmployee.PhoneNumber) ? DBNull.Value : newEmployee.PhoneNumber));
                         command.Parameters.Add(new SqlParameter("@idBusiness", newEmployee.IdBusiness != 0 ? (object)newEmployee.IdBusiness : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@BusinessName", string.IsNullOrEmpty(newEmployee.BusinessName) ? DBNull.Value : newEmployee.BusinessName));
+                        command.Parameters.Add(new SqlParameter("@businessName", string.IsNullOrEmpty(newEmployee.BusinessName) ? DBNull.Value : newEmployee.BusinessName));
                         command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(newEmployee.Email) ? DBNull.Value : newEmployee.Email));
                         command.Parameters.Add(new SqlParameter("@operation", 3));
 
@@ -354,6 +354,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@position", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
                             new SqlParameter("@idBusiness", DBNull.Value),
+                            new SqlParameter("@businessName", DBNull.Value),
                             new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
@@ -377,6 +378,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     PhoneNumber = dataReader["phoneNumber"].ToString(),
                                     BusinessName = dataReader["businessName"].ToString(),
                                     Email = dataReader["email"].ToString(),
+                                    Role = dataReader["roleName"].ToString(),
                                 };
 
                             }
@@ -416,7 +418,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@position", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
                             new SqlParameter("@idBusiness", DBNull.Value),
-                            new SqlParameter("@BusinessName", DBNull.Value),
+                            new SqlParameter("@businessName", DBNull.Value),
                             new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@operation", '4')
                         };
