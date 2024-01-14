@@ -16,7 +16,7 @@
 
         <form id="bankAccountForm" asp-controller="BankAccount" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
-            <!-- Fila 1: Nombre, Descripcion Moneda -->
+            <!-- Fila 1: Identificación -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Identificación</label>
@@ -38,7 +38,7 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Número de Cuenta</label>
-                    <input type="text" class="form-control" asp-for="AccountNumber" aria-label="Primer Apellido">
+                    <input type="text" class="form-control" asp-for="AccountNumber" aria-label="Número de Cuenta">
                     <span asp-validation-for="AccountNumber" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <!-- Botón de envío y volver -->
+            <!-- Botón de envío -->
             <div class="d-flex justify-content-end mb-3">
                 <button type="submit" class="btn btn-primary">
                     @if (action == "Edit")

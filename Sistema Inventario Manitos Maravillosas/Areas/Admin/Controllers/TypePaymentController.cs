@@ -110,8 +110,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
             {
                 ViewData["Success"] = "Se ha eliminado al tipo de pago!";
             }
-            var clients = _TypePaymentService.GetAll();
-            return View("Index", clients);
+            var typePayments = _TypePaymentService.GetAll();
+            return View("Index", typePayments);
         }
     }
 }
