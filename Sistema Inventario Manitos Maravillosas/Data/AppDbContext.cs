@@ -27,7 +27,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data
         //Inventory
 
         //Admin
-        public DbSet<Product>? Product { get; set; }
+        public DbSet<ProductFacturation>? Product { get; set; }
         //login
 
 

@@ -37,7 +37,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
         }
 
 
-        public void addProductToCartXBill(Product product)
+        public void addProductToCartXBill(ProductFacturation product)
         {
             var flagProductFound = false;
             if (bill.CartXProducts.Count == 0)

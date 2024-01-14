@@ -17,7 +17,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
             IdClient = "defaultClientId";     // Set a default or fetch from user context
             IdBusiness = 1;                   // Set a default business ID
             CartXProducts = new List<CartXProduct>();
-            Products = new List<Product>();
+            Products = new List<ProductFacturation>();
         }
 
         [Key]
@@ -45,7 +45,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         // Navigation property for CartXProduct
         public virtual ICollection<CartXProduct> CartXProducts { get; set; }
 
-        public List<Product> Products { get; set; }
+        public List<ProductFacturation> Products { get; set; }
 
     }
 
@@ -73,7 +73,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         // Foreign keys
         public string IdProduct { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual ProductFacturation Product { get; set; }
 
         public int IdBill { get; set; }
         public virtual Bill Bill { get; set; }
