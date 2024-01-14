@@ -7,24 +7,23 @@ using System.Net;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
-    public interface ITypePaymentService
+    public interface ITypeDeliveryService
     {
-        List<TypePaymentViewModel> GetAll();
-        OperationResult Add(TypePayment newTypePayment);
-        TypePayment GetById(int id);
+        List<TypeDelivery> GetAll();
+        OperationResult Add(TypeDelivery newTypeDelivery);
+        TypeDelivery GetById(int id);
         OperationResult Delete(string id);
-        OperationResult Update(TypePayment newTypePayment);
-        List<string> GetTypePayments();
+        OperationResult Update(TypeDelivery newTypeDelivery);
+
     }
 
-
-    public class TypePaymentService : ITypePaymentService
+    public class TypeDeliveryService : ITypeDeliveryService
     {
         private readonly IConfiguration _configuration;
 
         private OperationResult result = new OperationResult(true, "");
 
-        public TypePaymentService(IConfiguration configuration)
+        public TypeDeliveryService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -32,24 +31,24 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         //------------------------------------------------------------------------------------
         //                              GetAll                                             
         //------------------------------------------------------------------------------------
-        public List<TypePaymentViewModel> GetAll()
+        public List<TypeDelivery> GetAll()
         {
-            List<TypePaymentViewModel> typePayments = new List<TypePaymentViewModel>();
+            List<TypeDelivery> typeDeliveries = new List<TypeDelivery>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("spTypePaymentCRUD", connection))
+                    using (SqlCommand command = new SqlCommand("spTypeDeliveryCRUD", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
                         var parameters = new SqlParameter[]
                         {
-                            new SqlParameter("@idTypePayment", DBNull.Value),
+                            new SqlParameter("@idTypeDelivery", DBNull.Value),
                             new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@description", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -61,14 +60,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         {
                             while (dataReader.Read())
                             {
-                                TypePaymentViewModel typePayment = new TypePaymentViewModel
+                                TypeDelivery typeDelivery = new TypeDelivery
                                 {
-                                    Id = Convert.ToInt32(dataReader["idTypePayment"]),
+                                    Id = Convert.ToInt32(dataReader["idTypeDelivery"]),
                                     Name = dataReader["name"].ToString(),
-                                    CoinDescription = dataReader["coinDescription"].ToString(),
-                                    CoinName = dataReader["coinName"].ToString(),
+                                    Description = dataReader["description"].ToString(),
                                 };
-                                typePayments.Add(typePayment);
+                                typeDeliveries.Add(typeDelivery);
                             }
                         }
                     }
@@ -76,17 +74,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                typePayments.Clear();
+                typeDeliveries.Clear();
                 throw new CustomDataException(ex.Message, ex);
             }
 
-            return typePayments;
+            return typeDeliveries;
         }
 
         //------------------------------------------------------------------------------------
         //                              Add                                             
         //------------------------------------------------------------------------------------
-        public OperationResult Add(TypePayment newTypePayment)
+        public OperationResult Add(TypeDelivery newTypeDelivery)
         {
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
@@ -94,13 +92,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("spTypePaymentCRUD", connection))
+                    using (SqlCommand command = new SqlCommand("spTypeDeliveryCRUD", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.Add(new SqlParameter("@idTypePayment", newTypePayment.Id != 0 ? (object)newTypePayment.Id : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newTypePayment.Name) ? DBNull.Value : newTypePayment.Name));
-                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newTypePayment.CoinDescription) ? DBNull.Value : newTypePayment.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@idTypeDelivery", newTypeDelivery.Id != 0 ? (object)newTypeDelivery.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newTypeDelivery.Name) ? DBNull.Value : newTypeDelivery.Name));
+                        command.Parameters.Add(new SqlParameter("@description", string.IsNullOrEmpty(newTypeDelivery.Description) ? DBNull.Value : newTypeDelivery.Description));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
                         connection.Open();
@@ -141,15 +139,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("spTypePaymentCRUD", connection))
+                    using (SqlCommand command = new SqlCommand("spTypeDeliveryCRUD", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
                         var parameters = new SqlParameter[]
                         {
-                            new SqlParameter("@idTypePayment", id),
+                            new SqlParameter("@idTypeDelivery", id),
                             new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@description", DBNull.Value),
                             new SqlParameter("@operation", '4')
                         };
 
@@ -184,24 +182,24 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         //------------------------------------------------------------------------------------
         //                              GetById                                             
         //------------------------------------------------------------------------------------
-        public TypePayment GetById(int id)
+        public TypeDelivery GetById(int id)
         {
-            TypePayment typePayment = null; 
+            TypeDelivery typeDelivery = null;
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("spTypePaymentCRUD", connection))
+                    using (SqlCommand command = new SqlCommand("spTypeDeliveryCRUD", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
                         var parameters = new SqlParameter[]
                         {
-                            new SqlParameter("@idTypePayment", id),
+                            new SqlParameter("@idTypeDelivery", id),
                             new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@description", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -213,12 +211,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         {
                             if (dataReader.Read())
                             {
-                                typePayment = new TypePayment
+                                typeDelivery = new TypeDelivery
                                 {
-                                    Id = Convert.ToInt32(dataReader["idTypePayment"]),
+                                    Id = Convert.ToInt32(dataReader["idTypeDelivery"]),
                                     Name = dataReader["name"].ToString(),
-                                    CoinDescription = dataReader["coinDescription"].ToString(),
-                                    
+                                    Description = dataReader["description"].ToString(),
+
                                 };
                             }
                         }
@@ -230,13 +228,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 throw new CustomDataException("An error occurred while fetching the type payment by ID.", ex);
             }
 
-            return typePayment;
+            return typeDelivery;
         }
 
         //------------------------------------------------------------------------------------
         //                              Update                                             
         //------------------------------------------------------------------------------------
-        public OperationResult Update(TypePayment newTypePayment)
+        public OperationResult Update(TypeDelivery newTypeDelivery)
         {
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
@@ -244,13 +242,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("spTypePaymentCRUD", connection))
+                    using (SqlCommand command = new SqlCommand("spTypeDeliveryCRUD", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.Add(new SqlParameter("@idTypePayment", newTypePayment.Id != 0 ? (object)newTypePayment.Id : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newTypePayment.Name) ? DBNull.Value : newTypePayment.Name));
-                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newTypePayment.CoinDescription) ? DBNull.Value : newTypePayment.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@idTypeDelivery", newTypeDelivery.Id != 0 ? (object)newTypeDelivery.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newTypeDelivery.Name) ? DBNull.Value : newTypeDelivery.Name));
+                        command.Parameters.Add(new SqlParameter("@description", string.IsNullOrEmpty(newTypeDelivery.Description) ? DBNull.Value : newTypeDelivery.Description));
                         command.Parameters.Add(new SqlParameter("@operation", 3));
 
                         connection.Open();
@@ -283,48 +281,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
             return result;
         }
-
-        //------------------------------------------------------------------------------------
-        //                              GetTypePayments                                             
-        //------------------------------------------------------------------------------------
-        public List<string> GetTypePayments()
-        {
-            List<string> TypePaymentNames = new List<string>();
-            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null;
-
-            try
-            {
-                connection = new SqlConnection(connectionString);
-
-                using (SqlCommand GetTypePaymentsCommand = new SqlCommand("spGetTypePaymentNames", connection))
-                {
-                    GetTypePaymentsCommand.CommandType = CommandType.StoredProcedure;
-                    connection.Open();
-
-                    using (SqlDataReader typePaymentDataReader = GetTypePaymentsCommand.ExecuteReader())
-                    {
-                        while (typePaymentDataReader.Read())
-                        {
-                            string typePaymentName = typePaymentDataReader["name"].ToString();
-                            TypePaymentNames.Add(typePaymentName);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new CustomDataException("An error occurred: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (connection != null && connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
-            }
-            return TypePaymentNames;
-        }
-
+        
     }
 }
