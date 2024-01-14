@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
@@ -16,6 +17,7 @@ builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>(); // Agrega esta línea
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
+builder.Services.AddScoped<BillHandler>();
 
 
 var emailConfig = builder.Configuration
@@ -46,6 +48,8 @@ builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireCo
 
 builder.Services.AddHttpClient(); // Register HttpClient
 
+// Add IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(); // Add session services
 builder.Services.AddMemoryCache(); // Add memory cache services
 

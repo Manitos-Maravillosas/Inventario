@@ -6,6 +6,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Newtonsoft.Json;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
@@ -15,12 +16,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
     {
         private readonly IProductService _productService;
         private readonly IClientService _clientService;
+        private readonly BillHandler _billHandler;
 
-
-        public PurchaseController(IProductService productService, IClientService clientService)
+        public PurchaseController(IProductService productService, IClientService clientService,BillHandler billHandler)
         {
+            
             _productService = productService;
             _clientService = clientService;
+            _billHandler = billHandler;
         }
 
         // GET: FacturationController
@@ -31,7 +34,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             if (!string.IsNullOrEmpty(sessionData))
             {
                 ViewData["isBill"] = true;
-                Bill b = GetBill();
+                Bill b = _billHandler.GetBill();
                 ViewData["bill"] = b;
                 if (b.Client != null)
                 {
@@ -48,27 +51,49 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 
         // POST: Facturation/Purcharse/AddProductToCart
         [HttpPost]
-        public IActionResult AddProductToCart(string id, int quantity = 1)
+        public IActionResult AddProductToCart(string id, int quantity)
         {
+            if (quantity <= 0)
+            {
+                return Json(new { success = false, message = "La cantidad debe ser mayor a 0" });
+            }
             try
             {
-                var product = _productService.GetStockById(id, quantity);
-                if (product != null && product.Stock > 0)
+                CartXProduct cartXProduct = _billHandler.FindProductById(id);
+                if (cartXProduct == null)
                 {
+                    var product = _productService.GetStockById(id, quantity);
+                    if (product != null && product.Stock > 0)
+                    {
 
-                    // Add the new product to the cart
-                    addProductToCartXBill(product);
+                        // Add the new product to the cart
+                        _billHandler.addProductToCartXBill(product);
+                        return PartialView("_tableProducts", _billHandler.GetBill());
 
-                    updatePriceBill();
-                    return PartialView("_tableProducts", GetBill());
-
-                    //return Json(new { success = true, message = "Product added to cart successfully.", data = productDto });
-
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "No hay producto disponible" });
+                    }
                 }
                 else
                 {
-                    return Json(new { success = false, message = "No hay producto disponible" });
+                    quantity += cartXProduct.Quantity;
+                    var product = _productService.GetStockById(id, quantity);
+                    
+                    if (product != null)
+                    {
+                        _billHandler.UpdateProductSubtotalPrice(cartXProduct, quantity);
+                        return PartialView("_tableProducts", _billHandler.GetBill());
                     }
+                    else
+                    {
+                        return Json(new { success = false, message = "Ha ocurrido un error inesperado" });
+                    }
+                    //_billHandler.updatePriceBill();
+                    
+                }
+                
             }
             catch (CustomDataException ex)
             {
@@ -86,14 +111,62 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
         }
+        // POST: Facturation/Purcharse/AddProductToCart
+        [HttpPost]
+        public IActionResult UpdateQuanty(string id, int quantity)
+        {
+            if (quantity <= 0)
+            {
+                return Json(new { success = false, message = "La cantidad debe ser mayor a 0" });
+            }
+            try
+            {
+                CartXProduct cartXProduct = _billHandler.FindProductById(id);
+                if (cartXProduct != null)
+                {
+                    var product = _productService.GetStockById(id, quantity);
+
+                    if (product != null)
+                    {
+                        _billHandler.UpdateProductSubtotalPrice(cartXProduct, quantity);
+                        return PartialView("_tableProducts", _billHandler.GetBill());
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Ha ocurrido un error inesperado" });
+                    }
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Ha ocurrido un error inesperado" });
+
+                }
+
+            }
+            catch (CustomDataException ex)
+            {
+                if (ex.Message == "Sql")
+                {
+                    return Json(new { success = false, message = ex.InnerException.Message });
+                }
+                else
+                {
+                    throw new CustomDataException("An error occurred: " + ex.Message, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+        }
 
         // POST: Facturation/Purcharse/removeProductFromCart
         [HttpPost]
         public IActionResult removeProductFromCart(string id)
         {
-           if (RemoveProductFromCartXBill(id))
+           if (_billHandler.RemoveProductFromCartXBill(id))
             {
-                return PartialView("_tableProducts", GetBill());
+                return PartialView("_tableProducts", _billHandler.GetBill());
             }
            else
             {
@@ -108,7 +181,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         [HttpPost]
         public void AssingClientToBill(string id)
         {
-            updateClientBill(id);
+            _billHandler.updateClientBill(id);
 
         }
 
@@ -129,143 +202,18 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 else
                 {
                     ViewData["Success"] = "Cliente agregado correctamente!";
-                    updateClientBill(client.Id);
+                    _billHandler.updateClientBill(client.Id);
                 }
                                
 
             }
-            Bill z = GetBill();
+            Bill z = _billHandler.GetBill();
             var sessionData = HttpContext.Session.GetString("Bill");
             return RedirectToAction("Index");
         }
 
-        //-------------------------------------------------------------------------------------//
-        //                           Bill Handler                                                 //
-        //-------------------------------------------------------------------------------------//
-        private void addProductToCartXBill(Product product)
-        {
-            Bill bill = GetBill();
-            var flagProductFound = false;
-            if (bill.CartXProducts == null)
-            {
-                bill.CartXProducts = new List<CartXProduct>();
-            }
-            else if (bill.CartXProducts.Count == 0)
-            {
-                bill.CartXProducts.Add(new CartXProduct
-                {
-                    IdProduct = product.IdProduct,
-                    Quantity = 1,
-                    Cost = product.Cost,
-                    Price = product.Price,
-                    SubTotal = product.Price,
-                    Product = product
-                });
-            }
-            else
-            {
-                foreach (var item in bill.CartXProducts)
-                {
-                    if (item.IdProduct == product.IdProduct)
-                    {
-                        item.Quantity += 1;
-                        item.SubTotal = item.Quantity * item.Price;
-                        flagProductFound = true;
-                        break;
-                    }
-                }
+        
 
-                if (!flagProductFound)
-                {
-                    bill.CartXProducts.Add(new CartXProduct
-                    {
-                        IdProduct = product.IdProduct,
-                        Quantity = 1,
-                        Cost = product.Cost,
-                        Price = product.Price,
-                        SubTotal = product.Price,
-                        Product = product
-                    });
-                }
-            }
-
-            SaveBill(bill);
-        }
-
-        private bool RemoveProductFromCartXBill(string IdProduct)
-        {
-            Bill bill = GetBill();
-            var flagProductFound = false;
-
-
-            try
-            {
-                if (bill != null)
-                {
-                    foreach (var item in bill.CartXProducts)
-                    {
-                        if (item.IdProduct == IdProduct)
-                        {
-                            bill.CartXProducts.Remove(item);
-                            flagProductFound = true;
-                            SaveBill(bill);
-                            break;
-                        }
-                    }
-                }
-            }catch (Exception e)
-            {
-                throw new CustomDataException("Error Message", e);
-            }
-
-            return flagProductFound;
-            
-        }
-
-        private void updatePriceBill()
-        {
-            Bill bill = GetBill();
-
-            //Update bill
-            bill.SubTotal = bill.CartXProducts.Sum(x => x.SubTotal);
-            bill.TotalCost = bill.SubTotal - (bill.SubTotal * (bill.PercentDiscount / 100));
-            SaveBill(bill);
-        }
-
-        private void updateClientBill(string id)
-        {
-            Bill bill = GetBill();
-            bill.IdClient = id;
-            bill.Client = _clientService.GetById(id);
-            SaveBill(bill);
-        }
-
-        private Bill GetBill()
-        {
-            var sessionData = HttpContext.Session.GetString("Bill");
-            return string.IsNullOrEmpty(sessionData)  ? new Bill() : JsonConvert.DeserializeObject<Bill>(sessionData);
-        }
-
-        private void SaveBill(Bill bill)
-        {
-            var sessionData = JsonConvert.SerializeObject(bill);
-            HttpContext.Session.SetString("Bill", sessionData);
-        }
-
-    }
-
-    
-
-    public class ProductDto
-    {
-        public string IdProduct { get; set; }
-        public string Name { get; set; }
-        public float Stock { get; set; }
-        public float Price { get; set; }
-        public string Description { get; set; }
-        public bool Status { get; set; }
-
-        // Add any other properties needed by the client
     }
 
 }

@@ -61,10 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 var name = this.getAttribute('data-name');
                 var idAddress = this.getAttribute('data-idaddress');
 
-                console.log(id + ' - ' + name)
-                console.log(idAddress)
-
-
                 document.getElementById('clientDataInput').value = id + ' - '+name;
                 document.getElementById('idAddressClient').value = idAddress;
 
@@ -149,16 +145,13 @@ document.addEventListener('DOMContentLoaded', function () {
     if (field != 0 && table != null && firstRow != null) {
         field.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') { // Verifica si la tecla presionada es 'Enter'
-                //var newRow = firstRow.cloneNode(true); // Clone the first row
-                //newRow.classList.remove('d-none'); // Remove the editableRow class
-
-                addProductToCart(); // Llama a la función addProductToCart si es 'Enter'
+                AddProductToCart(); // Llama a la función addProductToCart si es 'Enter'
 
             }
         });
     }
     
-    function addProductToCart() {
+    function AddProductToCart() {
         var productId = document.getElementById('idProductField').value;
         fetch('/Facturation/Purchase/AddProductToCart', {
             method: 'POST',
@@ -252,6 +245,15 @@ function applyEventListenersToRow() {
     var editableCells = document.querySelectorAll('.editableCell');
     var editableInputs = document.querySelectorAll('.editableInput');
 
+    var deliveryModal = new bootstrap.Modal(document.getElementById('modalDelivery'));
+    var assignDelivery = document.querySelector('#assignDelivery');
+    if (assignDelivery) {
+        assignDelivery.addEventListener('click', function () {
+
+            deliveryModal.show();
+        });
+    }
+
     editableCells.forEach(function (cell) {
         cell.addEventListener('dblclick', function () {
             var parent = cell.parentElement;
@@ -278,9 +280,91 @@ function applyEventListenersToRow() {
             
             input.style.display = 'none'; // Hide the input
             div.style.display = 'block'; // Show the div
+
+            var idProduct = this.getAttribute('data-idProduct');
+            //conver the input value to int
+            var inputValue = this.value;
+            if (checkGreterThanZero(inputValue)) {
+                UpdateQuanty(idProduct, inputValue, input);
+            }
+        });
+
+        input.addEventListener('keypress', function (event){
+            if (event.key === 'Enter') {
+                this.blur();
+                
+            }
         });
     });
+
 }
+
+function checkGreterThanZero(inputValue) {
+    if (!isNaN(inputValue)) {
+        inputValue = parseInt(inputValue);
+        if (inputValue <= 0) {
+            Swal.fire({
+                title: 'Error',
+                text: 'La cantidad ingresada debe ser mayor a 0',
+                icon: 'error'
+            })
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            text: 'Debe ser un número',
+            icon: 'error'
+        })
+        return false;
+    }
+}
+
+function UpdateQuanty(idProduct, quanty, input) {
+    fetch('/Facturation/Purchase/UpdateQuanty', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `id=${encodeURIComponent(idProduct)}&quantity=${encodeURIComponent(quanty)}`
+    })
+        .then(response => {
+            // Check the response header to determine the content type
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                return response.json().then(data => {
+                    // Process JSON data
+                    if (!data.success) {
+                        // Handle failure. Display the error message from the server.
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.message,
+                            icon: 'error'
+                        })
+                    }
+                });
+            } else if (contentType && contentType.indexOf("text/html") !== -1) {
+                return response.text().then(html => {
+                    // Process HTML data
+                    addRow(html);
+                    noProductsVisibleFalse();
+                    applyEventListenersToRow();
+                });
+            } else {
+                throw new TypeError('Received response is neither JSON nor HTML');
+            }
+        })
+        .catch(error => {
+            // Handle network errors or other exceptions
+            console.error('Fetch Error:', error);
+        });
+}
+
+
 
 //-------------------------------------------------------------------------------------//
 //                                  Product into row                                   //
