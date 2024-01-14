@@ -27,6 +27,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public Business Business { get; set; }
 
         public int IdProductCategory { get; set; }
+        public string Category { get; set; }
+        //public ProductCategory ProductCategory { get; set; }
+
 
         // Navigation properties
         // Add collections for related entities if needed

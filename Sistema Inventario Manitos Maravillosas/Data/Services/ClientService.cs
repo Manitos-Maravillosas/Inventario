@@ -182,7 +182,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     LastName1 = dataReader["lastName1"].ToString(),
                                     LastName2 = dataReader["lastName2"].ToString(),
                                     PhoneNumber = dataReader["phoneNumber"].ToString(),
-                                    Signs = dataReader["signs"].ToString(),
+                                    IdAddress = Convert.ToInt32(dataReader["idAddress"]),
+                                    DepartmentName = dataReader["departmentName"].ToString(),
+                                    CityName = dataReader["cityName"].ToString(),
+                                    Signs = dataReader["signs"].ToString()
 
                                 };
                                 clients.Add(client);
@@ -244,10 +247,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                 LastName1 = dataReader["lastName1"].ToString(),
                                 LastName2 = dataReader["lastName2"].ToString(),
                                 PhoneNumber = dataReader["phoneNumber"].ToString(),
-                                Signs = dataReader["signs"].ToString(),
-                                CityName = dataReader["cityName"].ToString(),
+                                IdAddress = Convert.ToInt32(dataReader["idAddress"]),
                                 DepartmentName = dataReader["departmentName"].ToString(),
-                            };
+                                CityName = dataReader["cityName"].ToString(),
+                                Signs = dataReader["signs"].ToString()
+                                };
                             }
                         }
                     }

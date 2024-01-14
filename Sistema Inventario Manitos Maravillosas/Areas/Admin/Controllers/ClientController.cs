@@ -14,6 +14,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         private readonly IClientService _clientService;
         private readonly IAddressService _addressService;
         public ClientController(IClientService clientService, IAddressService addressService)
+
         {
             _clientService = clientService;
             _addressService = addressService;

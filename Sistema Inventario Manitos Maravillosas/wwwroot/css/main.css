@@ -330,6 +330,19 @@ img {
     display: inline-block;
 }
 
+/**/
+#clientDataInput {
+    font-size: 16px;
+    color: #333;
+    border: 2px solid transparent; /* Borde transparente */
+    border-radius: 5px;
+    outline: none; /* Elimina el resalte al estar en foco */
+}
+
+    #clientDataInput:focus {
+        border: 2px solid transparent; /* Mantiene el borde transparente al enfocarse */
+        box-shadow: none; /* Elimina cualquier sombra al enfocarse */
+    }
 .custom-icon-btn .custom-tooltip {
     visibility: hidden;
     width: 120px;
@@ -380,13 +393,12 @@ img {
 }
 
 
-
 .w-15 {
     width: 15%;
 }
 
 
-w-20{
+.w-20{
     width: 20%;
 }
 
@@ -474,6 +486,13 @@ tr.rowHover:hover {
 
 }
 
+#modalClient .modal-dialog {
+    max-width: 50%;
+}
+#addClient .modal-dialog {
+    max-width: 80%;
+}
+/* ------------------------------------------------- Admin---------------------------------------      */
 /*------- Search Input-------*/
 .search-input {
     margin-right: 25px;

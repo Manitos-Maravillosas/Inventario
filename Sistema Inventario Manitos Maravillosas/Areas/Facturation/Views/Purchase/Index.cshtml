@@ -1,7 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Rendering
-
+@using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
+@using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
+@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Client>
 @{
     ViewData["Title"] = "Index";
+    bool isBill = ViewData["isBill"] as bool? ?? false;
+    bool isClient = ViewData["isClient"] as bool? ?? false;
+    Bill bill = new Bill();
+    if (isBill)
+    {
+        bill = ViewData["bill"] as Bill;
+    }
+
 }
 
 <h3>Venta de Productos</h3>
@@ -14,16 +24,16 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <form class="col-10 ">
+                        <div class="col-10 ">
                             <div class="input-group flex-nowrap">
-                                <input id="idProduct" type="text" class="form-control" placeholder="Código del Producto" aria-label="Código del Producto" aria-describedby="addon-wrapping" oninput="addProductToCart()">
+                                <input id="idProductField" type="text" class="form-control" placeholder="Código del Producto" aria-label="Código del Producto" aria-describedby="addon-wrapping">
 
                                 <span class="input-group-text" id="addon-wrapping"><i class="pbi bi-search"></i></span>
                                 
                             </div>
                             <span id="prductValidadtion" class="field-validation-error text d-none">Manito matinez</span>
 
-                        </form>
+                        </div>
 
                         <div class="col-2 justify-content-center d-flex align-items-center">
                             <div class="custom-icon-btn">
@@ -41,12 +51,11 @@
             <div class="card">
                 <div class="card-body">
                     <form class="row">
-
                         <div class="col-auto">
                             <button id="assignClient" type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-check"></i>   Asignar Cliente</i></button>
                         </div>
-                        <label class="col-sm col-form-label">155582647</label>
-                        <label class="col-sm col-form-label">Maynor Martínez</label>
+                        <input class="col" type="text" id="clientDataInput" disabled value="@(isClient ? bill.IdClient+" - "+bill.Client.Name+" " + bill.Client.LastName1 : "No se ha asignado un cliente" )">
+                        <input id="idAddressClient" hidden class="col-sm col-form-label" value="@(isClient ? bill.Client.IdAddress: "" )">
                     </form>
                 </div>
             </div>
@@ -64,6 +73,7 @@
                     <tr>
                         <th scope="col">Código</th>
                         <th scope="col">Nombre</th>
+                        <th scope="col">Categoría</th>
                         <th scope="col">Descripción</th>
                         <th scope="col">Precio $</th>
                         <th scope="col">Cantidad</th>
@@ -71,80 +81,35 @@
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="noProducts">
-                    <tr>
-                        <td colspan="7" class="text-center">Empiece el escaneo de productos</td>
-                    </tr>
-                </tbody>
-                <tbody id="productsBody" class="d-none">
 
-                    <tr class="rowHover d-none">
-                        <th scope="row"></th>
-                        <td contenteditable="true">Mark</td>
-                        <td>Otto</td>
-                        <td>50 $</td>
-                        <td class="w-15">
-                            <div class="editableCell">21</div>
-                            <input class="editableInput" type="number">
-                        </td>
-                        <td>50 $</td>
-                        <td>asdf</td>
-                    </tr>
-                    <tr class="rowHover editableRow d-none">
-                        <th scope="row"></th>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
-                        <td >
-                            <div class="editableCell" data-price>0 $</div>                            
-                            <input class="editableInput" type="number">
-                        </td>
-                        <td class="w-15">
-                            <div class="editableCell">0</div>
-                            <input class="editableInput" type="number">
-                        </td>
-                        <td>50 $</td>
-                        <td>asdf</td>
-                    </tr>
-                    @* Subtotal *@
-                    <tr class="fw-bold no-border">
-                        <th scope="row" colspan="4"></th>
-                        <td>Subtotal</td>
-                        <td colspan="2"> 3015 $</td>
-                    </tr>
-                    @* Envio *@
-                    <tr class="fw-bold no-border">
-                        <th scope="row" colspan="3"></th>
-                        <td class="text-end"><button id="assignDelivery" type="button" class="btn btn-secondary btn-sm"><i class="bi bi-gear-fill"></i></button></td>
-                        <td>Envío</td>
-                        <td colspan="2"> 3015 $</td>
-                    </tr>
-                    @* Desceunto *@
-                    <tr class="fw-bold no-border  border-bottom border-secondary ">
-                        <th scope="row" colspan="3"></th>
-                        <td class="align-items-md-center text-end" style="width:13%">
-                        </td>
-                        <td class="d-flex justify-content-between ">
-                            Descuento
-                            <div class=" w-50 d-flex justify-content-end">
-                                <div class="fw-normal  w-50 text-end">
-                                    <div class="editableCell">21</div>
-                                    <input class="editableInput" type="number">
-                                </div>
-                                %
-                            </div>
+                @if (isBill) @* This else is beacuse the user can create the bill when assing a client *@
+                {
+                    @if(bill.CartXProducts.Count > 0)
+                    {
+                        <partial name="_tableProducts" model="@ViewData["bill"]" view-data="ViewData">
+                        </partial>
+                    }
+                    else
+                    {
+                        <tbody id="noProducts">
+                            <tr>
+                                <td colspan="7" class="text-center">Empiece el escaneo de productos</td>
+                            </tr>
+                        </tbody>
+                    }
+                }                
+                else
+                {
+                    <tbody id="noProducts">
+                        <tr>
+                            <td colspan="7" class="text-center">Empiece el escaneo de productos</td>
+                        </tr>
+                    </tbody>
+                }
 
-                        </td>
-                        <td colspan="2"> 3015 $</td>
-                    </tr>
-                    @* Total *@
-                    <tr class="fw-bold no-border fs-4">
-                        <th scope="row" colspan="4"></th>
-                        <td>Total</td>
-                        <td colspan="2"> 3015 $</td>
-                    </tr>
-                                       
-                </tbody>
+
             </table>
+
            
         </div>
     </div>
@@ -231,8 +196,8 @@
                     <button type="button" class="btn btn-warning">Limpiar Datos   <i class="bi bi-stars"></i></button>
                     <button type="button" class="btn btn-outline-secondary">Dejar Pendiente  <i class="bi bi-file-earmark-bar-graph-fill"></i></button>
                 </div>
-                <div class="fw-bold fs-4">
-                    Total a Cobrar: 3015 $     
+                <div  class="fw-bold fs-4">
+                    @* Total a Cobrar:  <span id="totalCostBill">@(isBill ? bill.TotalCost : "0")</span> $ *@
                     <button type="button" class="btn btn-success btn-lg"><i class="bi bi-cash-stack"></i>  Cobrar</button>
                 </div>
             </div>
@@ -241,7 +206,9 @@
 </section>
 <!-- get the clients returned from the controller  -->
 
-
+<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<!-----------------                                                                      MODALL                                                                                            ---------->
+<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 <!-- Button modal for Client-->
 <div class="modal fade" tabindex="-1" id="modalClient">
     <div class="modal-dialog modal-dialog-centered">
@@ -252,107 +219,70 @@
           </div>
           <div class="modal-body">
                 <div class="input-group flex-nowrap mb-3">
-                    <input type="text" class="form-control" placeholder="Identificacion" aria-label="Identificacion del cliente" aria-describedby="addon-wrapping">
+                    <input id="identificationClientFilter" type="text" class="form-control" placeholder="Identificacion" aria-label="Identificacion del cliente" aria-describedby="addon-wrapping">
                     <span class="input-group-text" id="addon-wrapping"><i class="pbi bi-search"></i></span>
                 </div>
                 <ul id="listClient" class="list-group scrollable-list mb-2">
-                    <li class="list-group-item list-group-item-action">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="circle d-flex justify-content-center align-items-center">
-                                        DB <!-- Initials -->
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var client in Model)
+                        {
+
+                            <li class="list-group-item list-group-item-action" data-id="@client.Id" data-name="@client.Name @client.LastName1" data-idaddress="@client.IdAddress">
+                                <div class="container">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <div class="circle d-flex justify-content-center align-items-center">
+                                                @client.Name[0]@client.LastName1[0]
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="fs-6 fw-bold">@client.Id <span class="fw-normal"> - </span>@client.Name @client.LastName1</div>
+                                            <div class="text-black">@client.DepartmentName, @client.CityName, @client.Signs </div>
+                                            <div class="text-black-50 fw-lighter">@client.PhoneNumber</div>
+                                            
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
-                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item list-group-item-action">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="circle d-flex justify-content-center align-items-center">
-                                        DB <!-- Initials -->
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
-                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
-                                </div>
-                            </div>
-                        </div>
-                    <li class="list-group-item list-group-item-action">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="circle d-flex justify-content-center align-items-center">
-                                        DB <!-- Initials -->
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
-                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
-                                </div>
-                            </div>
-                        </div>
-                    <li class="list-group-item list-group-item-action">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="circle d-flex justify-content-center align-items-center">
-                                        DB <!-- Initials -->
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
-                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item list-group-item-action">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="circle d-flex justify-content-center align-items-center">
-                                        DB <!-- Initials -->
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
-                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item list-group-item-action">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="circle d-flex justify-content-center align-items-center">
-                                        DB <!-- Initials -->
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="fs-6">ID: 123456789 - Daniela Baltonado</div>
-                                    <div class="text-black-50 fw-light">daniB2001@gmail.com</div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                            </li>
+                           
+                        }
+                    }
+                    
                 </ul>
-                <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-plus-square"></i></button>
+                <button id="openNewClient" type="button" class="btn btn-primary btn-sm">Agregar Nuevo <i class="bi bi-plus-square"></i></button>
           </div>
             
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Aceptar</button>
-          </div>
+        @*   <div class="modal-footer">
+            <button id="openNewClient" type="button" class="btn btn-primary">Aceptar</button> 
+               <a asp-area="Admin" asp-controller="Client" asp-action="Create"  type="button" class="btn btn-primary">Aceptar</a> 
+          </div> *@
         </div>
   </div>
+</div>
+<div class="modal fade" tabindex="-1" id="addClient">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @{
+                    ViewData["Action"] = "CreateClient";
+
+                    ViewData["Controller"] = "Purchase";
+                    Client clientModel = new Client();
+                }
+                <partial name="_ClientForm" model="clientModel" view-data="ViewData">
+
+            </div>
+
+@*             <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Aceptar</button>
+            </div> *@
+        </div>
+    </div>
 </div>
 
 <!-- Button modal for Delevery-->
@@ -419,21 +349,17 @@
                             <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
                         </div>
                     </div>
-
-
-
-
-
                 </form>
             </div>
 
-            <div class="modal-footer">
+           @*  <div class="modal-footer">
                 <button type="button" class="btn btn-primary">Aceptar</button>
-            </div>
+            </div> *@
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script src="~/js/facturation/facturation.js"></script>
+    <script src="~/js/admin/client.js"></script>
 }

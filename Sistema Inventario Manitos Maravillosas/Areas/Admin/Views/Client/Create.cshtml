@@ -5,9 +5,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     ViewData["Action"] = "Create";
+    ViewData["Controller"] = "Client";
 }
 <section class="container px-5 py-3">
-    <h3 style="margin-bottom: 2rem;">Agregar Cliente</h3>
+    <div class="d-flex justify-content-between mb-2 align-items-center">
+        <h3 class="m-0">Agregar Cliente</h3>
+        <a class="fs-1 text-primary px-1" asp-area="Admin" asp-controller="Client" asp-action="Index">
+            <i class="bi bi-arrow-left-short"></i>
+        </a>
+    </div>
+
+
+@*  
+    <h3 class="mb-2" >Agregar Cliente</h3>
+    <div class="card">
+        <div class="card-body">
+            <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "Client", new { area = "Admin" })'">
+                <span> <i class="bi bi-arrow-left-short"></i></span>
+            </button>
+        </div>
+    </div> *@
 
     <partial name="_ClientForm" model="Model" view-data="ViewData">
 

@@ -2,6 +2,7 @@ using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 builder.Services.AddScoped<ITypeDeliveryService, TypeDeliveryService>();
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
+builder.Services.AddScoped<BillHandler>();
 
 var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
@@ -50,6 +52,8 @@ builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireCo
 
 builder.Services.AddHttpClient(); // Register HttpClient
 
+// Add IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(); // Add session services
 builder.Services.AddMemoryCache(); // Add memory cache services
 
@@ -80,6 +84,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseSession(); // Add this line to use session middleware
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
@@ -88,7 +94,7 @@ app.UseEndpoints(endpoints =>
 
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+        pattern: "{area=Facturation}/{controller=Purchase}/{action=Index}/{id?}");
 
 });
 

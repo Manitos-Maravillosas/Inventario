@@ -7,6 +7,21 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services
 {
+    public interface IProductService
+    {
+        List<Product> GetAll();
+        Product GetById(string id);
+        OperationResult Add(Product newProduct);
+        OperationResult Update(Product product);
+        OperationResult Delete(string id);
+
+        Product GetStockById(string id, int quantity);
+
+        OperationResult AddStock(string id, int quantity);
+
+        OperationResult UpdateStock(string id, int quantity);
+
+    }
     public class ProductService : IProductService
     {
         private readonly IConfiguration _configuration;
@@ -134,11 +149,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                                 product.IdProduct = Convert.ToString(dataReader["IdProduct"]);
                                 product.ProductName = Convert.ToString(dataReader["name"]);
                                 product.Stock = Convert.ToInt32(dataReader["Stock"]);
-                                product.Cost = Convert.ToInt32(dataReader["Cost"]);
+                                product.Cost = Convert.ToSingle(dataReader["Cost"]);
+                                product.Price = Convert.ToSingle(dataReader["Price"]);
                                 product.Description = Convert.ToString(dataReader["Description"]);
                                 product.Status = Convert.ToBoolean(dataReader["Status"]);
                                 product.IdBusiness = Convert.ToInt32(dataReader["IdBusiness"]);
                                 product.IdProductCategory = Convert.ToInt32(dataReader["IdProductCategory"]);
+                                product.Category = Convert.ToString(dataReader["Category"]);
                             }
                         }
                     }
@@ -149,7 +166,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                 // Check if the error is a custom error thrown using RAISEERROR
                 if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
                 {
-                    throw new CustomDataException("Error Message", sqlEx);
+                    throw new CustomDataException("Sql", sqlEx);
                 }
                 else
                 {
