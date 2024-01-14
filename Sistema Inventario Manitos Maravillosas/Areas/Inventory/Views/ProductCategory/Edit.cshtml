@@ -1,45 +1,54 @@
 ﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models.ProductCategory
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Modificar Categoria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Action"] = "Edit";
 }
+<section class="container px-5 py-3">
+    <h3 style="margin-bottom: 2rem;">Modificar Categoría</h3>
 
-<!DOCTYPE html>
+    <partial name="_ProductCategoryForm" model="Model" view-data="ViewData">
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
+    </partial>
+</section>
 
-<h4>ProductCategory</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdProductCategory" />
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+@section Scripts {
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
-</body>
-</html>
+    @if (ViewData["Success"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: "Perfecto!",
+                    text: "@ViewData["Success"]",
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Inventory/ProductCategory/Index';
+                    }
+                });
+            });
+        </script>
+    }
+
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Error',
+                    text: '@ViewData["ErrorMessage"]',
+                    icon: 'error'
+                });
+            });
+        </script>
+
+        ViewData["ErrorMessage"] = null;
+    }
+}

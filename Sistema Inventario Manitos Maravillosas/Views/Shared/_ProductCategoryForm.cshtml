@@ -5,7 +5,7 @@
 
 <div class="card">
     <div class="card-body">
-        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "Employee", new { area = "Admin" })'">
+        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "ProductCategory", new { area = "Inventory" })'">
             <span> <i class="bi bi-arrow-left-short"></i></span>
         </button>
     </div>
@@ -14,22 +14,21 @@
 <div class="card">
     <div class="card-body">
 
-        <form id="employeeForm" asp-controller="Employee" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+        <form id="productCategoryForm" asp-controller="ProductCategory" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
             <!-- Fila 1: Identificación, Nombre -->
+            @if (action == "Edit")
+            {
+                <input type="hidden" asp-for="IdProductCategory">
+            }else{
+                <input type="hidden" asp-for="IdProductCategory" value="0">
+            }
             <div class="row mb-3">
-                <div class="col-md-6">
-                        <input type="hidden" asp-for="IdProductCategory">
-                        <span asp-validation-for="IdProductCategory" class="text-danger"></span>
-                </div>
                 <div class="col-md-6">
                     <label class="form-label">Categoría</label>
                     <input type="text" class="form-control" asp-for="Category" aria-label="Nombre">
                     <span asp-validation-for="Category" class="text-danger"></span>
                 </div>
-            </div>
-            <!-- Fila 2: Primer Apellido, Segundo Apellido -->
-            <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Descripcion</label>
                     <input type="text" class="form-control" asp-for="Description" aria-label="Descripcion">

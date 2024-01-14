@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Models;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Controllers
 {
@@ -21,7 +22,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Controllers
         // GET: Inventory/ProductCategories
         public async Task<IActionResult> Index()
         {
-            var productCategories = _productCategoryService.GetProductCategories();
+            var productCategories = _productCategoryService.GetAll();
 
             return View(productCategories);
         }
@@ -55,31 +56,31 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdProductCategory,Category,Description")] ProductCategory productCategory)
+        public async Task<IActionResult> Create(ProductCategory productCategory)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(productCategory);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _productCategoryService.Add(productCategory);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Categoria agregada correctamente!";
+
             }
-            return View(productCategory);
+            return View();
         }
 
         // GET: Inventory/ProductCategories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null || _context.ProductCategories == null)
+            ProductCategory employee = _productCategoryService.GetById(id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            var productCategory = await _context.ProductCategories.FindAsync(id);
-            if (productCategory == null)
-            {
-                return NotFound();
-            }
-            return View(productCategory);
+            return View(employee);
         }
 
         // POST: Inventory/ProductCategories/Edit/5
@@ -87,34 +88,19 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdProductCategory,Category,Description")] ProductCategory productCategory)
+        public async Task<IActionResult> Edit(ProductCategory productCategory)
         {
-            if (id != productCategory.IdProductCategory)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                OperationResult result = _productCategoryService.Update(productCategory);
+                if (!result.Success)
                 {
-                    _context.Update(productCategory);
-                    await _context.SaveChangesAsync();
+                    ViewData["ErrorMessage"] = result.Message;
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductCategoryExists(productCategory.IdProductCategory))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ViewData["Success"] = "Se han modificado los datos de la categoria!";
+
             }
-            return View(productCategory);
+            return View();
         }
 
         // GET: Inventory/ProductCategories/Delete/5

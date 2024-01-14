@@ -7,17 +7,18 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
     public interface IProductCategoryService
     {
-        OperationResult CreateProductCategory(ProductCategory productCategory);
-        OperationResult UpdateProductCategory(ProductCategory productCategory);
+        OperationResult Add(ProductCategory productCategory);
+        OperationResult Update(ProductCategory productCategory);
         OperationResult DeleteProductCategory(int idProductCategory);
-        List<ProductCategory> GetProductCategories();
-        ProductCategory GetProductCategoryById(int idProductCategory);
+        List<ProductCategory> GetAll();
+        ProductCategory GetById(int idProductCategory);
     }
 
     public class ProductCategoryService : IProductCategoryService
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
+        private OperationResult result = new OperationResult(true, "");
 
         public ProductCategoryService(AppDbContext context, IConfiguration configuration)
         {
@@ -25,32 +26,92 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             _configuration = configuration;
         }
 
-        public OperationResult CreateProductCategory(ProductCategory productCategory)
+        public OperationResult Add(ProductCategory productCategory)
         {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
             try
             {
-                _context.ProductCategories.Add(productCategory);
-                _context.SaveChanges();
-                return new OperationResult(true, "Categoría de producto creada exitosamente");
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spProductCategoryCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.Add(new SqlParameter("@idProductCategory", productCategory.IdProductCategory != 0 ? DBNull.Value : productCategory.IdProductCategory));
+                        command.Parameters.Add(new SqlParameter("@category", string.IsNullOrEmpty(productCategory.Category) ? DBNull.Value : productCategory.Category));
+                        command.Parameters.Add(new SqlParameter("@description", string.IsNullOrEmpty(productCategory.Description) ? DBNull.Value : productCategory.Description));
+                        command.Parameters.Add(new SqlParameter("@operation", 1));
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
             }
-            catch (Exception e)
+            catch (SqlException sqlEx)
             {
-                return new OperationResult(false, e.Message);
+                if (sqlEx.Number == 50000)
+                {
+                    result.Success = false;
+                    result.Message = sqlEx.Message;
+                    return result;
+                }
+                else
+                {
+                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
             }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+            }
+
+            return result;
         }
 
-        public OperationResult UpdateProductCategory(ProductCategory productCategory)
+        public OperationResult Update(ProductCategory productCategory)
         {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
             try
             {
-                _context.ProductCategories.Update(productCategory);
-                _context.SaveChanges();
-                return new OperationResult(true, "Categoría de producto actualizada exitosamente");
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spProductCategoryCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.Add(new SqlParameter("@idProductCategory", productCategory.IdProductCategory == 0 ? DBNull.Value : productCategory.IdProductCategory));
+                        command.Parameters.Add(new SqlParameter("@category", string.IsNullOrEmpty(productCategory.Category) ? DBNull.Value : productCategory.Category));
+                        command.Parameters.Add(new SqlParameter("@description", string.IsNullOrEmpty(productCategory.Description) ? DBNull.Value : productCategory.Description));
+                        command.Parameters.Add(new SqlParameter("@operation", 3));
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
             }
-            catch (Exception e)
+            catch (SqlException sqlEx)
             {
-                return new OperationResult(false, e.Message);
+                if (sqlEx.Number == 50000)
+                {
+                    result.Success = false;
+                    result.Message = sqlEx.Message;
+                    return result;
+                }
+                else
+                {
+                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
             }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+            }
+
+            return result;
         }
 
         public OperationResult DeleteProductCategory(int idProductCategory)
@@ -68,7 +129,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
         }
 
-        public List<ProductCategory> GetProductCategories()
+        public List<ProductCategory> GetAll()
         {
             List<ProductCategory> productCategories = new List<ProductCategory>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
@@ -126,9 +187,61 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return productCategories;
         }
 
-        public ProductCategory GetProductCategoryById(int idProductCategory)
+        public ProductCategory GetById(int idProductCategory)
         {
-            return _context.ProductCategories.Find(idProductCategory);
+            ProductCategory productCategory = new ProductCategory();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null;
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                using (SqlCommand command = new SqlCommand("spProductCategoryCRUD", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    var parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@idProductCategory", idProductCategory),
+                        new SqlParameter("@category", DBNull.Value),
+                        new SqlParameter("@description", DBNull.Value),
+                        new SqlParameter("@operation", '2')
+                    };
+
+                    command.Parameters.AddRange(parameters);
+
+                    connection.Open();
+
+                    using (SqlDataReader dataReader = command.ExecuteReader())
+                    {
+
+
+                        while (dataReader.Read())
+                        {
+                            productCategory = new ProductCategory
+                            {
+                                IdProductCategory = Convert.ToInt32(dataReader["idProductCategory"]),
+                                Category = Convert.ToString(dataReader["category"]),
+                                Description = Convert.ToString(dataReader["description"])
+                            };
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+            return productCategory;
         }
     }
 }
