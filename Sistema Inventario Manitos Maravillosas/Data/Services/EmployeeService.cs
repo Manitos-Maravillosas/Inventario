@@ -8,7 +8,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
     public interface IEmployeeService
     {
         List<Employee> GetAll();
-        Employee GetById(string id);       
+        Employee GetById(string id);
         List<string> GetRoleNames();
         public string GetUserId(string employeeId);
         List<string> GetUserEmails();
@@ -34,7 +34,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         {
             List<Employee> employees = new List<Employee>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null; 
+            SqlConnection connection = null;
 
             try
             {
@@ -91,7 +91,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
             return employees;
         }
-        
+
         //------------------------------------------------------------------------------------
         //                              GetRoleNames                                             
         //------------------------------------------------------------------------------------
@@ -141,7 +141,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         {
             string userId = string.Empty;
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null; 
+            SqlConnection connection = null;
 
             try
             {
@@ -186,7 +186,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         {
             List<string> userEmails = new List<string>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null; 
+            SqlConnection connection = null;
 
             try
             {
@@ -255,10 +255,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (SqlException sqlEx)
             {
-                if (sqlEx.Number == 50000) 
+                if (sqlEx.Number == 50000)
                 {
                     result.Success = false;
-                    result.Message = sqlEx.Message; 
+                    result.Message = sqlEx.Message;
                     return result;
                 }
                 else
@@ -310,10 +310,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 string userMessage = "An error occurred while processing your request.";
 
-                if (sqlEx.Number == 50000) 
+                if (sqlEx.Number == 50000)
                 {
                     result.Success = false;
-                    result.Message = sqlEx.Message; 
+                    result.Message = sqlEx.Message;
                     return result;
                 }
                 else
@@ -434,10 +434,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             catch (SqlException sqlEx)
             {
 
-                if (sqlEx.Number == 50000) 
+                if (sqlEx.Number == 50000)
                 {
                     result.Success = false;
-                    result.Message = sqlEx.Message; 
+                    result.Message = sqlEx.Message;
                     return result;
                 }
                 else
