@@ -50,7 +50,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener descripciones de monedas.", ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
             finally
             {
@@ -61,7 +61,5 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             return coinDescriptions;
         }
-
-
     }
 }

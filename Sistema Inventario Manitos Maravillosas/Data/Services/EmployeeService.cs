@@ -85,14 +85,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al leer datos del SqlDataReader.", ex);
-            }
-            finally
-            {
-                if (connection != null && connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                employees.Clear();
+                throw new CustomDataException(ex.Message, ex);
             }
 
             return employees;
@@ -128,7 +122,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener nombres de roles.", ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
             finally
             {
@@ -173,7 +167,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener nombres de roles.", ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
             finally
             {
@@ -215,7 +209,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener correos electrónicos de usuarios.", ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
             finally
             {
@@ -249,7 +243,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         command.Parameters.Add(new SqlParameter("@position", string.IsNullOrEmpty(newEmployee.Position) ? DBNull.Value : newEmployee.Position));
                         command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(newEmployee.PhoneNumber) ? DBNull.Value : newEmployee.PhoneNumber));
                         command.Parameters.Add(new SqlParameter("@idBusiness", newEmployee.IdBusiness != 0 ? (object)newEmployee.IdBusiness : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@BusinessName", string.IsNullOrEmpty(newEmployee.BusinessName) ? DBNull.Value : newEmployee.BusinessName));
+                        command.Parameters.Add(new SqlParameter("@businessName", string.IsNullOrEmpty(newEmployee.BusinessName) ? DBNull.Value : newEmployee.BusinessName));
                         command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(newEmployee.Email) ? DBNull.Value : newEmployee.Email));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
@@ -269,12 +263,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 }
                 else
                 {
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                    throw new CustomDataException("An error occurred: " + sqlEx.Message, sqlEx);
                 }
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return result;
@@ -302,7 +296,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         command.Parameters.Add(new SqlParameter("@position", string.IsNullOrEmpty(newEmployee.Position) ? DBNull.Value : newEmployee.Position));
                         command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(newEmployee.PhoneNumber) ? DBNull.Value : newEmployee.PhoneNumber));
                         command.Parameters.Add(new SqlParameter("@idBusiness", newEmployee.IdBusiness != 0 ? (object)newEmployee.IdBusiness : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@BusinessName", string.IsNullOrEmpty(newEmployee.BusinessName) ? DBNull.Value : newEmployee.BusinessName));
+                        command.Parameters.Add(new SqlParameter("@businessName", string.IsNullOrEmpty(newEmployee.BusinessName) ? DBNull.Value : newEmployee.BusinessName));
                         command.Parameters.Add(new SqlParameter("@email", string.IsNullOrEmpty(newEmployee.Email) ? DBNull.Value : newEmployee.Email));
                         command.Parameters.Add(new SqlParameter("@operation", 3));
 
@@ -324,12 +318,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 }
                 else
                 {
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                    throw new CustomDataException("An error occurred: " + sqlEx.Message, sqlEx);
                 }
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return result;
@@ -360,6 +354,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@position", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
                             new SqlParameter("@idBusiness", DBNull.Value),
+                            new SqlParameter("@businessName", DBNull.Value),
                             new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
@@ -383,6 +378,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     PhoneNumber = dataReader["phoneNumber"].ToString(),
                                     BusinessName = dataReader["businessName"].ToString(),
                                     Email = dataReader["email"].ToString(),
+                                    Role = dataReader["roleName"].ToString(),
                                 };
 
                             }
@@ -392,7 +388,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return employee;
@@ -422,7 +418,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@position", DBNull.Value),
                             new SqlParameter("@phoneNumber", DBNull.Value),
                             new SqlParameter("@idBusiness", DBNull.Value),
-                            new SqlParameter("@BusinessName", DBNull.Value),
+                            new SqlParameter("@businessName", DBNull.Value),
                             new SqlParameter("@email", DBNull.Value),
                             new SqlParameter("@operation", '4')
                         };
@@ -446,12 +442,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                 }
                 else
                 {
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                    throw new CustomDataException("An error occurred: " + sqlEx.Message, sqlEx);
                 }
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return result;
