@@ -14,7 +14,7 @@
 <div class="card">
     <div class="card-body">
 
-        <form id="employeeForm" asp-controller="Employee" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+        <form id="productForm" asp-controller="Product" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
             <!-- Fila 1: Identificación, Nombre -->
             <div class="row mb-3">
@@ -67,7 +67,7 @@
             <!-- Fila 3: Negocio, Correo -->
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label asp-for="ProductCategory" class="control-label mb-2">Negocio</label>
+                    <label asp-for="ProductCategory" class="control-label mb-2">Categoria</label>
                     <div class="select-wrapper">
                         <select asp-for="ProductCategory" class="form-control" asp-items="ViewBag.ProductCategories">
                             <option value="">Seleccione una categoria</option>
@@ -92,8 +92,8 @@
                     <label asp-for="Status" class="control-label mb-2">Estado</label>
                     <div class="select-wrapper">
                         <select asp-for="Status" class="form-control">
-                            <option value="true">Activo</option>
-                            <option value="false">Inactivo</option>
+                            <option value="True">Activo</option>
+                            <option value="False">Inactivo</option>
                         </select>
                     </div>
                     <span asp-validation-for="Status" class="text-danger"></span>

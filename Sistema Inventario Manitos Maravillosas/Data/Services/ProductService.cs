@@ -9,9 +9,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
     {
         OperationResult Add(Product Product);
         OperationResult Update(Product Product);
-        OperationResult Delete(int idProduct);
+        OperationResult Delete(string idProduct);
         List<Product> GetAll();
-        Product GetById(int idProduct);
+        Product GetById(string idProduct);
     }
 
     public class ProductService : IProductService
@@ -40,9 +40,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         command.Parameters.Add(new SqlParameter("@idProduct", string.IsNullOrEmpty(product.IdProduct) ? DBNull.Value : product.IdProduct));
                         command.Parameters.Add(new SqlParameter("@productName", string.IsNullOrEmpty(product.ProductName) ? DBNull.Value : product.ProductName));
-                        command.Parameters.Add(new SqlParameter("@stock", product.Stock == 0 ? DBNull.Value : product.Stock));
-                        command.Parameters.Add(new SqlParameter("@cost", product.Cost == 0 ? DBNull.Value : product.Cost));
-                        command.Parameters.Add(new SqlParameter("@price", product.Price == 0 ? DBNull.Value : product.Price));
+                        command.Parameters.Add(new SqlParameter("@stock", product.Stock));
+                        command.Parameters.Add(new SqlParameter("@cost", product.Cost));
+                        command.Parameters.Add(new SqlParameter("@price", product.Price));
                         command.Parameters.Add(new SqlParameter("@description", string.IsNullOrEmpty(product.Description) ? DBNull.Value : product.Description));
                         command.Parameters.Add(new SqlParameter("@status", product.Status == false ? DBNull.Value : product.Status));
                         command.Parameters.Add(new SqlParameter("@productCategory", string.IsNullOrEmpty(product.ProductCategory) ? DBNull.Value : product.ProductCategory));
@@ -97,6 +97,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         command.Parameters.Add(new SqlParameter("@status", Product.Status == false ? DBNull.Value : Product.Status));
                         command.Parameters.Add(new SqlParameter("@productCategory", string.IsNullOrEmpty(Product.ProductCategory) ? DBNull.Value : Product.ProductCategory));
                         command.Parameters.Add(new SqlParameter("@businessName", string.IsNullOrEmpty(Product.BusinessName) ? DBNull.Value : Product.BusinessName));
+                        command.Parameters.Add(new SqlParameter("@operation", 3));
 
                         connection.Open();
                         command.ExecuteNonQuery();
@@ -125,7 +126,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return result;
         }
 
-        public OperationResult Delete(int idProduct)
+        public OperationResult Delete(string idProduct)
         {
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
@@ -215,7 +216,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             Product Product = new Product
                             {
                                 IdProduct = Convert.ToString(dataReader["idProduct"]),
-                                ProductName = Convert.ToString(dataReader["productName"]),
+                                ProductName = Convert.ToString(dataReader["name"]),
                                 Stock = Convert.ToSingle(dataReader["stock"]),
                                 Cost = Convert.ToSingle(dataReader["cost"]),
                                 Price = Convert.ToSingle(dataReader["price"]),
@@ -245,7 +246,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return products;
         }
 
-        public Product GetById(int idProduct)
+        public Product GetById(string idProduct)
         {
             Product product = new Product();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
@@ -285,7 +286,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             product = new Product
                             {
                                 IdProduct = Convert.ToString(dataReader["idProduct"]),
-                                ProductName = Convert.ToString(dataReader["productName"]),
+                                ProductName = Convert.ToString(dataReader["name"]),
                                 Stock = Convert.ToSingle(dataReader["stock"]),
                                 Cost = Convert.ToSingle(dataReader["cost"]),
                                 Price = Convert.ToSingle(dataReader["price"]),

@@ -13,17 +13,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models
         [StringLength(60, ErrorMessage = "El nombre del producto debe estar entre 2 y 60 caracteres", MinimumLength = 2)]
         public string ProductName { get; set; }
 
-        [Required(ErrorMessage = "Se requiere el stock del producto.")]
         [Range(0, 1000000, ErrorMessage = "El stock debe ser mayor o igual a 0.")]
-        public float Stock { get; set; }
+        public float Stock { get; set; } = 0;
 
-        [Required(ErrorMessage = "Se requiere el costo del producto.")]
         [Range(0, 1000000, ErrorMessage = "El costo debe ser mayor o igual a 0.")]
-        public float Cost { get; set; }
+        public float Cost { get; set; } = 0;
 
-        [Required(ErrorMessage = "Se requiere el precio del producto.")]
         [Range(0, 1000000, ErrorMessage = "El precio debe ser mayor o igual a 0.")]
-        public float Price { get; set; }
+        public float Price { get; set; } = 0;
 
         [Required(ErrorMessage = "Se requiere la descripción del producto.")]
         [StringLength(150, ErrorMessage = "La descripción del producto debe estar entre 2 y 150 caracteres", MinimumLength = 2)]
