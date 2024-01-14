@@ -5,11 +5,10 @@
 @{
     ViewData["Title"] = "Index";
     bool isBill = ViewData["isBill"] as bool? ?? false;
-    bool isClient = false;
+    bool isClient = ViewData["isClient"] as bool? ?? false;
     Bill bill = new Bill();
     if (isBill)
     {
-        isClient = (bill.IdClient != null) ? true : false;
         bill = ViewData["bill"] as Bill;
     }
 
@@ -74,6 +73,7 @@
                     <tr>
                         <th scope="col">Código</th>
                         <th scope="col">Nombre</th>
+                        <th scope="col">Categoría</th>
                         <th scope="col">Descripción</th>
                         <th scope="col">Precio $</th>
                         <th scope="col">Cantidad</th>
@@ -82,7 +82,7 @@
                     </tr>
                 </thead>
 
-                @if (isBill)
+                @if (isBill) @* This else is beacuse the user can create the bill when assing a client *@
                 {
                     @if(bill.CartXProducts.Count > 0)
                     {
@@ -97,7 +97,7 @@
                             </tr>
                         </tbody>
                     }
-                }
+                }                
                 else
                 {
                     <tbody id="noProducts">
@@ -196,8 +196,8 @@
                     <button type="button" class="btn btn-warning">Limpiar Datos   <i class="bi bi-stars"></i></button>
                     <button type="button" class="btn btn-outline-secondary">Dejar Pendiente  <i class="bi bi-file-earmark-bar-graph-fill"></i></button>
                 </div>
-                <div class="fw-bold fs-4">
-                    Total a Cobrar: @(isBill ? bill.TotalCost:"0" ) $     
+                <div  class="fw-bold fs-4">
+                    @* Total a Cobrar:  <span id="totalCostBill">@(isBill ? bill.TotalCost : "0")</span> $ *@
                     <button type="button" class="btn btn-success btn-lg"><i class="bi bi-cash-stack"></i>  Cobrar</button>
                 </div>
             </div>
@@ -250,13 +250,13 @@
                     }
                     
                 </ul>
-                <button id="openNewClient" type="button" class="btn btn-primary btn-sm"><i class="bi bi-plus-square"></i></button>
+                <button id="openNewClient" type="button" class="btn btn-primary btn-sm">Agregar Nuevo <i class="bi bi-plus-square"></i></button>
           </div>
             
-          <div class="modal-footer">
+        @*   <div class="modal-footer">
             <button id="openNewClient" type="button" class="btn btn-primary">Aceptar</button> 
-              @*  <a asp-area="Admin" asp-controller="Client" asp-action="Create"  type="button" class="btn btn-primary">Aceptar</a> *@
-          </div>
+               <a asp-area="Admin" asp-controller="Client" asp-action="Create"  type="button" class="btn btn-primary">Aceptar</a> 
+          </div> *@
         </div>
   </div>
 </div>
@@ -278,9 +278,9 @@
 
             </div>
 
-            <div class="modal-footer">
+@*             <div class="modal-footer">
                 <button type="button" class="btn btn-primary">Aceptar</button>
-            </div>
+            </div> *@
         </div>
     </div>
 </div>
@@ -352,9 +352,9 @@
                 </form>
             </div>
 
-            <div class="modal-footer">
+           @*  <div class="modal-footer">
                 <button type="button" class="btn btn-primary">Aceptar</button>
-            </div>
+            </div> *@
         </div>
     </div>
 </div>

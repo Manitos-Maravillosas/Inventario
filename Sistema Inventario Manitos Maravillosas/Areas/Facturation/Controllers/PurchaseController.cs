@@ -16,8 +16,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly IProductService _productService;
         private readonly IClientService _clientService;
 
-        private List<Product> cartProducts = new List<Product>();
-        private List<Bill> bills = new List<Bill>();
 
         public PurchaseController(IProductService productService, IClientService clientService)
         {
@@ -33,11 +31,20 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             if (!string.IsNullOrEmpty(sessionData))
             {
                 ViewData["isBill"] = true;
-                ViewData["bill"] = GetBill();
+                Bill b = GetBill();
+                ViewData["bill"] = b;
+                if (b.Client != null)
+                {
+                    
+                    ViewData["isClient"] = true;
+                }
             }
 
             return View(clients);
         }
+        //-------------------------------------------------------------------------------------//
+        //                           Product                                                  //
+        //-------------------------------------------------------------------------------------//
 
         // POST: Facturation/Purcharse/AddProductToCart
         [HttpPost]
@@ -48,16 +55,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 var product = _productService.GetStockById(id, quantity);
                 if (product != null && product.Stock > 0)
                 {
-                    var productDto = new ProductDto
-                    {
-                        IdProduct = product.IdProduct,
-                        Name = product.ProductName,
-                        Stock = product.Stock,
-                        Price = product.Cost,
-                        Description = product.Description,
-                        Status = product.Status
-                        // Map other properties as needed
-                    };
 
                     // Add the new product to the cart
                     addProductToCartXBill(product);
@@ -70,18 +67,43 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, message = "Product not available." });
-                }
+                    return Json(new { success = false, message = "No hay producto disponible" });
+                    }
             }
             catch (CustomDataException ex)
             {
-                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+                if (ex.Message == "Sql")
+                {
+                    return Json(new { success = false, message = ex.InnerException.Message });
+                }
+                else
+                {
+                    throw new CustomDataException("An error occurred: " + ex.Message, ex);
+                }               
             }
             catch (Exception ex)
             {
                 throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
         }
+
+        // POST: Facturation/Purcharse/removeProductFromCart
+        [HttpPost]
+        public IActionResult removeProductFromCart(string id)
+        {
+           if (RemoveProductFromCartXBill(id))
+            {
+                return PartialView("_tableProducts", GetBill());
+            }
+           else
+            {
+                return Json(new { success = false, message = "Product not available." });
+            }
+        }
+
+        //-------------------------------------------------------------------------------------//
+        //                           Client                                                  //
+        //-------------------------------------------------------------------------------------//
 
         [HttpPost]
         public void AssingClientToBill(string id)
@@ -102,14 +124,24 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 if (!result.Success)
                 {
                     ViewData["ErrorMessage"] = result.Message;
+
                 }
-                ViewData["Success"] = "Cliente agregado correctamente!";
+                else
+                {
+                    ViewData["Success"] = "Cliente agregado correctamente!";
+                    updateClientBill(client.Id);
+                }
+                               
 
             }
+            Bill z = GetBill();
+            var sessionData = HttpContext.Session.GetString("Bill");
             return RedirectToAction("Index");
         }
 
-
+        //-------------------------------------------------------------------------------------//
+        //                           Bill Handler                                                 //
+        //-------------------------------------------------------------------------------------//
         private void addProductToCartXBill(Product product)
         {
             Bill bill = GetBill();
@@ -158,6 +190,36 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             }
 
             SaveBill(bill);
+        }
+
+        private bool RemoveProductFromCartXBill(string IdProduct)
+        {
+            Bill bill = GetBill();
+            var flagProductFound = false;
+
+
+            try
+            {
+                if (bill != null)
+                {
+                    foreach (var item in bill.CartXProducts)
+                    {
+                        if (item.IdProduct == IdProduct)
+                        {
+                            bill.CartXProducts.Remove(item);
+                            flagProductFound = true;
+                            SaveBill(bill);
+                            break;
+                        }
+                    }
+                }
+            }catch (Exception e)
+            {
+                throw new CustomDataException("Error Message", e);
+            }
+
+            return flagProductFound;
+            
         }
 
         private void updatePriceBill()

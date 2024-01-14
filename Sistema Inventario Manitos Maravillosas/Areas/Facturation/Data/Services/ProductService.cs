@@ -155,6 +155,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                                 product.Status = Convert.ToBoolean(dataReader["Status"]);
                                 product.IdBusiness = Convert.ToInt32(dataReader["IdBusiness"]);
                                 product.IdProductCategory = Convert.ToInt32(dataReader["IdProductCategory"]);
+                                product.Category = Convert.ToString(dataReader["Category"]);
                             }
                         }
                     }
@@ -165,7 +166,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                 // Check if the error is a custom error thrown using RAISEERROR
                 if (sqlEx.Number == 50000) // 50000 is the default error number for RAISEERROR
                 {
-                    throw new CustomDataException("Error Message", sqlEx);
+                    throw new CustomDataException("Sql", sqlEx);
                 }
                 else
                 {

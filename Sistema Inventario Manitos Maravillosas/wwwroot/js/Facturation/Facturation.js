@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
     });
 
-    //select client
+    //-----------------------------------------------------select client
     var listClient = document.getElementById('listClient');
     if (listClient) {
 
@@ -73,6 +73,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 clientModal.hide();
             });
         }       
+    }
+    //-----------------------------------------------------assing client to a bill
+    function assignClientToBill(idClient) {
+        fetch('/Facturation/Purchase/AssingClientToBill', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `id=${encodeURIComponent(idClient)}`
+        })
+            .then(response => {
+                // Asegúrate de que la respuesta esté bien antes de intentar leerla
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text(); // Usa response.text() ya que esperas HTML como respuesta
+            })
+            .catch(error => {
+                console.error('Error al obtener los departamentos:', error);
+            });
     }
 
  
@@ -148,43 +168,67 @@ document.addEventListener('DOMContentLoaded', function () {
             body: `id=${encodeURIComponent(productId)}&quantity=1`
         })
             .then(response => {
-                // Asegúrate de que la respuesta esté bien antes de intentar leerla
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                // Check the response header to determine the content type
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    return response.json().then(data => {
+                        // Process JSON data
+                        if (!data.success) {
+                            // Handle failure. Display the error message from the server.
+                            Swal.fire({
+                                title: 'Error',
+                                text: data.message,
+                                icon: 'error'
+                            });
+                        }
+                    });
+                } else if (contentType && contentType.indexOf("text/html") !== -1) {
+                    return response.text().then(html => {
+                        // Process HTML data
+                        addRow(html);
+                        noProductsVisibleFalse();
+                        applyEventListenersToRow();
+                    });
+                } else {
+                    throw new TypeError('Received response is neither JSON nor HTML');
                 }
-                return response.text(); // Usa response.text() ya que esperas HTML como respuesta
-             })
-            .then(tableBodyHtml => {
-                // 'html' es el HTML de tu PartialView
-                // Inserta este HTML en la tabla o donde necesites actualizar
-
-                addRow(tableBodyHtml);
-                noProductsVisibleFalse()
-                applyEventListenersToRow();
-            })
-    }
-
-    function assignClientToBill(idClient) {
-        fetch('/Facturation/Purchase/AssingClientToBill', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `id=${encodeURIComponent(idClient)}`
-        })
-            .then(response => {
-                // Asegúrate de que la respuesta esté bien antes de intentar leerla
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text(); // Usa response.text() ya que esperas HTML como respuesta
             })
             .catch(error => {
-                console.error('Error al obtener los departamentos:', error);
+                // Handle network errors or other exceptions
+                console.error('Fetch Error:', error);
             });
     }
+    
+    applyEventListenersToRow();
 
 });
+
+function removeProductFromCart(id) {
+    fetch('/Facturation/Purchase/removeProductFromCart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `id=${encodeURIComponent(id)}`
+    })
+        .then(response => {
+            // Asegúrate de que la respuesta esté bien antes de intentar leerla
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text(); // Usa response.text() ya que esperas HTML como respuesta
+        })
+        .then(tableBodyHtml => {
+            // 'html' es el HTML de tu PartialView
+            // Inserta este HTML en la tabla o donde necesites actualizar
+
+            addRow(tableBodyHtml);
+            noProductsVisibleFalse()
+            applyEventListenersToRow();
+        })
+
+
+}
 
 
 function addRow(tableBodyHtml) {
