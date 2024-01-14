@@ -20,6 +20,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 
     {
         private readonly IEmployeeService _employeeService;
+        private readonly IBusinessService _businessService;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly SignInManager<AppUser> _signInManager;
@@ -32,6 +33,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
 
         public EmployeeController(
             IEmployeeService employeeService,
+            IBusinessService businessService,
             RoleManager<IdentityRole> roleManager,
             UserManager<AppUser> userManager,
             IUserStore<AppUser> userStore,
@@ -40,7 +42,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
             EmailService.Models.IEmailSender emailSender)
         {
             _employeeService = employeeService;
-
+            _businessService = businessService;
             _roleManager = roleManager;
             _userManager = userManager;
             _userStore = userStore;
@@ -68,7 +70,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
         // GET: EmployeeController/Create
         public ActionResult Create()
         {
-            var businessNames = _employeeService.GetBusinessNames();
+            var businessNames = _businessService.GetBusinessNames();
             var roleNames = _employeeService.GetRoleNames();
 
             ViewBag.BusinessNames = new SelectList(businessNames);
@@ -94,7 +96,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 ViewData["Success"] = "Empleado agregado correctamente!";
 
             }
-            ViewBag.BusinessNames = new SelectList(_employeeService.GetBusinessNames());
+            ViewBag.BusinessNames = new SelectList(_businessService.GetBusinessNames());
             ViewBag.RoleNames = new SelectList(_employeeService.GetRoleNames());
             return View();
         }
@@ -212,7 +214,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewBag.BusinessNames = new SelectList(_employeeService.GetBusinessNames());
+            ViewBag.BusinessNames = new SelectList(_businessService.GetBusinessNames());
+            ViewBag.RoleNames = new SelectList(_employeeService.GetRoleNames());
+
             return View(employee);
         }
 
@@ -234,7 +238,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: EmployeeController/Delete/5
+        // POST: EmployeeController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteAsync(string id)
         {
             string userId = _employeeService.GetUserId(id);
@@ -251,7 +257,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 throw new InvalidOperationException($"Unexpected error occurred deleting user.");
             }
 
-            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+            _logger.LogInformation("User with ID '{UserId}' was deleted.", userId);
             ViewData["Success"] = "Se ha eliminado al Empleado!";
 
             var employees = _employeeService.GetAll();

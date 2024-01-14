@@ -89,7 +89,9 @@
 
                     <!---SubMenu Items-->
                     <ul class="subMenuCollapse" role="navigation">
-                        <!-- Submenu items here -->
+                        <li class="subMenuNavItem">
+                            <a class="aside-linkSubItem" asp-area="Inventory" asp-controller="ProductCategory" asp-action="Index">Categorias</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -124,24 +126,29 @@
                     <ul class="subMenuCollapse" role="navigation">
                         <li class="subMenuNavItem">
                             <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Client" asp-action="Index">Cliente</a>
-                        </li>
-                        
+                        </li>                        
                     </ul>
                     <ul class="subMenuCollapse" role="navigation">
                         <li class="subMenuNavItem">
                             <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Employee" asp-action="Index">Empleado</a>
                         </li>
-
                     </ul>
                     <ul class="subMenuCollapse" role="navigation">
                         <li class="subMenuNavItem">
-                            <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Administration" asp-action="CreateRole">CreateRole</a>
+                            <a class="aside-linkSubItem" asp-area="Admin" asp-controller="TypePayment" asp-action="Index">Tipo de Pago</a>
                         </li>
-
                     </ul>
-                     
+                    <ul class="subMenuCollapse" role="navigation">
+                        <li class="subMenuNavItem">
+                            <a class="aside-linkSubItem" asp-area="Admin" asp-controller="BankAccount" asp-action="Index">Cuenta de Banco</a>
+                        </li>
+                    </ul>
+                    <ul class="subMenuCollapse" role="navigation">
+                        <li class="subMenuNavItem">
+                            <a class="aside-linkSubItem" asp-area="Admin" asp-controller="TypeDelivery" asp-action="Index">Tipo de Envío</a>
+                        </li>
+                    </ul>
                 </li>
-
                 <!---Reportes-->
                 <li class="inline-nav-item">
                     <a class="d-flex justify-content-between align-items-center aside-link " href="/Admin/BuscarInstalacion">

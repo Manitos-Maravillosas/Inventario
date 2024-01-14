@@ -11,7 +11,6 @@
 
     cargarDepartamentos();
 
-    // Inicializar deshabilitados para el modo "Crear"
     citySelect.disabled = true;
     addressInput.disabled = true;
 
@@ -22,7 +21,7 @@
 
         cargarDepartamentos(selectedDepartment);
         cargarCiudades(selectedDepartment, selectedCity);
-        // Habilitar los campos en el modo "Editar"
+        
         citySelect.disabled = false;
         addressInput.disabled = false;
     }

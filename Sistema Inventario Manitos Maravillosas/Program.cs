@@ -1,7 +1,6 @@
 using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
@@ -10,15 +9,20 @@ using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Filters;
 using SistemaInventario.Data;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>(); // Agrega esta línea
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IBusinessService, BusinessService>();
+builder.Services.AddScoped<ITypePaymentService, TypePaymentService>();
+builder.Services.AddScoped<ICoinService, CoinService>();
+builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+builder.Services.AddScoped<IBankAccountService, BankAccountService>();
+builder.Services.AddScoped<ITypeDeliveryService, TypeDeliveryService>();
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
 builder.Services.AddScoped<BillHandler>();
-
 
 var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")

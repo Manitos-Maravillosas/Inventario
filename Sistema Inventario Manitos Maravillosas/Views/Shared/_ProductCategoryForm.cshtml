@@ -1,0 +1,56 @@
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models.ProductCategory
+@{
+    var action = ViewData["Action"] as string;
+}
+
+<div class="card">
+    <div class="card-body">
+        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "ProductCategory", new { area = "Inventory" })'">
+            <span> <i class="bi bi-arrow-left-short"></i></span>
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <form id="productCategoryForm" asp-controller="ProductCategory" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+            @Html.AntiForgeryToken()
+            <!-- Fila 1: Identificación, Nombre -->
+            @if (action == "Edit")
+            {
+                <input type="hidden" asp-for="IdProductCategory">
+            }else{
+                <input type="hidden" asp-for="IdProductCategory" value="0">
+            }
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Categoría</label>
+                    <input type="text" class="form-control" asp-for="Category" aria-label="Nombre">
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Descripcion</label>
+                    <input type="text" class="form-control" asp-for="Description" aria-label="Descripcion">
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Botón de envío y volver -->
+            <div class="d-flex justify-content-end mb-3">
+                <button type="submit" class="btn btn-primary">
+                    @if (action == "Edit")
+                    {
+                        <span>Modificar <i class="bi bi-pencil-square"></i></span>
+                    }
+                    else
+                    {
+                        <span>Agregar <i class="bi bi-plus-circle"></i></span>
+                    }
+                </button>
+
+            </div>
+        </form>
+
+    </div>
+</div>

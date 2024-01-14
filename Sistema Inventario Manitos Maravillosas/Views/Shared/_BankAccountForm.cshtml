@@ -1,0 +1,94 @@
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.BankAccount
+@{
+    var action = ViewData["Action"] as string;
+}
+
+<div class="card">
+    <div class="card-body">
+        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "BankAccount", new { area = "Admin" })'">
+            <span> <i class="bi bi-arrow-left-short"></i></span>
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <form id="bankAccountForm" asp-controller="BankAccount" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+            @Html.AntiForgeryToken()
+            <!-- Fila 1: Identificación -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Identificación</label>
+                    @if (action == "Create")
+                    {
+                        <input type="text" class="form-control" asp-for="Id" aria-label="Identificación" disabled>                        
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" asp-for="Id" aria-label="Identificación" disabled>
+                        <input type="hidden" asp-for="Id">
+                    }
+
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>
+                
+            </div>
+            <!-- Fila 2: Número de Cuenta, Banco -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Número de Cuenta</label>
+                    <input type="text" class="form-control" asp-for="AccountNumber" aria-label="Número de Cuenta">
+                    <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="BankName" class="control-label mb-2">Banco</label>
+                    <div class="select-wrapper">
+                        <select asp-for="BankName" class="form-control" asp-items="ViewBag.BankNames">
+                            <option value="">Seleccione un Banco</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="CoinDescription" class="text-danger"></span>
+                </div>                
+            </div>
+
+            <!-- Fila 2: Moneda, Tipo de Pago -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="CoinDescription" class="control-label mb-2">Moneda</label>
+                    <div class="select-wrapper">
+                        <select asp-for="CoinDescription" class="form-control" asp-items="ViewBag.CoinDescriptions">
+                            <option value="">Seleccione una moneda</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="CoinDescription" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="TypePaymentName" class="control-label mb-2">Tipo de Pago</label>
+                    <div class="select-wrapper">
+                        <select asp-for="TypePaymentName" class="form-control" asp-items="ViewBag.TypePaymentNames">
+                            <option value="">Seleccione un tipo de Pago</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="TypePaymentName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Botón de envío -->
+            <div class="d-flex justify-content-end mb-3">
+                <button type="submit" class="btn btn-primary">
+                    @if (action == "Edit")
+                    {
+                        <span>Modificar <i class="bi bi-pencil-square"></i></span>
+                    }
+                    else
+                    {
+                        <span>Agregar <i class="bi bi-plus-circle"></i></span>
+                    }
+                </button>
+
+            </div>
+        </form>
+
+    </div>
+</div>

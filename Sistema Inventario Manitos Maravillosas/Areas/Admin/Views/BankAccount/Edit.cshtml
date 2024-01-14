@@ -1,21 +1,19 @@
-﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Employee
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.BankAccount
 
 @{
-    ViewData["Title"] = "Crear Empleado";
+    ViewData["Title"] = "Modificar Cuenta de Banco";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    ViewData["Action"] = "Create";
+    ViewData["Action"] = "Edit";
 }
+
 <section class="container px-5 py-3">
-    <h3 style="margin-bottom: 2rem;">Agregar Empleado</h3>
-
-    <partial name="_EmployeeForm" model="Model" view-data="ViewData">
-
-    </partial>
+    <h3 style="margin-bottom: 2rem;">Modificar Tipo de Pago</h3>
+    <partial name="_BankAccountForm" model="Model" view-data="ViewData">
 </section>
 
 @section Scripts {
-    
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
@@ -30,7 +28,7 @@
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/Admin/Employee/Index'; 
+                        window.location.href = '/Admin/BankAccount/Index';
                     }
                 });
             });
@@ -51,7 +49,4 @@
 
         ViewData["ErrorMessage"] = null;
     }
-
-
-
 }

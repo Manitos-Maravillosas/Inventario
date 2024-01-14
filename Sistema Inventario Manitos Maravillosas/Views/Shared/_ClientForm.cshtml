@@ -15,12 +15,12 @@
 <div id="cityInfo" data-city="@city" style="display:none;"></div>
 <div id="addressInfo" data-address="@address" style="display:none;"></div>
 
-
 <div id="actionInfo" data-action="@action" style="display:none;"></div>
 
 <div class="card">
     <div class="card-body">
         
+
         <form id="clientForm" asp-controller="@(controllerCall)" asp-action="@action" method="post">
             <input type="hidden" id="hiddenCityField" vale="CityName" name="CityName">
             <input type="hidden" id="hiddenAddressField" asp-for="Signs" name="Signs">
@@ -61,7 +61,7 @@
                     <span asp-validation-for="LastName2" class="text-danger"></span>
                 </div>
             </div>
-            <!-- Fila 3: Correo, Número de Contacto -->
+            <!-- Fila 3: Dirección, Número de Contacto -->
             <div class="row mb-3">
                 <div class="col-sm">
                     <div class="card">
@@ -105,7 +105,7 @@
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
-            <!-- Botón de envío y volver -->
+            <!-- Botón de envío -->
             <div class="d-flex justify-content-end mb-3">                
                 <button type="submit" class="btn btn-primary">
                     @if (action == "Edit")
@@ -137,13 +137,16 @@
                     <select class="form-select my-2" id="departmentSelect" aria-label="Selector de Departamento">
                         <option value="">Selecciona un Departamento</option>
                     </select>
+                    <span asp-validation-for="DepartmentName" class="text-danger"></span>
 
                     <label class="form-label">Municipio</label>
                     <select class="form-select my-2" asp-for="CityName" id="citySelect" aria-label="Selector de Ciudad" disabled>
                         <option value="">Primero seleccione un Departamento</option>
                     </select>
+                    <span asp-validation-for="CityName" class="text-danger"></span>
                     <label class="form-label">Dirección Exacta</label>
                     <textarea class="form-control my-2" asp-for="Signs" id="additionalInfoInput" placeholder="Primero seleccione un municipio" aria-label="Información Adicional" disabled></textarea>
+                    <span asp-validation-for="Signs" class="text-danger"></span>
                 </div>                                
             </div>
             <div class="modal-footer">
