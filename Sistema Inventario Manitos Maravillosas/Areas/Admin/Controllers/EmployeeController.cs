@@ -216,7 +216,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
             }
             ViewBag.BusinessNames = new SelectList(_businessService.GetBusinessNames());
             ViewBag.RoleNames = new SelectList(_employeeService.GetRoleNames());
-            
+
             return View(employee);
         }
 
@@ -238,7 +238,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: EmployeeController/Delete/5
+        // POST: EmployeeController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteAsync(string id)
         {
             string userId = _employeeService.GetUserId(id);
@@ -255,7 +257,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 throw new InvalidOperationException($"Unexpected error occurred deleting user.");
             }
 
-            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+            _logger.LogInformation("User with ID '{UserId}' was deleted.", userId);
             ViewData["Success"] = "Se ha eliminado al Empleado!";
 
             var employees = _employeeService.GetAll();

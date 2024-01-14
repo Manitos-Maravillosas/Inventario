@@ -103,46 +103,21 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Controllers
             return View();
         }
 
-        // GET: Inventory/ProductCategories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.ProductCategories == null)
-            {
-                return NotFound();
-            }
-
-            var productCategory = await _context.ProductCategories
-                .FirstOrDefaultAsync(m => m.IdProductCategory == id);
-            if (productCategory == null)
-            {
-                return NotFound();
-            }
-
-            return View(productCategory);
-        }
-
         // POST: Inventory/ProductCategories/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult Delete(int id)
         {
-            if (_context.ProductCategories == null)
+            OperationResult result = _productCategoryService.Delete(id);
+            if (!result.Success)
             {
-                return Problem("Entity set 'AppDbContext.ProductCategories'  is null.");
+                ViewData["ErrorMessage"] = result.Message;
             }
-            var productCategory = await _context.ProductCategories.FindAsync(id);
-            if (productCategory != null)
-            {
-                _context.ProductCategories.Remove(productCategory);
-            }
+            ViewData["Success"] = "Se ha eliminado la categoria!";
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var productCategories = _productCategoryService.GetAll();
+            return View("Index", productCategories);
 
-        private bool ProductCategoryExists(int id)
-        {
-            return (_context.ProductCategories?.Any(e => e.IdProductCategory == id)).GetValueOrDefault();
         }
     }
 }

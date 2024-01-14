@@ -9,7 +9,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
     {
         OperationResult Add(ProductCategory productCategory);
         OperationResult Update(ProductCategory productCategory);
-        OperationResult DeleteProductCategory(int idProductCategory);
+        OperationResult Delete(int idProductCategory);
         List<ProductCategory> GetAll();
         ProductCategory GetById(int idProductCategory);
     }
@@ -114,19 +114,48 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return result;
         }
 
-        public OperationResult DeleteProductCategory(int idProductCategory)
+        public OperationResult Delete(int idProductCategory)
         {
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
             try
             {
-                var productCategory = _context.ProductCategories.Find(idProductCategory);
-                _context.ProductCategories.Remove(productCategory);
-                _context.SaveChanges();
-                return new OperationResult(true, "Categoría de producto eliminada exitosamente");
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spProductCategoryCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.Add(new SqlParameter("@idProductCategory", idProductCategory));
+                        command.Parameters.Add(new SqlParameter("@category", DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@description", DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@operation", 4));
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
             }
-            catch (Exception e)
+            catch (SqlException sqlEx)
             {
-                return new OperationResult(false, e.Message);
+                if (sqlEx.Number == 50000)
+                {
+                    result.Success = false;
+                    result.Message = sqlEx.Message;
+                    return result;
+                }
+                else
+                {
+                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                }
             }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+            }
+
+            return result;
         }
 
         public List<ProductCategory> GetAll()
