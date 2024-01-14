@@ -16,7 +16,7 @@
 
         <form id="typePaymentForm" asp-controller="TypePayment" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
-            <!-- Fila 1: Nombre, Descripcion Moneda -->
+            <!-- Fila 1: Identificación -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Identificación</label>
@@ -34,11 +34,11 @@
                 </div>
                 
             </div>
-            <!-- Fila 2: Primer Apellido, Segundo Apellido -->
+            <!-- Fila 2: Nombre, Descripción Moneda -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Nombre</label>
-                    <input type="text" class="form-control" asp-for="Name" aria-label="Primer Apellido">
+                    <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
@@ -53,7 +53,7 @@
                 
             </div>
 
-            <!-- Botón de envío y volver -->
+            <!-- Botón de envío -->
             <div class="d-flex justify-content-end mb-3">
                 <button type="submit" class="btn btn-primary">
                     @if (action == "Edit")

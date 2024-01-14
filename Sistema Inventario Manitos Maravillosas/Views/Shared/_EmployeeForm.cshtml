@@ -51,11 +51,11 @@
                     <span asp-validation-for="LastName2" class="text-danger"></span>
                 </div>
             </div>
-            <!-- Fila 3: Correo, Número de Contacto -->
+            <!-- Fila 3: Posición, Número de Contacto -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Posición</label>
-                    <input type="text" class="form-control" asp-for="Position" aria-label="Correo">
+                    <input type="text" class="form-control" asp-for="Position" aria-label="Posición">
                     <span asp-validation-for="Position" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
@@ -64,7 +64,7 @@
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
-            <!-- Fila 3: Businees, Email -->
+            <!-- Fila 3: Negocio, Correo -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label asp-for="BusinessName" class="control-label mb-2">Negocio</label>
@@ -96,7 +96,7 @@
                 </div>
             </div>
 
-            <!-- Botón de envío y volver -->
+            <!-- Botón de envío -->
             <div class="d-flex justify-content-end mb-3">
                 <button type="submit" class="btn btn-primary">
                     @if (action == "Edit")
