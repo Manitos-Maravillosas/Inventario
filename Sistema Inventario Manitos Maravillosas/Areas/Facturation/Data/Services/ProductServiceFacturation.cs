@@ -1,38 +1,36 @@
-﻿using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+﻿using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 using System.Data;
 using System.Data.SqlClient;
-using System;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services
 {
-    public interface IProductService
+    public interface IProductServiceFacturation
     {
-        List<Product> GetAll();
-        Product GetById(string id);
-        OperationResult Add(Product newProduct);
-        OperationResult Update(Product product);
+        List<ProductFacturation> GetAll();
+        ProductFacturation GetById(string id);
+        OperationResult Add(ProductFacturation newProduct);
+        OperationResult Update(ProductFacturation product);
         OperationResult Delete(string id);
 
-        Product GetStockById(string id, int quantity);
+        ProductFacturation GetStockById(string id, int quantity);
 
         OperationResult AddStock(string id, int quantity);
 
         OperationResult UpdateStock(string id, int quantity);
 
     }
-    public class ProductService : IProductService
+    public class ProductServiceFacturation : IProductServiceFacturation
     {
         private readonly IConfiguration _configuration;
 
         private OperationResult result = new OperationResult(true, "");
 
-        public ProductService(IConfiguration configuration)
+        public ProductServiceFacturation(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-        public OperationResult Add(Product newProduct)
+        public OperationResult Add(ProductFacturation newProduct)
         {
             throw new NotImplementedException();
         }
@@ -50,9 +48,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
         //------------------------------------------------------------------------------------
         //                              GetAll                                             
         //------------------------------------------------------------------------------------
-        public List<Product> GetAll()
+        public List<ProductFacturation> GetAll()
         {
-            List<Product> products = new List<Product>();
+            List<ProductFacturation> products = new List<ProductFacturation>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
             try
@@ -89,7 +87,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
 
                             while (dataReader.Read())
                             {
-                                Product product = new Product();
+                                ProductFacturation product = new ProductFacturation();
 
                                 products.Add(product);
                             }
@@ -107,14 +105,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
             return products;
         }
 
-        public Product GetById(string id)
+        public ProductFacturation GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Product GetStockById(string id, int quantity)
+        public ProductFacturation GetStockById(string id, int quantity)
         {
-            Product product = new Product();
+            ProductFacturation product = new ProductFacturation();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
             try
@@ -186,7 +184,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
             return product;
         }
 
-        public OperationResult Update(Product product)
+        public OperationResult Update(ProductFacturation product)
         {
             throw new NotImplementedException();
         }

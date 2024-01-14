@@ -1,15 +1,15 @@
-﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models.ProductCategory
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models.Product
 
 @{
-    ViewData["Title"] = "Agregar Categoria";
+    ViewData["Title"] = "Agregar Producto";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     ViewData["Action"] = "Create";
 }
 <section class="container px-5 py-3">
-    <h3 style="margin-bottom: 2rem;">Agregar Categoría</h3>
+    <h3 style="margin-bottom: 2rem;">Agregar Producto</h3>
 
-    <partial name="_ProductCategoryForm" model="Model" view-data="ViewData">
+    <partial name="_ProductForm" model="Model" view-data="ViewData">
 
     </partial>
 </section>
@@ -30,7 +30,7 @@
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/Inventory/ProductCategory/Index';
+                        window.location.href = '/Inventory/Product';
                     }
                 });
             });
@@ -51,4 +51,10 @@
 
         ViewData["ErrorMessage"] = null;
     }
+    <script>
+        // assign default value of 0 to inputs with id="Stock" id="Cost" and id="Price"
+        document.getElementById("Stock").defaultValue = 0;
+        document.getElementById("Cost").defaultValue = 0;
+        document.getElementById("Price").defaultValue = 0;
+    </script>
 }

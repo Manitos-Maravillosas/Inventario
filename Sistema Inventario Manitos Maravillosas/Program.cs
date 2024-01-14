@@ -12,13 +12,14 @@ using SistemaInventario.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IClientService, ClientService>();
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductServiceFacturation, ProductServiceFacturation>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IBusinessService, BusinessService>();
 builder.Services.AddScoped<ITypePaymentService, TypePaymentService>();
 builder.Services.AddScoped<ICoinService, CoinService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 builder.Services.AddScoped<ITypeDeliveryService, TypeDeliveryService>();
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
