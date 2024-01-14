@@ -110,6 +110,26 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data
 
         //Admin
         public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.BankAccount>? BankAccount { get; set; }
+        //login
+
+
+        //Facturation
+
+
+        //Inventory
+
+        //Admin
+        //public DbSet<Client> Client { get; set; }
+        //login
+
+
+        //Facturation
+
+
+        //Inventory
+
+        //Admin
+        public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.TypeDelivery>? TypeDelivery { get; set; }
 
 
     }
