@@ -16,13 +16,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
     {
         private readonly IProductService _productService;
         private readonly IClientService _clientService;
+        private readonly ITypePaymentService _typePaymentService;
+        private readonly IBankAccountService _bankAccountService;
         private readonly BillHandler _billHandler;
 
-        public PurchaseController(IProductService productService, IClientService clientService,BillHandler billHandler)
+        public PurchaseController(IProductService productService, IClientService clientService, ITypePaymentService typePaymentService, BillHandler billHandler)
         {
             
             _productService = productService;
             _clientService = clientService;
+            _typePaymentService = typePaymentService;
             _billHandler = billHandler;
         }
 
