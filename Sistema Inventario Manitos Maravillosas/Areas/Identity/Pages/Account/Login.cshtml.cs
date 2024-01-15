@@ -118,7 +118,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Usuario ha ingresado");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect("~/");
                 }
                 if (result.RequiresTwoFactor)
                 {
