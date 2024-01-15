@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewData["Title"] = "View PDF";
+}
+
+<section class="container-fluid content-page w-100 px-3 py3">
+    <div class="d-flex justify-content-between mb-2 align-items-center">
+        <h3 class="m-0">Cobrar Factura</h3>
+        <a class="fs-3 px-1" asp-area="Facturation" asp-controller="Purchase" asp-action="Index">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+    </div>
+    <div class="row">
+        <div class="pdfViewer pb-2 col-6">
+            <div class="pdfController d-flex justify-content-between px-2 py-1 mb-2">
+                <div class="pdfControllerPage">
+                    <button id="pageUp-button" class="pdf-IconButton p-1"><i class="bi bi-chevron-up"></i></button>
+                    <button id="pageDown-button" class="pdf-IconButton p-1"><i class="bi bi-chevron-down"></i></button>
+                    <span class="text-white">Page 1</span>
+                </div>
+                <div class="pdfControllersZoom">
+                    <button id="minusPlus-button" class="pdf-IconButton p-1"><i class="bi bi-dash"></i></button>
+                    <button id="zoomPlus-button" class="pdf-IconButton p-1"><i class="bi bi-plus-lg"></i></button>
+                    <span class="text-white">100%</span>
+                </div>
+                <div class="pdfControllerButtons">
+
+                    <button id="download-button" class="pdf-IconButton p-1"><i class="bi bi-printer"></i></button>
+                    <button id="download-button" class="pdf-IconButton p-1"><i class="bi bi-download"></i></button>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center mb-2">
+                <canvas id="pdf-canvas" class="justify-content-center"></canvas>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4>
+                        Gestión de Cobro
+                    </h4>
+
+                    <form>
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar Pago Mixto</label>
+                        </div>
+                        <!--Cargar todos los métodos de pago que hay-->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Efectivo
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Cuenta
+                            </label>
+                        </div>
+                        <!--this select should querry from the data base-->
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de Pago</label>
+                            <select class="form-select " aria-label="Seleccione un tipo de pago">
+                                <option disabled>Seleccione un método de Envío</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+
+                        <!--this select should querry from the data base-->
+                        <div class="mb-3">
+                            <label class="form-label">Entidad Bancaría</label>
+                            <select class="form-select mb-3" aria-label="Seleccione una Entidad Bancaria">
+                                <option selected>Seleccione una Empresa</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Moneda</label>
+                            <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
+                                <div class="form-check form-check-inline radio-item">
+                                    <input type="radio" name="radioPub" id="public" value="1" role="radio" aria-label="Opción público">
+                                    <label for="public">Córdoba NIC </label>
+                                </div>
+                                <div class="form-check form-check-inline radio-item">
+                                    <input type="radio" name="radioPub" id="private" value="0" role="radio" aria-label="Opción privado">
+                                    <label for="private">Dólar USD</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+           
+
+        </div>
+    </div>
+</section>
+
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+    <script>
+        var pdfUrl = '@Url.Action("GeneratePdf", "PurchaseConfiguration", new { area = "Facturation" })';
+    </script>
+    <script src="~/js/facturation/pdfscript.js"></script>
+
+}

@@ -492,6 +492,31 @@ tr.rowHover:hover {
 #addClient .modal-dialog {
     max-width: 80%;
 }
+/* ------------------------------------------------- Facturation Purchase Configuration ---------------------------------------      */
+.pdfViewer {
+    background-color: #2A2A2E;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.pdfController {
+    background-color: #38383D;
+}
+
+.pdf-IconButton {
+    background-color: transparent;
+    color: #D1D1D2;
+    border-radius: 5px;
+    border: none;
+    /*set the heigh of the button exactly like width*/
+    height: 100%;
+    width: 30px;
+}
+
+    .pdf-IconButton:hover {
+        background-color: #666667;
+        transition: all ease-in-out 0.2s;
+    }
 /* ------------------------------------------------- Admin---------------------------------------      */
 /*------- Search Input-------*/
 .search-input {
