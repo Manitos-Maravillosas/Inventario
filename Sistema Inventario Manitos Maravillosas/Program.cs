@@ -1,3 +1,5 @@
+using DinkToPdf.Contracts;
+using DinkToPdf;
 using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,9 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add<CustomExceptionFilter>();
 });
 
+
+// Add the DinkToPdf service
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 builder.Services.AddRazorPages();
 
@@ -94,7 +99,7 @@ app.UseEndpoints(endpoints =>
 
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{area=Facturation}/{controller=Purchase}/{action=Index}/{id?}");
+        pattern: "{area=Facturation}/{controller=PurchaseConfiguration}/{action=Index}/{id?}");
 
 });
 
