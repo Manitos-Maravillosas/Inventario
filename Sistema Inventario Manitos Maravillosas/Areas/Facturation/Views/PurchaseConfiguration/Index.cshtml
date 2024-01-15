@@ -1,59 +1,57 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "View PDF";
 }
 
-<div style="background-color: black; padding: 10px; position: relative;">
-    <canvas id="pdf-canvas"></canvas>
-    <div style="position: absolute; top: 10px; right: 10px;">
-        <button id="print-button" style="margin-right: 10px;">🖨 Print</button>
-        <button id="download-button">⬇ Download</button>
+<section class="container-fluid content-page w-100 px-3 py3">
+    <div class="d-flex justify-content-between mb-2 align-items-center">
+        <h3 class="m-0">Cobrar Factura</h3>
+        <a class="fs-3 px-1" asp-area="Facturation" asp-controller="Purchase" asp-action="Index">
+            <i class="bi bi-chevron-left"></i>
+        </a>
     </div>
-</div>
+    <div class="row">
+        <div class="pdfViewer pb-2 col-6">
+            <div class="pdfController d-flex justify-content-between px-2 py-1 mb-2">
+                <div class="pdfControllerPage">
+                    <button id="pageUp-button" class="pdf-IconButton p-1"><i class="bi bi-chevron-up"></i></button>
+                    <button id="pageDown-button" class="pdf-IconButton p-1"><i class="bi bi-chevron-down"></i></button>
+                    <span class="text-white">Page 1</span>
+                </div>
+                <div class="pdfControllersZoom">
+                    <button id="minusPlus-button" class="pdf-IconButton p-1"><i class="bi bi-dash"></i></button>
+                    <button id="zoomPlus-button" class="pdf-IconButton p-1"><i class="bi bi-plus-lg"></i></button>
+                    <span class="text-white">100%</span>
+                </div>
+                <div class="pdfControllerButtons">
+
+                    <button id="download-button" class="pdf-IconButton p-1"><i class="bi bi-printer"></i></button>
+                    <button id="download-button" class="pdf-IconButton p-1"><i class="bi bi-download"></i></button>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center mb-2">
+                <canvas id="pdf-canvas" class="justify-content-center"></canvas>
+            </div>
+        </div>
+
+        <div class="col-6" >
+            <h5>
+                Gestión de Cobro
+            </h5>
+
+
+        </div>
+    </div>
+</section>
+
+
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
     <script>
-        // The URL of the action that generates the PDF
-        var url = '@Url.Action("GeneratePdf", "PurchaseConfiguration", new { area = "Facturation" })';
-
-        var pdfDoc = null;
-
-        // Load the PDF file.
-        pdfjsLib.getDocument(url).promise.then(function (pdf) {
-            pdfDoc = pdf;
-            // Get the first page.
-            pdf.getPage(1).then(function (page) {
-                var canvas = document.getElementById('pdf-canvas');
-                var context = canvas.getContext('2d');
-                var viewport = page.getViewport({ scale: 1.5 });
-
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                // Render the page.
-                var renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                page.render(renderContext);
-            });
-        });
-
-        // Print functionality
-        document.getElementById('print-button').addEventListener('click', function () {
-            if (pdfDoc) {
-                window.print();
-            }
-        });
-
-        // Download functionality
-        document.getElementById('download-button').addEventListener('click', function () {
-            if (pdfDoc) {
-                var link = document.createElement('a');
-                link.href = url;
-                link.download = 'GeneratedInvoice.pdf';
-                link.click();
-            }
-        });
+        var pdfUrl = '@Url.Action("GeneratePdf", "PurchaseConfiguration", new { area = "Facturation" })';
     </script>
+    <script src="~/js/facturation/pdfscript.js"></script>
+
 }

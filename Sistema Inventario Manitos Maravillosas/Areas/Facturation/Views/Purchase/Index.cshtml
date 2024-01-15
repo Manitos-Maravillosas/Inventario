@@ -198,7 +198,7 @@
                 </div>
                 <div  class="fw-bold fs-4">
                     @* Total a Cobrar:  <span id="totalCostBill">@(isBill ? bill.TotalCost : "0")</span> $ *@
-                    <button type="button" class="btn btn-success btn-lg"><i class="bi bi-cash-stack"></i>  Cobrar</button>
+                    <a asp-area="Facturation" asp-controller="PurchaseConfiguration" asp-action="Index" class="btn btn-success btn-lg"><i class="bi bi-cash-stack"></i>  Cobrar</a>
                 </div>
             </div>
         </div>

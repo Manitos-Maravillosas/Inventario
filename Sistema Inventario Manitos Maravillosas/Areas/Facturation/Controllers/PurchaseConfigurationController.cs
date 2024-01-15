@@ -17,7 +17,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
-   
+
     [Area("Facturation")]
     [Authorize]
     public class PurchaseConfigurationController : Controller
@@ -45,8 +45,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             }
             else
             {
-                return View();
+                return View();                
             }
+
         }
 
 
@@ -199,17 +200,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             return height;
         }
 
+
     }
-
-   
-
-    public class InvoiceItem
+    public class PrintPdfViewModel
     {
-        public string Description { get; set; }
-        public int Quantity { get; set; }
-        public decimal Price { get; set; }
-        public decimal Total => Quantity * Price;
+        public string PdfUrl { get; set; }
     }
-
 
 }
