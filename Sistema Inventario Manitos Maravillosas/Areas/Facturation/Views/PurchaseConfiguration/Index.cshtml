@@ -1,9 +1,14 @@
-﻿@* Razor View *@
-@{
+﻿@{
     ViewData["Title"] = "View PDF";
 }
 
-<canvas id="pdf-canvas"></canvas>
+<div style="background-color: black; padding: 10px; position: relative;">
+    <canvas id="pdf-canvas"></canvas>
+    <div style="position: absolute; top: 10px; right: 10px;">
+        <button id="print-button" style="margin-right: 10px;">🖨 Print</button>
+        <button id="download-button">⬇ Download</button>
+    </div>
+</div>
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
@@ -11,8 +16,11 @@
         // The URL of the action that generates the PDF
         var url = '@Url.Action("GeneratePdf", "PurchaseConfiguration", new { area = "Facturation" })';
 
+        var pdfDoc = null;
+
         // Load the PDF file.
         pdfjsLib.getDocument(url).promise.then(function (pdf) {
+            pdfDoc = pdf;
             // Get the first page.
             pdf.getPage(1).then(function (page) {
                 var canvas = document.getElementById('pdf-canvas');
@@ -30,6 +38,22 @@
                 page.render(renderContext);
             });
         });
+
+        // Print functionality
+        document.getElementById('print-button').addEventListener('click', function () {
+            if (pdfDoc) {
+                window.print();
+            }
+        });
+
+        // Download functionality
+        document.getElementById('download-button').addEventListener('click', function () {
+            if (pdfDoc) {
+                var link = document.createElement('a');
+                link.href = url;
+                link.download = 'GeneratedInvoice.pdf';
+                link.click();
+            }
+        });
     </script>
 }
-
