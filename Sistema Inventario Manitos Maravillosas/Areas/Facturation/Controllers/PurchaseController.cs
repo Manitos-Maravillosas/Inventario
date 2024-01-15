@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
-using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
-using Sistema_Inventario_Manitos_Maravillosas.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
-using Newtonsoft.Json;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Models;
+using IProductServiceFacturation = Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services.IProductServiceFacturation;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
@@ -14,15 +13,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
     [Authorize]
     public class PurchaseController : Controller
     {
-        private readonly IProductService _productService;
+        private readonly IProductServiceFacturation _productService;
         private readonly IClientService _clientService;
         private readonly ITypePaymentService _typePaymentService;
         private readonly IBankAccountService _bankAccountService;
         private readonly BillHandler _billHandler;
 
+
         public PurchaseController(IProductService productService, IClientService clientService, ITypePaymentService typePaymentService, BillHandler billHandler)
         {
-            
+
             _productService = productService;
             _clientService = clientService;
             _typePaymentService = typePaymentService;
@@ -41,7 +41,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 ViewData["bill"] = b;
                 if (b.Client != null)
                 {
-                    
+
                     ViewData["isClient"] = true;
                 }
             }
@@ -85,7 +85,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                     
                     quantity += cartXProduct.Quantity;
                     var product = _productService.GetStockById(id, quantity);
-                    
+
                     if (product != null)
                     {
                         _billHandler.UpdateProductSubtotalPrice(cartXProduct, quantity);
@@ -96,9 +96,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                         return Json(new { success = false, message = "Ha ocurrido un error inesperado" });
                     }
                     //_billHandler.updatePriceBill();
-                    
+
                 }
-                
+
             }
             catch (CustomDataException ex)
             {
@@ -109,7 +109,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 else
                 {
                     throw new CustomDataException("An error occurred: " + ex.Message, ex);
-                }               
+                }
             }
             catch (Exception ex)
             {
@@ -169,11 +169,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         [HttpPost]
         public IActionResult removeProductFromCart(string id)
         {
-           if (_billHandler.RemoveProductFromCartXBill(id))
+            if (_billHandler.RemoveProductFromCartXBill(id))
             {
                 return PartialView("_tableProducts", _billHandler.GetBill());
             }
-           else
+            else
             {
                 return Json(new { success = false, message = "Product not available." });
             }
@@ -209,7 +209,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                     ViewData["Success"] = "Cliente agregado correctamente!";
                     _billHandler.updateClientBill(client.Id);
                 }
-                               
+
 
             }
             Bill z = _billHandler.GetBill();
@@ -217,7 +217,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             return RedirectToAction("Index");
         }
 
-        
+
 
     }
 

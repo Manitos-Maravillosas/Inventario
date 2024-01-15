@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 {
-    public class Product
+    public class ProductFacturation
     {
         [Key]
         [StringLength(60)]

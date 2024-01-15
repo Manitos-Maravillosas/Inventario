@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
@@ -27,23 +26,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Controllers
             return View(productCategories);
         }
 
-        // GET: Inventory/ProductCategories/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.ProductCategories == null)
-            {
-                return NotFound();
-            }
-
-            var productCategory = await _context.ProductCategories
-                .FirstOrDefaultAsync(m => m.IdProductCategory == id);
-            if (productCategory == null)
-            {
-                return NotFound();
-            }
-
-            return View(productCategory);
-        }
 
         // GET: Inventory/ProductCategories/Create
         public IActionResult Create()
@@ -74,13 +56,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Controllers
         // GET: Inventory/ProductCategories/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            ProductCategory employee = _productCategoryService.GetById(id);
-            if (employee == null)
+            ProductCategory productCategory = _productCategoryService.GetById(id);
+            if (productCategory == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(productCategory);
         }
 
         // POST: Inventory/ProductCategories/Edit/5

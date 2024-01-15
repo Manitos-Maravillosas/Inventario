@@ -1,0 +1,120 @@
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models.Product
+@{
+    var action = ViewData["Action"] as string;
+}
+
+<div class="card">
+    <div class="card-body">
+        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "Product", new { area = "Inventory" })'">
+            <span> <i class="bi bi-arrow-left-short"></i></span>
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <form id="productForm" asp-controller="Product" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+            @Html.AntiForgeryToken()
+            <!-- Fila 1: Identificación, Nombre -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Código del producto</label>
+                    @if (action == "Edit")
+                    {
+                        <input type="text" class="form-control" asp-for="IdProduct" aria-label="Código del producto" disabled>
+                        <input type="hidden" asp-for="IdProduct">
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" asp-for="IdProduct" aria-label="Código del producto">
+                    }
+
+                    <span asp-validation-for="IdProduct" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nombre del producto</label>
+                    <input type="text" class="form-control" asp-for="ProductName" aria-label="Nombre del producto">
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+            </div>
+            <!-- Fila 2: Primer Apellido, Segundo Apellido -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Stock</label>
+                    <input type="number" class="form-control" asp-for="Stock" aria-label="Stock">
+                    <span asp-validation-for="Stock" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Costo</label>
+                    <input type="number" class="form-control" asp-for="Cost" aria-label="Costo">
+                    <span asp-validation-for="Cost" class="text-danger"></span>
+                </div>
+            </div>
+            <!-- Fila 3: Posición, Número de Contacto -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Precio</label>
+                    <input type="number" class="form-control" asp-for="Price" aria-label="Precio">
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Descripción</label>
+                    <input type="text" class="form-control" asp-for="Description" aria-label="Descripción">
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <!-- Fila 3: Negocio, Correo -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="ProductCategory" class="control-label mb-2">Categoria</label>
+                    <div class="select-wrapper">
+                        <select asp-for="ProductCategory" class="form-control" asp-items="ViewBag.ProductCategories">
+                            <option value="">Seleccione una categoria</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="ProductCategory" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BusinessName" class="control-label mb-2">Negocio</label>
+                    <div class="select-wrapper">
+                        <select asp-for="BusinessName" class="form-control" asp-items="ViewBag.BusinessNames">
+                            <option value="">Seleccione un negocio</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="BusinessName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Status" class="control-label mb-2">Estado</label>
+                    <div class="select-wrapper">
+                        <select asp-for="Status" class="form-control">
+                            <option value="True">Activo</option>
+                            <option value="False">Inactivo</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Botón de envío -->
+            <div class="d-flex justify-content-end mb-3">
+                <button type="submit" class="btn btn-primary">
+                    @if (action == "Edit")
+                    {
+                        <span>Modificar <i class="bi bi-pencil-square"></i></span>
+                    }
+                    else
+                    {
+                        <span>Agregar <i class="bi bi-plus-circle"></i></span>
+                    }
+                </button>
+
+            </div>
+        </form>
+
+    </div>
+</div>
