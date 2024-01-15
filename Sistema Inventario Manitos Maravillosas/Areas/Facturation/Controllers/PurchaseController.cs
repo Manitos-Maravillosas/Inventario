@@ -78,6 +78,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 }
                 else
                 {
+                    
+                    
                     quantity += cartXProduct.Quantity;
                     var product = _productService.GetStockById(id, quantity);
                     

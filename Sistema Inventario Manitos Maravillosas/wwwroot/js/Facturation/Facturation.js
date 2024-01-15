@@ -95,13 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //-------------------------------------------------------------------------------------//
     //                                  Delevery Modal                                      //
     //-------------------------------------------------------------------------------------//
-    var assignDelivery = document.querySelector('#assignDelivery');
-    if (assignDelivery) {
-        assignDelivery.addEventListener('click', function () {
 
-            deliveryModal.show();
-        });
-    }
 
 
     //-------------------------------------------------------------------------------------//
