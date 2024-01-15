@@ -82,7 +82,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            /*
+
             if (User.Identity.IsAuthenticated)
             {
                 Response.Redirect("/Home/Index");
@@ -101,7 +101,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
-            */
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
