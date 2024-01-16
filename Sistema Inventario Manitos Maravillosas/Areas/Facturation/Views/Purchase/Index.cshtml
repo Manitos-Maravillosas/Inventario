@@ -19,24 +19,31 @@
         <div class="card-body p-2">
             <label class="form-label mb-1">Ver sistema en:</label>
             <div class="checkbox-container w-15 mb-2" role="radiogroup" aria-labelledby="CobrarPorLabel">
-                <div class="form-check form-check-inline radio-item mt-0">
-                    <input id="nic" type="radio" name="radioMoney" value="1" role="radio" aria-label="Opción Manitos Maravillosas">
-                    <label for="nic">Córdoba (NIC) C$ </label>
-                </div>
                 <div class="form-check form-check-inline radio-item  mt-0">
-                    <input id="usd" type="radio" name="radioMoney" value="2" role="radio" aria-label="Opción Cliente">
-                    <label for="usd">Dólar (USD) $</label>
+                    <input id="usdRadio" type="radio" name="radioMoney" value="1" role="radio" aria-label="Opción Cliente" @(bill.optionMoney == 1 ? "checked" : "")>
+                    <label for="usdRadio">Dólar ($ USD) </label>
                 </div>
+                <div class="form-check form-check-inline radio-item mt-0">
+                    <input id="nicRadio" type="radio" name="radioMoney" value="2" role="radio" aria-label="Opción Manitos Maravillosas" @(bill.optionMoney == 2 ? "checked" : "")>
+                    <label for="nicRadio">Córdoba (C$ NIC)  </label>
+                </div>
+
             </div>
-            <label class="form-label mb-1">Cambio:</label>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">$</span>
-                <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
+            <label class="form-label mb-1">Cambio del dólar:</label>
+            <div class="input-group mb-3 d-flex align-items-center">
+                <span class="input-group-text" id="basic-addon1"><span class="">$</span></span>
+                <input disabled type="number" class="form-control" placeholder="1.00">
+                <span class="px-2"> <i class="bi bi-chevron-double-right"></i></span>
+                <span class="input-group-text" id="basic-addon1"><span class="">C$</span></span>
+                <input id="exchangeMoney" type="number" class="form-control" placeholder="36.68" value="36.68">
             </div>
            
             <div class="divButtonMoney-container">
                 <button id="divMoneyButton" type="button" ><i class="bi bi-chevron-double-down"></i> Moneda</button>
             </div>
+
+                
+
         </div>
     </div>
 </div>
@@ -95,48 +102,10 @@
         <div class="card-body">
 
 
-            <table id="productsTable" class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Categoría</th>
-                        <th scope="col">Descripción</th>
-                        <th scope="col">Precio $</th>
-                        <th scope="col">Cantidad</th>
-                        <th scope="col">Sub Total $</th>
-                        <th scope="col">Acciones</th>
-                    </tr>
-                </thead>
-
-                @if (isBill) @* This else is beacuse the user can create the bill when assing a client *@
-                {
-                    @if(bill.CartXProducts.Count > 0)
-                    {
-                        <partial name="_tableProducts" model="@ViewData["bill"]" view-data="ViewData">
-                        </partial>
-                    }
-                    else
-                    {
-                        <tbody id="noProducts">
-                            <tr>
-                                <td colspan="7" class="text-center">Empiece el escaneo de productos</td>
-                            </tr>
-                        </tbody>
-                    }
-                }                
-                else
-                {
-                    <tbody id="noProducts">
-                        <tr>
-                            <td colspan="7" class="text-center">Empiece el escaneo de productos</td>
-                        </tr>
-                    </tbody>
-                }
-
-
-            </table>
-
+            <div id="tableContainer">
+                <partial name="_tableProducts" model="@bill" view-data="ViewData">
+            </div>
+           
            
         </div>
     </div>
@@ -224,7 +193,7 @@
                     <button type="button" class="btn btn-outline-secondary">Dejar Pendiente  <i class="bi bi-file-earmark-bar-graph-fill"></i></button>
                 </div>
                 <div  class="fw-bold fs-4">
-                    @* Total a Cobrar:  <span id="totalCostBill">@(isBill ? bill.TotalCost : "0")</span> $ *@
+                    @* Total a Cobrar:  <span id="totalCostBill">@(isBill ? bill.TotalCost : "0")</span> <span class="addonMoney">$</span> *@
                     <a asp-area="Facturation" asp-controller="PurchaseConfiguration" asp-action="Index" class="btn btn-success btn-lg"><i class="bi bi-cash-stack"></i>  Cobrar</a>
                 </div>
             </div>
@@ -364,7 +333,11 @@
                         <div class="mb-3">
                             <label class="form-label">Costo Adicional: (Empresa externa)</label>
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">$</span>
+                                <span class="input-group-text" id="basic-addon1">
+                                    <span class="addonMoney">
+@((bill.optionMoney == 1) ? "$" : "C$")
+                                    </span>
+                                </span>
                                 <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -375,7 +348,11 @@
                     <div class="mb-3">
                         <label class="form-label">Costo de envío: (Motorizado Interno)</label>
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">$</span>
+                            <span class="input-group-text" id="basic-addon1">
+                                <span class="addonMoney">
+                                    @((bill.optionMoney == 1) ? "$" : "C$")
+                                </span>
+                            </span>
                             <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Cubierto" aria-describedby="basic-addon1">
                         </div>
                     </div>
@@ -397,4 +374,5 @@
     <script type="module" src="~/js/facturation/facturationservice.js"></script>
     <script type="module" src="~/js/facturation/deleveryscript.js"></script>
     <script src="~/js/admin/client.js"></script>
+    <script src="~/js/facturation/moneyscript.js"></script>
 }

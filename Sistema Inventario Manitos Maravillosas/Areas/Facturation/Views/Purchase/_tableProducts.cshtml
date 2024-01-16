@@ -4,97 +4,140 @@
     var controllerCall = ViewData["Controller"] as string;
 }
 
-<!-- Divs ocultos para transferir datos del modelo a JavaScript -->
-@{
-
-}
-
-<tbody id="productsBody">
-    @if (Model.CartXProducts.Count == 0)
-    {
-        <tr class="rowHover">
-            <td colspan="8" class="text-center">Empiece el escaneo de los productos</td>
+<table id="productsTable" class="table">
+    <thead>
+        <tr>
+            <th scope="col">Código</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">
+                <span class="addonMoney">@((Model.optionMoney == 1) ? "$" : "C$")</span>
+                Precio
+            </th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">
+                <span class="addonMoney">@((Model.optionMoney == 1) ? "$" : "C$")</span>
+                Sub Total
+            </th>
+            <th scope="col">Acciones</th>
         </tr>
-    }
-    else
-    {
-        @foreach (var item in Model.CartXProducts)
+    </thead>
+
+
+    <tbody id="productsBody">
+        @if (Model.CartXProducts.Count == 0)
         {
             <tr class="rowHover">
-                <th scope="row">@item.Product.IdProduct</th>
-                <td>@item.Product.ProductName</td>
-                <td>@item.Product.Category</td>
-                <td class="w-20">@item.Product.Description</td>
-                <td>
-                    <div class="editableCell">@item.Product.Price $</div>
-                    <input class="editableInput" type="number" data-idProduct="@item.Product.IdProduct">
+                <td colspan="8" class="text-center">Empiece el escaneo de los productos</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model.CartXProducts)
+            {
+                <tr class="rowHover">
+                    <th scope="row">@item.Product.IdProduct</th>
+                    <td>@item.Product.ProductName</td>
+                    <td>@item.Product.Category</td>
+                    <td class="w-20">@item.Product.Description</td>
+                    <td>
+                        <div class="editableCell" data-price="@item.Price">
+                            <span class="addonMoney">
+                                @((Model.optionMoney == 1) ? "$" : "C$")
+                            </span>
+                            @item.Price
+                        </div>
+                        <input class="editableInput" type="number">
+                    </td>
+                    <td class="w-15">
+                        <div class="editableCell">@item.Quantity</div>
+                        <input class="editableInput" type="number" data-idProduct="@item.Product.IdProduct">
+                    </td>
+                    <td>
+                        <span class="addonMoney">
+                            @((Model.optionMoney == 1) ? "$" : "C$")
+                        </span>
+                        @item.SubTotal
+                    </td>
+                    <td>
+                        @* <button type="button" class="icon-button bi bi-pencil-square"></button> *@
+                        <button type="button" class="removeItemButton text-danger icon-button bi bi-x-lg" data-id="@item.Product.IdProduct"></button>
+                    </td>
+                </tr>
+            }
+            @*
+        <tr class="rowHover editableRow d-none">
+        <th scope="row"></th>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td>
+        <div class="editableCell" data-price>0 $</div>
+        <input class="editableInput" type="number">
+        </td>
+        <td class="w-15">
+        <div class="editableCell">0</div>
+        <input class="editableInput" type="number">
+        </td>
+        <td>50 $</td>
+        <td>asdf</td>
+        </tr> *@
+            @* Subtotal *@
+            <tr class="fw-bold no-border">
+                <th scope="row" colspan="4"></th>
+                <td>Subtotal</td>
+                <td colspan="2">
+                    <span class="addonMoney">
+                        @((Model.optionMoney == 1) ? "$" : "C$")
+                    </span>
+                    @Model.SubTotal
                 </td>
-                <td class="w-15">
-                    <div class="editableCell" >@item.Quantity</div>
-                    <input class="editableInput" type="number" data-idProduct="@item.Product.IdProduct">
-                    <input class="editableValue" type="hidden" data-idProduct="@item.Product.IdProduct" value="">
+            </tr>
+            @* Envio *@
+            <tr class="fw-bold no-border">
+                <th scope="row" colspan="3"></th>
+                <td class="text-end"><button id="assignDelivery" type="button" class="btn btn-secondary btn-sm"><i class="bi bi-gear-fill"></i></button></td>
+                <td>Envío</td>
+                <td colspan="2">
+                    <span class="addonMoney">
+                        @((Model.optionMoney == 1) ? "$" : "C$")
+                    </span>
+                    3015
                 </td>
-                <td>@item.SubTotal $</td>
-                <td>
-                    @* <button type="button" class="icon-button bi bi-pencil-square"></button> *@
-                    <button type="button" class="removeItemButton text-danger icon-button bi bi-x-lg" data-id="@item.Product.IdProduct"></button>
+            </tr>
+            @* Desceunto *@
+            <tr class="fw-bold no-border  border-bottom border-secondary ">
+                <th scope="row" colspan="3"></th>
+                <td class="align-items-md-center text-end" style="width:13%">
+                </td>
+                <td class="d-flex justify-content-between ">
+                    Descuento
+                    <div class=" w-50 d-flex justify-content-end">
+                        <div class="fw-normal  w-50 text-end">
+                            <div class="editableCell">21</div>
+                            <input class="editableInput" type="number">
+                        </div>
+                        %
+                    </div>
+
+                </td>
+                <td colspan="2"> 3015 $</td>
+            </tr>
+            @* Total *@
+            <tr class="fw-bold no-border fs-4">
+                <th scope="row" colspan="4"></th>
+                <td>Total</td>
+                <td colspan="2">
+                    <span class="addonMoney">
+                        @((Model.optionMoney == 1) ? "$" : "C$")
+                    </span>
+                    @Model.TotalCost
                 </td>
             </tr>
         }
-        @*
-    <tr class="rowHover editableRow d-none">
-    <th scope="row"></th>
-    <td contenteditable="true"></td>
-    <td contenteditable="true"></td>
-    <td>
-    <div class="editableCell" data-price>0 $</div>
-    <input class="editableInput" type="number">
-    </td>
-    <td class="w-15">
-    <div class="editableCell">0</div>
-    <input class="editableInput" type="number">
-    </td>
-    <td>50 $</td>
-    <td>asdf</td>
-    </tr> *@
-        @* Subtotal *@
-        <tr class="fw-bold no-border">
-            <th scope="row" colspan="4"></th>
-            <td>Subtotal</td>
-            <td colspan="2"> @Model.SubTotal $</td>
-        </tr>
-        @* Envio *@
-        <tr class="fw-bold no-border">
-            <th scope="row" colspan="3"></th>
-            <td class="text-end"><button id="assignDelivery" type="button" class="btn btn-secondary btn-sm"><i class="bi bi-gear-fill"></i></button></td>
-            <td>Envío</td>
-            <td colspan="2"> 3015 $</td>
-        </tr>
-        @* Desceunto *@
-        <tr class="fw-bold no-border  border-bottom border-secondary ">
-            <th scope="row" colspan="3"></th>
-            <td class="align-items-md-center text-end" style="width:13%">
-            </td>
-            <td class="d-flex justify-content-between ">
-                Descuento
-                <div class=" w-50 d-flex justify-content-end">
-                    <div class="fw-normal  w-50 text-end">
-                        <div class="editableCell">21</div>
-                        <input class="editableInput" type="number">
-                    </div>
-                    %
-                </div>
-
-            </td>
-            <td colspan="2"> 3015 $</td>
-        </tr>
-        @* Total *@
-        <tr class="fw-bold no-border fs-4">
-            <th scope="row" colspan="4"></th>
-            <td>Total</td>
-            <td colspan="2"> @Model.TotalCost $</td>
-        </tr>
-    }
 
 
-</tbody>
+    </tbody>
+
+
+</table>

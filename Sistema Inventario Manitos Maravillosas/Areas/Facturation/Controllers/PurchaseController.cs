@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
@@ -6,6 +7,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
+using System.Globalization;
 using IProductServiceFacturation = Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services.IProductServiceFacturation;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
@@ -196,26 +198,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 
         }
 
-        //-------------------------------------------------------------------------------------//
-        //                           Delevery                                                  //
-        //-------------------------------------------------------------------------------------//
-
-        [HttpGet]
-        public IActionResult GetTypeDeliveries()
-        {
-            List<TypeDelivery> deliveries = _typeDeliveryService.GetAll();
-            return Json(deliveries);
-        }
-
-        [HttpGet]
-        public IActionResult GetCompanyTrans()
-        {
-            List<CompanyTrans> companies = _deleveryService.GetAllCompanies();
-            return Json(companies);
-        }
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateClient(Client client)
@@ -236,11 +218,75 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 
 
             }
-            Bill z = _billHandler.GetBill();
-            var sessionData = HttpContext.Session.GetString("Bill");
             return RedirectToAction("Index");
         }
 
+        //-------------------------------------------------------------------------------------//
+        //                           Delevery                                                  //
+        //-------------------------------------------------------------------------------------//
+
+        [HttpGet]
+        public IActionResult GetTypeDeliveries()
+        {
+            List<TypeDelivery> deliveries = _typeDeliveryService.GetAll();
+            return Json(deliveries);
+        }
+
+        [HttpGet]
+        public IActionResult GetCompanyTrans()
+        {
+            List<CompanyTrans> companies = _deleveryService.GetAllCompanies();
+            return Json(companies);
+        }
+
+        //-------------------------------------------------------------------------------------//
+        //                           Money                                                  //
+        //-------------------------------------------------------------------------------------//
+
+        [HttpPost]
+        public IActionResult ConvertMoney(int option, string value)
+        {
+            float valueF = float.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
+            //option 658 = USD -> C$
+            
+            try
+            {
+                if (option == 658)
+                {
+                    //store the money in the session
+                    HttpContext.Session.SetString("MoneyValue", value);
+                    HttpContext.Session.SetString("MoneyId", value);
+                    _billHandler.UpdateMoneyBill(valueF, 2);
+
+
+                }
+                //option 12 = C$ -> USD
+                else if (option == 12)
+                {
+                    //store the money in the session
+                    HttpContext.Session.SetString("MoneyValue", value);
+                    HttpContext.Session.SetString("MoneyId", value);
+                    _billHandler.UpdateMoneyBill(valueF, 1);
+                }
+                return PartialView("_tableProducts", _billHandler.GetBill());           
+
+            }
+            catch (CustomDataException ex)
+            {
+                if (ex.Message == "Sql")
+                {
+                    return Json(new { success = false, message = ex.InnerException.Message });
+                }
+                else
+                {
+                    throw new CustomDataException("An error occurred: " + ex.Message, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+        }
 
 
     }

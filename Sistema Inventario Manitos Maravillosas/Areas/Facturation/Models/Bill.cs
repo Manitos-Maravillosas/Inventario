@@ -18,6 +18,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
             IdBusiness = 1;                   // Set a default business ID
             CartXProducts = new List<CartXProduct>();
             Products = new List<ProductFacturation>();
+            optionMoney = 1;
         }
 
         [Key]
@@ -27,6 +28,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public DateTime Date { get; set; }
 
         public float PercentDiscount { get; set; }
+
+        public float amountDiscount { get; set;} 
+
+        public float TotalDelivery { get; set; }
 
         public float SubTotal { get; set; }
 
@@ -46,6 +51,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public virtual ICollection<CartXProduct> CartXProducts { get; set; }
 
         public List<ProductFacturation> Products { get; set; }
+
+
+        public int optionMoney { get; set; }
 
     }
 

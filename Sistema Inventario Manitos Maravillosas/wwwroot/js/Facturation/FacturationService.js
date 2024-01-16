@@ -52,7 +52,6 @@ function AddProductToCart() {
                 return response.text().then(html => {
                     // Process HTML data
                     addRow(html);
-                    noProductsVisibleFalse();
                     applyEventListenersToRow();
                 });
             } else {
@@ -85,7 +84,6 @@ function removeProductFromCart(id) {
             // Inserta este HTML en la tabla o donde necesites actualizar
 
             addRow(tableBodyHtml);
-            noProductsVisibleFalse()
             applyEventListenersToRow();
         })
 
@@ -94,19 +92,12 @@ function removeProductFromCart(id) {
 
 
 function addRow(tableBodyHtml) {
-    var table = document.getElementById('productsTable');
-    var last = document.getElementById('productsBody');
+    var tableContainer = document.getElementById('tableContainer');
+    var last = document.getElementById('productsTable');
     if (last != null) {
-        table.removeChild(last)
+        tableContainer.removeChild(last)
     }
-    table.innerHTML += tableBodyHtml; // Esto agregará la fila al final de tu tabla
-}
-
-function noProductsVisibleFalse() {
-    var noProducts = document.getElementById('noProducts');
-    var productsBody = document.getElementById('productsBody');
-    productsBody.classList.remove('d-none');
-    noProducts.classList.add('d-none');
+    tableContainer.innerHTML += tableBodyHtml; // Esto agregará la fila al final de tu tabla
 }
 
 
@@ -142,20 +133,24 @@ function applyEventListenersToRow() {
                 input.value = 0;
             }
             if (div.hasAttribute('data-price')) {
-                div.textContent = input.value + ' $'; // Use textContent instead of innerHTML
-            } else {
+                div.textContent = '$ ' +input.value ; // Use textContent instead of innerHTML
+            } else {               
                 div.textContent = input.value; // Use textContent instead of innerHTML
-            }
 
+                var idProduct = this.getAttribute('data-idProduct');
+                if (idProduct != null && idProduct != ''){
+                    //conver the input value to int
+                    var inputValue = this.value;
+                    if (checkGreterThanZero(inputValue)) {
+                        UpdateQuanty(idProduct, inputValue);
+                    }
+                }
+            }
+            
             input.style.display = 'none'; // Hide the input
             div.style.display = 'block'; // Show the div
 
-            var idProduct = this.getAttribute('data-idProduct');
-            //conver the input value to int
-            var inputValue = this.value;
-            if (checkGreterThanZero(inputValue)) {
-                UpdateQuanty(idProduct, inputValue);
-            }
+           
         });
 
         input.addEventListener('keypress', function (event) {
@@ -181,6 +176,8 @@ function applyEventListenersToRow() {
 
 
 function checkGreterThanZero(inputValue) {
+    if (inputValue === '' || inputValue === null) return false;
+    
     if (!isNaN(inputValue)) {
         inputValue = parseInt(inputValue);
         if (inputValue <= 0) {
