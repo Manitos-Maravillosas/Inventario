@@ -602,3 +602,12 @@ tr.rowHover:hover {
 .rounded-15{
     border-radius: 15px;
 }
+
+.reports-card{
+    max-width: 600px;
+}
+
+.chart{
+    max-width: 500px;
+}
+
