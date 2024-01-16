@@ -141,9 +141,16 @@ img {
 
 
 /*-----------------------------------------------------Top Bar*/
+.headerContainer {
+    background-color: white;
+    position: relative;
+    z-index: 2;
+}
 .topBarContainer {
+
     max-height: var(--topBarMaxHeight);
     height: var(--topBarMaxHeight);
+    background-color: var(--colorMainTrans);
 }
 
 .topBar {
@@ -168,21 +175,25 @@ img {
     margin: auto;
 }
 
-/*-----------------------------------------------------Boton*/
+/*-----------------------------------------------------Money Boton*/
 #botonDesplegable {
     position: absolute;
     top: 0;
     right: 0;
 }
-
-.divMoney-container{
+.secctionFixed{
+    position: fixed;
+    width: 30%;
+    z-index: 1;
+}
+.divMoney-container {
     position: relative;
 }
 .divMoney {
     position: absolute; /* Cambiado de relative a absolute */
-    top: -185px;
+    top: -188px;
     left: 0;
-    z-index: 2;
+    z-index: 1;
     transition: all 0.6s; /* Smooth transition for the top property */
 }
 
@@ -195,7 +206,7 @@ img {
     left: -10px;
     bottom: -30px; /* Alinea al borde superior del contenedor padre */
     /* Alinea al borde izquierdo del contenedor padre */
-    z-index: 3; /* Mantiene el z-index como deseas */
+    z-index: 0; /* Mantiene el z-index como deseas */
 
     border: 1px solid var(--colorMainTrans);
     background-color: var(--colorMain);

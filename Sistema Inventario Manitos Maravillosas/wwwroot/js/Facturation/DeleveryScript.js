@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Llamando directamente a GetTypeDeliveries
                 GetTypeDeliveries().then(jsonData => {
                     // Limpiar opciones existentes
-                    typeDeliverySelect.innerHTML = '<option disabled selected>Seleccione un método de Envío</option>';
+                    typeDeliverySelect.innerHTML = '<option disabled>Seleccione un método de Envío</option>';
 
                     if (jsonData.length > 0) {
                         jsonData.forEach(function (deliveryType) {
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.value == '2') {
                 GetCompanyTrans().then(jsonData => {
                     //load companyTrans                    
-                    companyTransSelect.innerHTML = '<option disabled selected>Seleccione una Compañia de Transporte</option>';
+                    companyTransSelect.innerHTML = '<option disabled>Seleccione una Compañia de Transporte</option>';
 
                     if (jsonData.length > 0) {
                         jsonData.forEach(function (companyTrans) {

@@ -14,39 +14,38 @@
 
 }
 
-<div class="divMoney-container">
-    <div id="optionsMoney" class="card divMoney">
-        <div class="card-body p-2">
-            <label class="form-label mb-1">Ver sistema en:</label>
-            <div class="checkbox-container w-15 mb-2" role="radiogroup" aria-labelledby="CobrarPorLabel">
-                <div class="form-check form-check-inline radio-item  mt-0">
-                    <input id="usdRadio" type="radio" name="radioMoney" value="1" role="radio" aria-label="Opción Cliente" @(bill.optionMoney == 1 ? "checked" : "")>
-                    <label for="usdRadio">Dólar ($ USD) </label>
+<section class="secctionFixed">
+    <div class="divMoney-container">
+        <div id="optionsMoney" class="card divMoney">
+            <div class="card-body p-2">
+                <label class="form-label mb-1">Ver sistema en:</label>
+                <div class="checkbox-container w-15 mb-2" role="radiogroup" aria-labelledby="CobrarPorLabel">
+                    <div class="form-check form-check-inline radio-item  mt-0">
+                        <input id="usdRadio" type="radio" name="radioMoney" value="1" role="radio" aria-label="Opción Cliente" @(bill.optionMoney == 1 ? "checked" : "")>
+                        <label for="usdRadio">Dólar ($ USD) </label>
+                    </div>
+                    <div class="form-check form-check-inline radio-item mt-0">
+                        <input id="nicRadio" type="radio" name="radioMoney" value="2" role="radio" aria-label="Opción Manitos Maravillosas" @(bill.optionMoney == 2 ? "checked" : "")>
+                        <label for="nicRadio">Córdoba (C$ NIC)  </label>
+                    </div>
+
                 </div>
-                <div class="form-check form-check-inline radio-item mt-0">
-                    <input id="nicRadio" type="radio" name="radioMoney" value="2" role="radio" aria-label="Opción Manitos Maravillosas" @(bill.optionMoney == 2 ? "checked" : "")>
-                    <label for="nicRadio">Córdoba (C$ NIC)  </label>
+                <label class="form-label mb-1">Cambio del dólar:</label>
+                <div class="input-group mb-3 d-flex align-items-center">
+                    <span class="input-group-text" id="basic-addon1"><span class="">$</span></span>
+                    <input disabled type="number" class="form-control" placeholder="1.00">
+                    <span class="px-2"> <i class="bi bi-chevron-double-right"></i></span>
+                    <span class="input-group-text" id="basic-addon1"><span class="">C$</span></span>
+                    <input id="exchangeMoney" type="number" class="form-control" placeholder="36.68" value="36.68">
                 </div>
 
+                <div class="divButtonMoney-container">
+                    <button id="divMoneyButton" type="button"><i class="bi bi-chevron-double-down"></i> Moneda</button>
+                </div>
             </div>
-            <label class="form-label mb-1">Cambio del dólar:</label>
-            <div class="input-group mb-3 d-flex align-items-center">
-                <span class="input-group-text" id="basic-addon1"><span class="">$</span></span>
-                <input disabled type="number" class="form-control" placeholder="1.00">
-                <span class="px-2"> <i class="bi bi-chevron-double-right"></i></span>
-                <span class="input-group-text" id="basic-addon1"><span class="">C$</span></span>
-                <input id="exchangeMoney" type="number" class="form-control" placeholder="36.68" value="36.68">
-            </div>
-           
-            <div class="divButtonMoney-container">
-                <button id="divMoneyButton" type="button" ><i class="bi bi-chevron-double-down"></i> Moneda</button>
-            </div>
-
-                
-
         </div>
     </div>
-</div>
+</section>
 
 <h3 class="pt-4">Venta de Productos</h3>
 
