@@ -15,16 +15,18 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
     {
         private readonly IProductServiceFacturation _productService;
         private readonly IClientService _clientService;
+        private readonly ITypeDeliveryService _typeDeliveryService;
         private readonly ITypePaymentService _typePaymentService;
         private readonly IBankAccountService _bankAccountService;
         private readonly BillHandler _billHandler;
 
 
-        public PurchaseController(IProductService productService, IClientService clientService, ITypePaymentService typePaymentService, BillHandler billHandler)
+        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService, ITypePaymentService typePaymentService, BillHandler billHandler)
         {
 
             _productService = productService;
             _clientService = clientService;
+            _typeDeliveryService = typeDeliveryService;
             _typePaymentService = typePaymentService;
             _billHandler = billHandler;
         }
@@ -188,6 +190,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         {
             _billHandler.updateClientBill(id);
 
+        }
+
+        [HttpGet]
+        public IActionResult GetTypeDeliveries()
+        {
+            List<TypeDelivery> deliveries = _typeDeliveryService.GetAll();
+            return Json(deliveries);
         }
 
 

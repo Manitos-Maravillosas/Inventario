@@ -169,7 +169,6 @@ function applyEventListenersToRow() {
     var removeItemButton = document.querySelectorAll('.removeItemButton');
 
     removeItemButton.forEach(function (button) {
-        console.log(button);
         button.addEventListener('click', function () {
             var id = button.getAttribute('data-id');
             removeProductFromCart(id);
@@ -249,5 +248,23 @@ function UpdateQuanty(idProduct, quanty) {
 //-------------------------------------------------------------------------------------//
 //                                  Delevery                                           //
 //-------------------------------------------------------------------------------------//
+export function GetTypeDeliveries() {
+    return fetch('/Facturation/Purchase/GetTypeDeliveries', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(jsonData => {
+            return jsonData;
+        });
+}
+
 
 export { assignClientToBill, AddProductToCart, removeProductFromCart, applyEventListenersToRow };
