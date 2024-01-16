@@ -18,25 +18,28 @@
             @Html.AntiForgeryToken()
             <!-- Fila 1: Identificación -->
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Identificación</label>
-                    @if (action == "Create")
-                    {
-                        <input type="Hidden" class="form-control" asp-for="Id" aria-label="Identificación" disabled>
-                    }
-                    else
-                    {
+                @if (action == "Create")
+                {
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-6">
+                        <label class="form-label">Identificación</label>
                         <input type="text" class="form-control" asp-for="Id" aria-label="Identificación" disabled>
                         <input type="hidden" asp-for="Id">
-                    }
-
-                    <span asp-validation-for="Id" class="text-danger"></span>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                }
+                
             </div>
             <!-- Fila 2: Número de Contacto, Descripción -->
             <div class="row mb-3">

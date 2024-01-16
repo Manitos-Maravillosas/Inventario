@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
@@ -56,22 +57,30 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
         // GET: ProviderController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Provider provider = _ProviderService.GetById(id);
+            if (provider == null)
+            {
+                return NotFound();
+            }
+            return View(provider);
         }
 
         // POST: ProviderController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Provider provider)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _ProviderService.Update(provider);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Se ha modificado los datos del proveedor!";
+
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
         // GET: ProviderController/Delete/5
