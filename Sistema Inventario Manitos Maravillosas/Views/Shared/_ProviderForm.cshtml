@@ -1,11 +1,11 @@
-﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.TypeDelivery
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models.Provider
 @{
     var action = ViewData["Action"] as string;
 }
 
 <div class="card">
     <div class="card-body">
-        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "TypeDelivery", new { area = "Admin" })'">
+        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "Supplier", new { area = "Provider" })'">
             <span> <i class="bi bi-arrow-left-short"></i></span>
         </button>
     </div>
@@ -14,49 +14,46 @@
 <div class="card">
     <div class="card-body">
 
-        <form id="typeDeliveryForm" asp-controller="TypeDelivery" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+        <form id="providerForm" asp-controller="Provider" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
-            @if (action == "Create")
-            {
-                <!-- Fila 2: Nombre, Descripción -->
-                <div class="row mb-3">
+            <!-- Fila 1: Identificación y/o Nombre -->
+            <div class="row mb-3">
+                @if (action == "Create")
+                {
                     <div class="col-md-6">
                         <label class="form-label">Nombre</label>
                         <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Descripción</label>
-                        <input type="text" class="form-control" asp-for="Description" aria-label="Descripción">
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <!-- Fila 2: Identificación y Nombre -->
-                <div class="row mb-3">
+                }
+                else
+                {
                     <div class="col-md-6">
                         <label class="form-label">Identificación</label>
                         <input type="text" class="form-control" asp-for="Id" aria-label="Identificación" disabled>
                         <input type="hidden" asp-for="Id">
-                        <span asp-validation-for="Id" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Nombre</label>
                         <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
+                }                
+            </div>
+            <!-- Fila 2: Número de Contacto, Descripción -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Número de Contacto</label>
+                    <input type="text" class="form-control" asp-for="PhoneNumber" aria-label="Número de Contacto">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
-                <!-- Fila 2: Descripción -->
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Descripción</label>
-                        <input type="text" class="form-control" asp-for="Description" aria-label="Descripción">
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
+                <div class="col-md-6">
+                    <label class="form-label">Descripción</label>
+                    <input type="text" class="form-control" asp-for="Description" aria-label="Descripción">
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-            }                      
+
+            </div>
 
             <!-- Botón de envío -->
             <div class="d-flex justify-content-end mb-3">
