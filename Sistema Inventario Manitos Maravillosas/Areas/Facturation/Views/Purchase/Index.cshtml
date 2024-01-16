@@ -14,7 +14,34 @@
 
 }
 
-<h3>Venta de Productos</h3>
+<div class="divMoney-container">
+    <div id="optionsMoney" class="card divMoney">
+        <div class="card-body p-2">
+            <label class="form-label mb-1">Ver sistema en:</label>
+            <div class="checkbox-container w-15 mb-2" role="radiogroup" aria-labelledby="CobrarPorLabel">
+                <div class="form-check form-check-inline radio-item mt-0">
+                    <input id="nic" type="radio" name="radioMoney" value="1" role="radio" aria-label="Opción Manitos Maravillosas">
+                    <label for="nic">Córdoba (NIC) C$ </label>
+                </div>
+                <div class="form-check form-check-inline radio-item  mt-0">
+                    <input id="usd" type="radio" name="radioMoney" value="2" role="radio" aria-label="Opción Cliente">
+                    <label for="usd">Dólar (USD) $</label>
+                </div>
+            </div>
+            <label class="form-label mb-1">Cambio:</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">$</span>
+                <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
+            </div>
+           
+            <div class="divButtonMoney-container">
+                <button id="divMoneyButton" type="button" ><i class="bi bi-chevron-double-down"></i> Moneda</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="pt-4">Venta de Productos</h3>
 
 
 <section class="mb-3">
