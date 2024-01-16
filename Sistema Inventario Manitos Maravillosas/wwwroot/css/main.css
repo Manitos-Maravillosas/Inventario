@@ -298,7 +298,9 @@ img {
     color: inherit;
     cursor: pointer;
 }
-
+.icon-button.bi-check2-square {
+    color: var(--colorMain);
+}
 .icon-button.bi-pencil-square {
     color: var(--colorMain);
 }

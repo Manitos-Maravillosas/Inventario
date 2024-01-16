@@ -24,6 +24,7 @@ builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 builder.Services.AddScoped<IProviderService, ProviderService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 builder.Services.AddScoped<ITypeDeliveryService, TypeDeliveryService>();
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
 builder.Services.AddScoped<BillHandler>();

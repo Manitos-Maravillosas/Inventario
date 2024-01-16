@@ -1,0 +1,184 @@
+﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Delivery>
+
+@{
+    ViewData["Title"] = "Envíos Pendientes";
+}
+
+<section class="container px-5 py-3">
+
+    <h3 style="margin-bottom: 2rem;">Envíos Pendientes</h3>
+
+    <div class="dynamicallyTable">
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="input-group search-input">
+                        <input id="searchInput" type="text" class="form-control" placeholder="Buscar...">
+                        <span class="input-group-text">
+                            <i class="bi bi-search"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <label class="form-label m-0 p-0" for="rowsPerPage">Mostrar:</label>
+                        </div>
+                        <div class="col-auto">
+                            <select id="showCantRow" class="form-select form-select-sm showCantRow" aria-label="Default select example" id="rowsPerPage">
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <table id="table" class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
+                    <thead>
+                        <tr>
+                            <th scope="col">Identificación <i class="bi bi-sort-numeric-down sort-icon" data-column="0"></i></th>
+                            <th scope="col">Tipo de Envío <i class="bi bi-sort-alpha-down sort-icon" data-column="1"></i></th>
+                            <th scope="col">Dirección Exacta <i class="bi bi-sort-alpha-down sort-icon" data-column="2"></i></th>
+                            <th scope="col">Fecha Llegada Apróx. <i class="bi bi-sort-numeric-down sort-icon" data-column="3"></i></th>
+                            <th scope="col">Costo Interno <i class="bi bi-sort-numeric-down sort-icon" data-column="4"></i></th>
+                            <th scope="col">Total <i class="bi bi-sort-numeric-down sort-icon" data-column="5"></i></th>                                                       
+                            <th scope="col">Completar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var delivery in Model)
+                            {
+                                <tr>
+                                    <td>@delivery.Id</td>
+                                    <td>@delivery.NameTypeDelivery</td>
+                                    <td>@delivery.Signs</td>
+                                    <td>@delivery.DateAprox</td>
+                                    <td>@delivery.InternalCost</td>
+                                    <td>@delivery.Total</td>
+                                    <td>                                        
+                                        <form id="editForm-@delivery.Id" asp-action="Edit" method="post" style="display: inline-block;">
+                                            <input type="hidden" name="id" value="@delivery.Id" />
+                                            <button type="button" onclick="confirmEdit('@delivery.Id', '@delivery.Signs')" class="icon-button bi bi-check2-square" aria-label="Modificar"></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center">No hay envíos registrados</td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+                <div class="d-flex align-items-center justify-content-between">
+
+
+                    <div class="carousel-container d-flex align-items-center px-3 py-1 mb-0">
+                        <div id="carouselExampleControlsNoTouching" class="d-flex carousel slide align-items-center" data-bs-touch="false" data-bs-interval="false" style="background-color: transparent; width: 90px; height: 35px;">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
+                                        <span class="">1</span>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
+                                        <span class="">2</span>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="d-flex justify-content-center align-items-center fs-5 text-primary">
+                                        <span class="">3</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev buttonSlide" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next buttonSlide" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="@Url.Content("~/js/dynamicallyTablesScript.js")"></script>
+    <script>
+        function confirmEdit(deliveryId, deliverySigns) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Estás a punto de completar al envío " + deliverySigns + ". No podrás revertir esta acción.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, completar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var formId = "editForm-" + deliveryId;
+                    var form = document.getElementById(formId);
+                    form.submit();
+                }
+            });
+        }
+    </script>
+
+    @if (ViewData["Success"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: "Perfecto!",
+                    text: "@ViewData["Success"]",
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Facturation/Delivery/Index';
+                    }
+                });
+            });
+        </script>
+
+        ViewData["Success"] = null;
+    }
+
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Error',
+                    text: '@ViewData["ErrorMessage"]',
+                    icon: 'error'
+                });
+            });
+        </script>
+
+        ViewData["ErrorMessage"] = null;
+    }
+
+
+}
