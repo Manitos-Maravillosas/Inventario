@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var companyTransSelect = document.getElementById('companyTransSelect');
 
     var divForDepartamental = document.getElementById('divForDepartamental');
+    var dvInChargeAditionalCost = document.getElementById('dvInChargeAditionalCost');
     if (allowDeleverySwitch != null) {
 
 
@@ -45,7 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (jsonData.length > 0) {
                         jsonData.forEach(function (companyTrans) {
-                            var option = new Option(companyTrans.name, companyTrans.id);
+                            console.log(companyTrans);
+                            var option = new Option(companyTrans.name, companyTrans.idCompanyTrans);
                             companyTransSelect.add(option);
                         });
                     }
@@ -62,6 +64,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    if (companyTransSelect != null) {
+        companyTransSelect.addEventListener('change', function () {
+            console.log(this.value);
+            if (this.value == '2') {
+                dvInChargeAditionalCost.classList.remove('d-none');
+            }else {
+                dvInChargeAditionalCost.classList.add('d-none');
+            }
+        });
+    }
+    
 
     function restartDeleveryOff(){
         allowDeleverySwitch.checked = false;

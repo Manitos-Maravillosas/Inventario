@@ -320,22 +320,22 @@
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Cobrar A:</label>
+                        <div id="dvInChargeAditionalCost" class="mb-3 d-none">
+                            <label class="form-label">La empresa realiza el cobro A:</label>
                             <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
                                 <div class="form-check form-check-inline radio-item">
-                                    <input type="radio" name="radioPub" id="public" value="1" role="radio" aria-label="Opción público">
-                                    <label for="public">Público</label>
+                                    <input type="radio" name="radioCharge" id="manitos" value="1" role="radio" aria-label="Opción Manitos Maravillosas">
+                                    <label for="manitos">Manitos Maravillosas</label>
                                 </div>
                                 <div class="form-check form-check-inline radio-item">
-                                    <input type="radio" name="radioPub" id="private" value="0" role="radio" aria-label="Opción privado">
-                                    <label for="private">Privado</label>
+                                    <input type="radio" name="radioCharge" id="client" value="2" role="radio" aria-label="Opción Cliente">
+                                    <label for="client">Cliente</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Costo Adicional</label>
+                            <label class="form-label">Costo Adicional: (Empresa externa)</label>
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1">$</span>
                                 <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
@@ -346,7 +346,7 @@
 
 
                     <div class="mb-3">
-                        <label class="form-label">Costo de envío:</label>
+                        <label class="form-label">Costo de envío: (Motorizado Interno)</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">$</span>
                             <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Cubierto" aria-describedby="basic-addon1">
@@ -356,9 +356,9 @@
                 </form>
             </div>
 
-           @*  <div class="modal-footer">
+            <div class="modal-footer">
                 <button type="button" class="btn btn-primary">Aceptar</button>
-            </div> *@
+            </div>
         </div>
     </div>
 </div>
