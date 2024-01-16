@@ -40,6 +40,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public virtual Client Client { get; set; }
 
         public int IdBusiness { get; set; }
+        public string BusinessName { get; set; }
         public virtual Business Business { get; set; }
 
         // Navigation property for CartXProduct

@@ -301,6 +301,10 @@ img {
 .icon-button.bi-check2-square {
     color: var(--colorMain);
 }
+
+.icon-button.bi-eye-fill {
+    color: var(--colorMain);
+}
 .icon-button.bi-pencil-square {
     color: var(--colorMain);
 }

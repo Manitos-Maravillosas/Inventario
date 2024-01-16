@@ -64,14 +64,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                                     Id = Convert.ToInt32(dataReader["idDelivery"]),
                                     NameTypeDelivery = dataReader["TypeDeliveryName"].ToString(),
                                     Signs = dataReader["Signs"].ToString(),
-                                    DateAprox = DateOnly.FromDateTime(Convert.ToDateTime(dataReader["dateAprox"])),
+                                    DateAprox = Convert.ToDateTime(dataReader["dateAprox"]).Date, // Modificado aquí
                                     Total = Convert.ToSingle(dataReader["total"]),
-                                    InternalCost = Convert.ToSingle(dataReader["internalCost"]), 
+                                    InternalCost = Convert.ToSingle(dataReader["internalCost"]),
                                     IdBill = Convert.ToInt32(dataReader["idBill"]),
-
                                 };
                                 deliveries.Add(delivery);
                             }
+
                         }
                     }
                 }

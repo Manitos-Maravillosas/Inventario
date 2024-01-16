@@ -1,12 +1,12 @@
-﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Delivery>
+﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Bill>
 
 @{
-    ViewData["Title"] = "Envíos Pendientes";
+    ViewData["Title"] = "Facturas";
 }
 
 <section class="container px-5 py-3">
 
-    <h3 style="margin-bottom: 2rem;">Envíos Pendientes</h3>
+    <h3 style="margin-bottom: 2rem;">Factura</h3>
 
     <div class="dynamicallyTable">
         <div class="card mb-2">
@@ -39,36 +39,36 @@
                     </div>
                 </div>
 
-                <table id="table" class="table" style="margin-top: 1rem;" aria-label="Tabla de solicitudes de los solicitantes">
+                <table id="table" class="table" style="margin-top: 1rem;" aria-label="Tabla de facturas">
                     <thead>
                         <tr>
-                            <th scope="col">Identificación <i class="bi bi-sort-numeric-down sort-icon" data-column="0"></i></th>
-                            <th scope="col">Tipo de Envío <i class="bi bi-sort-alpha-down sort-icon" data-column="1"></i></th>
-                            <th scope="col">Dirección Exacta <i class="bi bi-sort-alpha-down sort-icon" data-column="2"></i></th>
-                            <th scope="col">Fecha Llegada Apróx. <i class="bi bi-sort-numeric-down sort-icon" data-column="3"></i></th>
-                            <th scope="col">Costo Interno <i class="bi bi-sort-numeric-down sort-icon" data-column="4"></i></th>
-                            <th scope="col">Total <i class="bi bi-sort-numeric-down sort-icon" data-column="5"></i></th>                                                       
-                            <th scope="col">Completar</th>
+                            <th scope="col">Número de Factura <i class="bi bi-sort-numeric-down sort-icon" data-column="0"></i></th>
+                            <th scope="col">Fecha <i class="bi bi-sort-numeric-down sort-icon" data-column="1"></i></th>
+                            <th scope="col">Descuento <i class="bi bi-sort-numeric-down sort-icon" data-column="2"></i></th>
+                            <th scope="col">Subtotal <i class="bi bi-sort-numeric-down sort-icon" data-column="3"></i></th>
+                            <th scope="col">Costo Total <i class="bi bi-sort-numeric-down sort-icon" data-column="4"></i></th>
+                            <th scope="col">Negocio <i class="bi bi-sort-alpha-down sort-icon" data-column="5"></i></th>
+                            <th scope="col">Opciones</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @if (Model != null && Model.Any())
                         {
-                            foreach (var delivery in Model)
+                            foreach (var bill in Model)
                             {
                                 <tr>
-                                    <td>@delivery.Id</td>
-                                    <td>@delivery.NameTypeDelivery</td>
-                                    <td>@delivery.Signs</td>
-                                    <td>@delivery.DateAprox.ToString("dd-MM-yyyy")</td>
-                                    <td>@delivery.InternalCost</td>
-                                    <td>@delivery.Total</td>
-                                    <td>                                        
-                                        <form id="editForm-@delivery.Id" asp-action="Edit" method="post" style="display: inline-block;">
-                                            <input type="hidden" name="id" value="@delivery.Id" />
-                                            <button type="button" onclick="confirmEdit('@delivery.Id', '@delivery.Signs')" class="icon-button bi bi-check2-square" aria-label="Modificar"></button>
-                                        </form>
+                                    <td>@bill.IdBill</td>
+                                    <td>@bill.Date.ToString("dd-MM-yyyy")</td>
+                                    <td>@bill.PercentDiscount %</td>
+                                    <td>@bill.SubTotal $</td>
+                                    <td>@bill.TotalCost $</td>
+                                    <td>@bill.BusinessName</td>
+                                    <td>
+                                        <form asp-action="Edit" method="get" style="display: inline-block;">
+                                            <input type="hidden" name="id" value="@bill.IdBill" />
+                                            <button type="submit" class="icon-button bi bi-eye-fill" aria-label="Modificar" style="cursor: pointer;"></button>
+                                        </form>                                        
                                     </td>
                                 </tr>
                             }
@@ -76,7 +76,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="7" class="text-center">No hay envíos registrados</td>
+                                <td colspan="7" class="text-center">No hay facturas registradas</td>
                             </tr>
                         }
 
@@ -84,7 +84,7 @@
 
                 </table>
 
-                <div class="d-flex align-items-center justify-content-end">                    
+                <div class="d-flex align-items-center justify-content-end">
                     <div class="carousel-container d-flex align-items-center px-3 py-1 mb-0">
                         <div id="carouselExampleControlsNoTouching" class="d-flex carousel slide align-items-center" data-bs-touch="false" data-bs-interval="false" style="background-color: transparent; width: 90px; height: 35px;">
                             <div class="carousel-inner">
@@ -121,62 +121,5 @@
 </section>
 
 @section Scripts {
-    <script src="@Url.Content("~/js/dynamicallyTablesScript.js")"></script>
-    <script>
-        function confirmEdit(deliveryId, deliverySigns) {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: "Estás a punto de completar al envío " + deliverySigns + ". No podrás revertir esta acción.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, completar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    var formId = "editForm-" + deliveryId;
-                    var form = document.getElementById(formId);
-                    form.submit();
-                }
-            });
-        }
-    </script>
-
-    @if (ViewData["Success"] != null)
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                Swal.fire({
-                    title: "Perfecto!",
-                    text: "@ViewData["Success"]",
-                    icon: "success"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = '/Facturation/Delivery/Index';
-                    }
-                });
-            });
-        </script>
-
-        ViewData["Success"] = null;
-    }
-
-    @if (ViewData["ErrorMessage"] != null)
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                Swal.fire({
-                    title: 'Error',
-                    text: '@ViewData["ErrorMessage"]',
-                    icon: 'error'
-                });
-            });
-        </script>
-
-        ViewData["ErrorMessage"] = null;
-    }
-
-
+    <script src="@Url.Content("~/js/dynamicallyTablesScript.js")"></script>    
 }

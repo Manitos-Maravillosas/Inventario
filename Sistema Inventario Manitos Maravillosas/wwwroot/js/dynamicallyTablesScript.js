@@ -144,22 +144,31 @@ function sortTableByColumn(tableId, column, asc = true) {
     const table = document.getElementById(tableId);
     let tbody = table.querySelector("tbody");
 
-    
     const rows = Array.from(tbody.querySelectorAll("tr"));
-        
-    const sortedRows = rows.sort((a, b) => {
-        const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim().toLowerCase();
-        const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim().toLowerCase();
 
-        return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+    const sortedRows = rows.sort((a, b) => {
+        const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+        const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+
+        // Intenta convertir a números para la comparación numérica
+        const aColNumber = parseFloat(aColText);
+        const bColNumber = parseFloat(bColText);
+
+        // Verifica si ambos valores son números
+        if (!isNaN(aColNumber) && !isNaN(bColNumber)) {
+            return (aColNumber - bColNumber) * dirModifier;
+        }
+
+        // De lo contrario, realiza una comparación de cadenas
+        return aColText.toLowerCase() > bColText.toLowerCase() ? (1 * dirModifier) : (-1 * dirModifier);
     });
-        
+
     while (tbody.firstChild) {
         tbody.removeChild(tbody.firstChild);
     }
 
     tbody.append(...sortedRows);
-       
+
     table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
     table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
     table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
