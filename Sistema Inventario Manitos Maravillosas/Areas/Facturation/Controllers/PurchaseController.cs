@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
@@ -16,17 +17,20 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly IProductServiceFacturation _productService;
         private readonly IClientService _clientService;
         private readonly ITypeDeliveryService _typeDeliveryService;
+        private readonly IDeleveryService _deleveryService;
         private readonly ITypePaymentService _typePaymentService;
         private readonly IBankAccountService _bankAccountService;
         private readonly BillHandler _billHandler;
 
 
-        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService, ITypePaymentService typePaymentService, BillHandler billHandler)
+        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService, IDeleveryService deleveryService,
+            ITypePaymentService typePaymentService, BillHandler billHandler)
         {
 
             _productService = productService;
             _clientService = clientService;
             _typeDeliveryService = typeDeliveryService;
+            _deleveryService = deleveryService;
             _typePaymentService = typePaymentService;
             _billHandler = billHandler;
         }
@@ -192,11 +196,22 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 
         }
 
+        //-------------------------------------------------------------------------------------//
+        //                           Delevery                                                  //
+        //-------------------------------------------------------------------------------------//
+
         [HttpGet]
         public IActionResult GetTypeDeliveries()
         {
             List<TypeDelivery> deliveries = _typeDeliveryService.GetAll();
             return Json(deliveries);
+        }
+
+        [HttpGet]
+        public IActionResult GetCompanyTrans()
+        {
+            List<CompanyTrans> companies = _deleveryService.GetAllCompanies();
+            return Json(companies);
         }
 
 

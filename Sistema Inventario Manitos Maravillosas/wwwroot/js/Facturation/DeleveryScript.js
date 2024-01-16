@@ -1,46 +1,77 @@
 ﻿
 document.addEventListener('DOMContentLoaded', function () {
     var allowDeleverySwitch = document.getElementById('allowDeleverySwitch');
+    var typeDeliverySelect = document.getElementById('typeDeliverySelect');
+    var companyTransSelect = document.getElementById('companyTransSelect');
 
+    var divForDepartamental = document.getElementById('divForDepartamental');
     if (allowDeleverySwitch != null) {
 
 
         
         allowDeleverySwitch.addEventListener('change', function () {
-            var typeDeleverySelect = document.getElementById('typeDeleverySelect');
+           
 
             if (allowDeleverySwitch.checked) {
-                typeDeleverySelect.disabled = false;
+                typeDeliverySelect.disabled = false;
 
                 // Llamando directamente a GetTypeDeliveries
                 GetTypeDeliveries().then(jsonData => {
                     // Limpiar opciones existentes
-                    typeDeleverySelect.innerHTML = '<option disabled>Seleccione un método de Envío</option>';
+                    typeDeliverySelect.innerHTML = '<option disabled selected>Seleccione un método de Envío</option>';
 
                     if (jsonData.length > 0) {
-                        // Añadir nuevas opciones
-                        console.log(jsonData);
                         jsonData.forEach(function (deliveryType) {
                             var option = new Option(deliveryType.name, deliveryType.id);
-                            typeDeleverySelect.add(option);
+                            typeDeliverySelect.add(option);
                         });
                     }
                 }).catch(error => {
                     console.error('Error:', error);
                 });
             } else {
-                typeDeleverySelect.disabled = true;
-                typeDeleverySelect.innerHTML = '<option disabled>Seleccione un método de Envío</option>';
+                restartDeleveryOff()
+            }
+        });      
+    }
+
+    if (typeDeliverySelect != null) {
+        typeDeliverySelect.addEventListener('change', function () {
+
+            if (this.value == '2') {
+                GetCompanyTrans().then(jsonData => {
+                    //load companyTrans                    
+                    companyTransSelect.innerHTML = '<option disabled selected>Seleccione una Compañia de Transporte</option>';
+
+                    if (jsonData.length > 0) {
+                        jsonData.forEach(function (companyTrans) {
+                            var option = new Option(companyTrans.name, companyTrans.id);
+                            companyTransSelect.add(option);
+                        });
+                    }
+
+
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+
+                divForDepartamental.classList.remove('d-none');
+
+            } else {
+                divForDepartamental.classList.add('d-none');
             }
         });
+    }
 
-
-        
-            //load data to the type delevery
-
+    function restartDeleveryOff(){
+        allowDeleverySwitch.checked = false;
+        typeDeliverySelect.disabled = true;
+        typeDeliverySelect.innerHTML = '<option disabled selected>Seleccione un método de Envío</option>';
+        divForDepartamental.classList.add('d-none');
     }
 
  });
 
 
-import { GetTypeDeliveries } from './facturationService.js';
+
+import { GetTypeDeliveries, GetCompanyTrans } from './facturationService.js';

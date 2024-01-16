@@ -266,5 +266,24 @@ export function GetTypeDeliveries() {
         });
 }
 
+export function GetCompanyTrans() {
+    return fetch('/Facturation/Purchase/GetCompanyTrans', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(jsonData => {
+            return jsonData;
+        });
+}
+
+
 
 export { assignClientToBill, AddProductToCart, removeProductFromCart, applyEventListenersToRow };

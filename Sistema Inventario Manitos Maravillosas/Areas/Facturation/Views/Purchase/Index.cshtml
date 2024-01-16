@@ -302,53 +302,57 @@
                     <!--this select should querry from the data base-->
                     <div class="mb-3">
                         <label class="form-label">Método de envío</label>
-                        <select id="typeDeleverySelect" class="form-select " aria-label="Seleccione un tipo de Envío" disabled>
+                        <select id="typeDeliverySelect" class="form-select " aria-label="Seleccione un tipo de Envío" disabled>
                             <option disabled selected>Seleccione un método de Envío</option>
-@*                             <option value="1">One</option>
+                            @*                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option> *@
                         </select>
                     </div>
 
-                    <!--this select should querry from the data base-->
-                    <div class="mb-3">
-                        <label class="form-label">Empresa responsable de enviar</label>
-                        <select class="form-select mb-3" aria-label="Seleccione una Empresa">
-                            <option selected>Seleccione una Empresa</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
+                    <div id="divForDepartamental" class="d-none">
+                        <!--this select should querry from the data base-->
+                        <div class="mb-3">
+                            <label class="form-label">Empresa responsable de enviar</label>
+                            <select id="companyTransSelect" class="form-select mb-3" aria-label="Seleccione una Empresa">
+                                <option disabled selected>Seleccione una Empresa</option>
+
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Cobrar A:</label>
+                            <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
+                                <div class="form-check form-check-inline radio-item">
+                                    <input type="radio" name="radioPub" id="public" value="1" role="radio" aria-label="Opción público">
+                                    <label for="public">Público</label>
+                                </div>
+                                <div class="form-check form-check-inline radio-item">
+                                    <input type="radio" name="radioPub" id="private" value="0" role="radio" aria-label="Opción privado">
+                                    <label for="private">Privado</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Costo Adicional</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">$</span>
+                                <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
                     </div>
 
+
+
                     <div class="mb-3">
-                        <label class="form-label">Costo Cubierto por Manitos Maravilloas</label>
+                        <label class="form-label">Costo de envío:</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">$</span>
                             <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Cubierto" aria-describedby="basic-addon1">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Cobrar A:</label>
-                        <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
-                            <div class="form-check form-check-inline radio-item">
-                                <input type="radio" name="radioPub" id="public" value="1" role="radio" aria-label="Opción público">
-                                <label for="public">Público</label>
-                            </div>
-                            <div class="form-check form-check-inline radio-item">
-                                <input type="radio" name="radioPub" id="private" value="0" role="radio" aria-label="Opción privado">
-                                <label for="private">Privado</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Costo Adicional</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">$</span>
-                            <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
-                        </div>
-                    </div>
+                    
                 </form>
             </div>
 
