@@ -1,0 +1,135 @@
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Models.ReportsViewModel
+@{
+    string excelReport = "excel";
+    string pdfReport = "pdf";
+    // list of reports
+    List<string> reports = new List<string>() { 
+        "totalSales",
+        "byProduct",
+        "byCategory",
+        "byClient",
+        "byBusiness",
+        "totalPurchases"
+    };
+    ViewData["Title"] = "Reportes";
+}
+<section class="container px-5 py-3">
+    <h3 style="margin-bottom: 2rem;">Reportes</h3>
+
+    <div class="row justify-content-between">
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card shadow h-100 py-2 rounded-15">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="bi bi-cash icon-75"></i>
+                        </div>
+                        <div class="col mr-2">
+                            <div class="fs-6 mb-1 ">
+                                Ventas (Mensual)
+                            </div>
+                            <div class="h5 mb-0 txt-blue">$40,000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card shadow h-100 py-2 rounded-15">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="bi bi-cart4 icon-75"></i>
+                        </div>
+                        <div class="col mr-2">
+                            <div class="fs-6 mb-1 ">
+                                Compras (Mensual)
+                            </div>
+                            <div class="h5 mb-0  txt-blue">$215,000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card shadow h-100 py-2 rounded-15">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="bi bi-coin icon-75"></i>
+                        </div>
+                        <div class="col mr-2">
+                            <div class="fs-6 mb-1 ">
+                                Ganancias (Mensual)
+                            </div>
+                            <div class="h5 mb-0  txt-blue">$215,000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container row justify-content-between d-flex mt-4">
+        <div class="card reports-card rounded-15">
+        <div class="container mt-5">
+            <form asp-area="Reports" asp-controller="Home" asp-action="Report" method="post" id="reportForm">
+            <div class="row">
+                <div class="col-md-6">
+                        <label asp-for="StartDate" class="form-label">Fecha de inicio:</label>
+                    <input type="date" class="form-control" asp-for="StartDate" placeholder="Fecha de inicio">
+                </div>
+                <div class="col-md-6">
+                        <label asp-for="EndDate" class="form-label">Fecha final:</label>
+                    <input type="date" class="form-control" asp-for="EndDate" placeholder="Fecha final">
+                </div>
+                    <input type="hidden" asp-for="ReportFormat">
+                <input type="hidden" asp-for="ReportType">
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 60%;">Reporte</th>
+                        <th scope="col" style="width: 40%;">Exportar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Reporte de ventas totales</td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-outline-danger" onclick="generateReport('@(pdfReport)','@(reports[0])')">
+                                <i class="bi bi-file-pdf"></i> PDF
+                            </button>
+                                <button type="button" class="btn btn-outline-success" onclick="generateReport('@(excelReport)','@(reports[0])')">
+                                <i class="bi bi-filetype-xlsx"></i> Excel
+                            </button>
+                        </td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+            </form>
+        </div>
+    </div>
+        <div class="card chart rounded-15">
+        here goes a chart
+    </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        function generateReport(reportFormat, reportType) {
+            // Set values for hidden input fields
+            document.getElementById('ReportFormat').value = reportFormat;
+            document.getElementById('ReportType').value = reportType;
+
+            // Submit the form
+            document.getElementById('reportForm').submit();
+        }
+    </script>
+}

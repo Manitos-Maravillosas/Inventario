@@ -16,7 +16,6 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Sistema_Inventario_Manitos_Maravillosas.styles.css" asp-append-version="true" />
     <link href="~/css/radiostyle.css" rel="stylesheet" />
 </head>
 <body>
@@ -161,7 +160,7 @@
                 <!---Reportes-->
                 @if (admin) {
                 <li class="inline-nav-item">
-                    <a class="d-flex justify-content-between align-items-center aside-link " href="/Admin/BuscarInstalacion">
+                        <a class="d-flex justify-content-between align-items-center aside-link" href="">
                         <div>
                             <i class="bi bi-clipboard-data-fill"></i>
                             Reportes
@@ -169,6 +168,11 @@
                         <i class="bi bi-caret-down-fill arrowCollapse"></i> <!-- Add if dropdown needed -->
                     </a>
                     <!-- Optional Submenu Items -->
+                        <ul class="subMenuCollapse" role="navigation">
+                            <li class="subMenuNavItem">
+                                <a class="aside-linkSubItem" asp-area="Reports" asp-controller="Home" asp-action="Index">Ver reportes</a>
+                            </li>
+                        </ul>
                 </li>
                 }
 

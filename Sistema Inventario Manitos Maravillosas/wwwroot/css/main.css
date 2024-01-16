@@ -3,6 +3,7 @@
     --colorMainRGB: 13, 110, 253;
     --colorMainTrans: rgba(13, 110, 253, 0.1);
     --colorDisable: #ACB4BC;
+    --colorBlue: #9EC5FE;
     --greyColor: #F1F1F1;
     --whiteContranst: #F6F6F6;
     --greyFooterRGB: 241, 241, 241;
@@ -587,4 +588,26 @@ tr.rowHover:hover {
 }
 
 
-/* ------------------------------------------------- Errow---------------------------------------      */
+/* ------------------------------------------------- Reports ---------------------------------------      */
+
+.icon-75 {
+    font-size: 75px;
+    color: var(--colorBlue);
+}
+
+.txt-blue{
+    color: var(--colorBlue);
+}
+
+.rounded-15{
+    border-radius: 15px;
+}
+
+.reports-card{
+    max-width: 600px;
+}
+
+.chart{
+    max-width: 500px;
+}
+
