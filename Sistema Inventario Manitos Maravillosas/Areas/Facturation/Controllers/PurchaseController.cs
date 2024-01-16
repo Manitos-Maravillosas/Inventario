@@ -15,13 +15,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
     {
         private readonly IProductServiceFacturation _productService;
         private readonly IClientService _clientService;
+        private readonly ITypePaymentService _typePaymentService;
+        private readonly IBankAccountService _bankAccountService;
         private readonly BillHandler _billHandler;
 
-        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, BillHandler billHandler)
+
+        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypePaymentService typePaymentService, BillHandler billHandler)
         {
 
             _productService = productService;
             _clientService = clientService;
+            _typePaymentService = typePaymentService;
             _billHandler = billHandler;
         }
 
@@ -77,6 +81,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 }
                 else
                 {
+
+
                     quantity += cartXProduct.Quantity;
                     var product = _productService.GetStockById(id, quantity);
 

@@ -37,7 +37,7 @@
                 <td>@item.SubTotal $</td>
                 <td>
                     @* <button type="button" class="icon-button bi bi-pencil-square"></button> *@
-                    <button type="button" class="text-danger icon-button bi bi-x-lg" onclick="removeProductFromCart(@item.Product.IdProduct)"></button>
+                    <button type="button" class="removeItemButton text-danger icon-button bi bi-x-lg" data-id="@item.Product.IdProduct"></button>
                 </td>
             </tr>
         }

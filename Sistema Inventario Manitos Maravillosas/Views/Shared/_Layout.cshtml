@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    bool admin = User.IsInRole("Administrador");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -131,11 +135,13 @@
                             <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Client" asp-action="Index">Cliente</a>
                         </li>                        
                     </ul>
-                    <ul class="subMenuCollapse" role="navigation">
-                        <li class="subMenuNavItem">
-                            <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Employee" asp-action="Index">Empleado</a>
-                        </li>
-                    </ul>
+                    @if (admin) {
+                        <ul class="subMenuCollapse" role="navigation">
+                            <li class="subMenuNavItem">
+                                <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Employee" asp-action="Index">Empleado</a>
+                            </li>
+                        </ul>
+                    }
                     <ul class="subMenuCollapse" role="navigation">
                         <li class="subMenuNavItem">
                             <a class="aside-linkSubItem" asp-area="Admin" asp-controller="TypePayment" asp-action="Index">Tipo de Pago</a>
@@ -153,6 +159,7 @@
                     </ul>
                 </li>
                 <!---Reportes-->
+                @if (admin) {
                 <li class="inline-nav-item">
                     <a class="d-flex justify-content-between align-items-center aside-link " href="/Admin/BuscarInstalacion">
                         <div>
@@ -163,7 +170,7 @@
                     </a>
                     <!-- Optional Submenu Items -->
                 </li>
-
+                }
 
 
             </ul>
