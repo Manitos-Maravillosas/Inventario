@@ -598,3 +598,7 @@ tr.rowHover:hover {
 .txt-blue{
     color: var(--colorBlue);
 }
+
+.rounded-15{
+    border-radius: 15px;
+}
