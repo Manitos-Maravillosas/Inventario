@@ -16,42 +16,56 @@
 
         <form id="typePaymentForm" asp-controller="TypePayment" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
-            <!-- Fila 1: Identificación -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Identificación</label>
-                    @if (action == "Create")
-                    {
-                        <input type="text" class="form-control" asp-for="Id" aria-label="Identificación" disabled>                        
-                    }
-                    else
-                    {
+            @if (action == "Create")
+            {
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="CoinDescription" class="control-label mb-2">Negocio</label>
+                        <div class="select-wrapper">
+                            <select asp-for="CoinDescription" class="form-control" asp-items="ViewBag.CoinDescriptions">
+                                <option value="">Seleccione una moneda</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="CoinDescription" class="text-danger"></span>
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                <!-- Fila 2: Indentificación y Nombre -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Identificación</label>
                         <input type="text" class="form-control" asp-for="Id" aria-label="Identificación" disabled>
                         <input type="hidden" asp-for="Id">
-                    }
-
-                    <span asp-validation-for="Id" class="text-danger"></span>
-                </div>
-                
-            </div>
-            <!-- Fila 2: Nombre, Descripción Moneda -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="col-md-6">
-                    <label asp-for="CoinDescription" class="control-label mb-2">Negocio</label>
-                    <div class="select-wrapper">
-                        <select asp-for="CoinDescription" class="form-control" asp-items="ViewBag.CoinDescriptions">
-                            <option value="">Seleccione una moneda</option>
-                        </select>
+                        <span asp-validation-for="Id" class="text-danger"></span>
                     </div>
-                    <span asp-validation-for="CoinDescription" class="text-danger"></span>
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
                 </div>
-                
-            </div>
+                <!-- Fila 2: Descripción Moneda -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="CoinDescription" class="control-label mb-2">Negocio</label>
+                        <div class="select-wrapper">
+                            <select asp-for="CoinDescription" class="form-control" asp-items="ViewBag.CoinDescriptions">
+                                <option value="">Seleccione una moneda</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="CoinDescription" class="text-danger"></span>
+                    </div>
+                </div>
+            }                        
 
             <!-- Botón de envío -->
             <div class="d-flex justify-content-end mb-3">
