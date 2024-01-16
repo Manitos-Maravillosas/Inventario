@@ -16,7 +16,7 @@
 
         <form id="providerForm" asp-controller="Provider" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
-            <!-- Fila 1: Identificación -->
+            <!-- Fila 1: Identificación y/o Nombre -->
             <div class="row mb-3">
                 @if (action == "Create")
                 {
@@ -38,8 +38,7 @@
                         <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                }
-                
+                }                
             </div>
             <!-- Fila 2: Número de Contacto, Descripción -->
             <div class="row mb-3">

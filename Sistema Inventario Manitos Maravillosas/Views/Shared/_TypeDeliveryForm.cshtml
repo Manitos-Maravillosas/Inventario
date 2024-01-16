@@ -16,37 +16,47 @@
 
         <form id="typeDeliveryForm" asp-controller="TypeDelivery" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
-            <!-- Fila 1: Identificación -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Identificación</label>
-                    @if (action == "Create")
-                    {
-                        <input type="text" class="form-control" asp-for="Id" aria-label="Identificación" disabled>                        
-                    }
-                    else
-                    {
+            @if (action == "Create")
+            {
+                <!-- Fila 2: Nombre, Descripción -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Descripción</label>
+                        <input type="text" class="form-control" asp-for="Description" aria-label="Descripción">
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- Fila 2: Identificación y Nombre -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Identificación</label>
                         <input type="text" class="form-control" asp-for="Id" aria-label="Identificación" disabled>
                         <input type="hidden" asp-for="Id">
-                    }
-
-                    <span asp-validation-for="Id" class="text-danger"></span>
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
                 </div>
-                
-            </div>
-            <!-- Fila 2: Nombre, Descripción -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" class="form-control" asp-for="Name" aria-label="Nombre">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                <!-- Fila 2: Descripción -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Descripción</label>
+                        <input type="text" class="form-control" asp-for="Description" aria-label="Descripción">
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label">Descripción</label>
-                    <input type="text" class="form-control" asp-for="Description" aria-label="Descripción">
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>                
-            </div>
+            }                      
 
             <!-- Botón de envío -->
             <div class="d-flex justify-content-end mb-3">
