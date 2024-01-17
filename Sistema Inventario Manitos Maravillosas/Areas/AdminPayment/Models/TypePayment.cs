@@ -17,12 +17,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models
 
     }
 
-    public class TypePaymentViewModel
+    public class TypePayment
     {
-        public int Id { get; set; }
+        public int IdTypePayment { get; set; }
         public string Name { get; set; }
-        public string CoinDescription { get; set; }
-        public string CoinName { get; set; }
     }
 
 }

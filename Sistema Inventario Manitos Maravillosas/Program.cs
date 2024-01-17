@@ -107,7 +107,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
     name: "areas",
-    pattern: "{area?}/{controller=TypePayment}/{action=Index}/{id?}");
+    pattern: "{area?}/{controller=BankAccount}/{action=Index}/{id?}");
 });
 
 

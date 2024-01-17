@@ -1,6 +1,7 @@
 ﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models.BankAccount
 @{
     var action = ViewData["Action"] as string;
+
 }
 
 <div class="card">
@@ -28,7 +29,7 @@
                     <div class="col-md-6">
                         <label asp-for="BankName" class="control-label mb-2">Banco</label>
                         <div class="select-wrapper">
-                            <select asp-for="BankName" class="form-control" asp-items="ViewBag.BankNames">
+                            <select asp-for="BankName" class="form-control" asp-items="ViewBag.BankSelect">
                                 <option value="">Seleccione un Banco</option>
                             </select>
                         </div>
@@ -41,7 +42,7 @@
                     <div class="col-md-6">
                         <label asp-for="CoinDescription" class="control-label mb-2">Moneda</label>
                         <div class="select-wrapper">
-                            <select asp-for="CoinDescription" class="form-control" asp-items="ViewBag.CoinDescriptions">
+                            <select asp-for="CoinDescription" class="form-control" asp-items="ViewBag.CoinSelect">
                                 <option value="">Seleccione una moneda</option>
                             </select>
                         </div>
@@ -50,7 +51,7 @@
                     <div class="col-md-6">
                         <label asp-for="TypePaymentName" class="control-label mb-2">Tipo de Pago</label>
                         <div class="select-wrapper">
-                            <select asp-for="TypePaymentName" class="form-control" asp-items="ViewBag.TypePaymentNames">
+                            <select asp-for="TypePaymentName" class="form-control" asp-items="ViewBag.TypePaymentSelect">
                                 <option value="">Seleccione un tipo de Pago</option>
                             </select>
                         </div>

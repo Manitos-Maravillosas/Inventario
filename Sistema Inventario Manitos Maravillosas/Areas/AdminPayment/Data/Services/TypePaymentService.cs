@@ -15,6 +15,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
         OperationResult Delete(string id);
         OperationResult Update(TypePaymentxCoin newTypePayment);
         List<string> GetTypePayments();
+
+        public List<TypePayment> GetAllTypePayments();
     }
 
 
@@ -329,6 +331,47 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
             }
             return TypePaymentNames;
         }
+        public List<TypePayment> GetAllTypePayments()
+        {
+            List<TypePayment> typePayment = new List<TypePayment>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null;
 
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand GetTypePaymentsCommand = new SqlCommand("spGetTypePayment", connection))
+                {
+                    GetTypePaymentsCommand.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataReader typePaymentDataReader = GetTypePaymentsCommand.ExecuteReader())
+                    {
+                        while (typePaymentDataReader.Read())
+                        {
+                            TypePayment typePaymentName = new TypePayment
+                            {
+                                IdTypePayment = Convert.ToInt32(typePaymentDataReader["idTypePayment"]),
+                                Name = typePaymentDataReader["name"].ToString(),
+                            };
+                            typePayment.Add(typePaymentName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            return typePayment;
+        }
     }
 }
