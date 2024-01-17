@@ -58,7 +58,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
 
         // PDF Generation
 
-        public Document GeneratePDFLayout(string reportType, MemoryStream stream, DateTime startDate, DateTime endDate)
+        public Document GeneratePDFLayout(string reportType, MemoryStream stream, DateOnly startDate, DateOnly endDate)
         {
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(stream));
             Document doc = new Document(pdfDoc);
@@ -79,7 +79,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             doc.Add(new Paragraph(
                 $"Fecha de inicio: {startDate.ToString("dd/MM/yyyy")}\n" +
                 $"Fecha de fin: {endDate.ToString("dd/MM/yyyy")}\n" +
-                $"Fecha de generación: {DateTime.Now.ToString("dd/MM/yyyy")}")
+                $"Fecha de generación: {DateOnly.Now.ToString("dd/MM/yyyy")}")
                 .AddStyle(boldStyle)
                 .SetTextAlignment(TextAlignment.CENTER));
 
