@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models
 {
     public class BankAccount
     {

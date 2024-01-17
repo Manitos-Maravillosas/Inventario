@@ -14,6 +14,8 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
@@ -26,19 +28,34 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly IProductService _productService;
         private readonly IClientService _clientService;
         private readonly BillHandler _billHandler;
+
+        private readonly ICoinService _CoinService;
+        private readonly ITypePaymentService _typePaymentService;
+        private readonly IBankAccountService _bankAccountService;
         private Bill bill;
-        public PurchaseConfigurationController(IProductService productService, IClientService clientService, BillHandler billHandler)
+        public PurchaseConfigurationController(IProductService productService, IClientService clientService, ITypePaymentService typePaymentService,
+            IBankAccountService bankAccountService,  BillHandler billHandler, ICoinService coinService)
         {
 
             _productService = productService;
             _clientService = clientService;
             _billHandler = billHandler;
+            _typePaymentService = typePaymentService;
+            _bankAccountService = bankAccountService;
+            _CoinService = coinService;
         }
 
         public IActionResult Index()
         {
             bill = _billHandler.GetBill();
+            // The JSON string
+            string json = "{\"idBill\":0,\"date\":\"2024-01-16T21:42:57.6021551-06:00\",\"percentDiscount\":0,\"amountDiscount\":0,\"subTotal\":1020,\"totalCost\":1023,\"idEmployee\":\"defaultEmployeeId\",\"employee\":null,\"idClient\":\"109710812\",\"client\":{\"id\":\"109710812\",\"name\":\"Ingrid\",\"lastName1\":\"Mena\",\"lastName2\":\"Barboza\",\"phoneNumber\":\"84252989\",\"idAddress\":14,\"departmentName\":\"Chinandega\",\"cityName\":\"El Realejo\",\"signs\":\"que le importa\"},\"idBusiness\":1,\"business\":null,\"cartXProducts\":[{\"idCartXProduct\":0,\"quantity\":4,\"cost\":50,\"price\":55,\"subTotal\":220,\"idProduct\":\"321\",\"product\":{\"idProduct\":\"321\",\"productName\":\"Headphones\",\"stock\":50,\"cost\":50,\"price\":55,\"description\":\"Wireless headphones with noise cancellation.\",\"status\":true,\"idBusiness\":1,\"business\":null,\"idProductCategory\":1,\"category\":\"Electronics\"},\"idBill\":0,\"bill\":null},{\"idCartXProduct\":0,\"quantity\":8,\"cost\":50,\"price\":60,\"subTotal\":480,\"idProduct\":\"987987\",\"product\":{\"idProduct\":\"987987\",\"productName\":\"Naranja\",\"stock\":80,\"cost\":50,\"price\":60,\"description\":\"Producto citrico de calidad\",\"status\":true,\"idBusiness\":1,\"business\":null,\"idProductCategory\":7,\"category\":\"Frutas y verduras\"},\"idBill\":0,\"bill\":null},{\"idCartXProduct\":0,\"quantity\":8,\"cost\":35,\"price\":40,\"subTotal\":320,\"idProduct\":\"456\",\"product\":{\"idProduct\":\"456\",\"productName\":\"Garden Hose\",\"stock\":40,\"cost\":35,\"price\":40,\"description\":\"Flexible 50ft garden hose with adjustable nozzle.\",\"status\":true,\"idBusiness\":2,\"business\":null,\"idProductCategory\":2,\"category\":\"Gardening Tools\"},\"idBill\":0,\"bill\":null}],\"products\":[],\"optionMoney\":1,\"listClients\":null,\"deliveryFlag\":true,\"delivery\":{\"id\":0,\"total\":3,\"internalCost\":3,\"notes\":null,\"dateAprox\":\"2024-01-20T00:00:00\",\"signs\":null,\"nameTypeDelivery\":null,\"idAddress\":0,\"idTypeDelivery\":1,\"idBill\":0,\"address\":null,\"typeDelivery\":null,\"bill\":null,\"deliveryxCompanyTrans\":{\"aditionalCompanyCost\":0,\"idCompanyTrans\":0,\"inChargePaymentDelivery\":\"2\"}}}";
 
+            var coinDescriptions = _CoinService.GetCoinDescriptions();
+            ViewBag.CoinDescriptions = new SelectList(coinDescriptions);
+            // Deserialize the JSON string to a Bill object
+            bill = JsonConvert.DeserializeObject<Bill>(json);
+            _billHandler.SaveBill(bill);
             if (bill.CartXProducts.Count <= 0)
             {
                 return RedirectToAction("Index", "Purchase");

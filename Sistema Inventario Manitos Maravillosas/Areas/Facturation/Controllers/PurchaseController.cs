@@ -21,14 +21,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly IClientService _clientService;
         private readonly ITypeDeliveryService _typeDeliveryService;
         private readonly IDeleveryService _deleveryService;
-        private readonly ITypePaymentService _typePaymentService;
-        private readonly IBankAccountService _bankAccountService;
         private readonly BillHandler _billHandler;
 
 
 
         public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService, IDeleveryService deleveryService,
-            ITypePaymentService typePaymentService, BillHandler billHandler)
+             BillHandler billHandler)
 
         {
 
@@ -36,7 +34,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             _clientService = clientService;
             _typeDeliveryService = typeDeliveryService;
             _deleveryService = deleveryService;
-            _typePaymentService = typePaymentService;
             _billHandler = billHandler;
         }
 
@@ -205,6 +202,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             if (_billHandler.RemoveProductFromCartXBill(id))
             {
                 return PartialView("_tableProducts", _billHandler.GetBill());
+               
             }
             else
             {

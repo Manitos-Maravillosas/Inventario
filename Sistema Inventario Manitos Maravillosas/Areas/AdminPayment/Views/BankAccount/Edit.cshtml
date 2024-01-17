@@ -1,17 +1,15 @@
-﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.BankAccount
+﻿@model BankAccount
 
 @{
-    ViewData["Title"] = "Crear Cuenta de Banco";
+    ViewData["Title"] = "Modificar Cuenta de Banco";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    ViewData["Action"] = "Create";
+    ViewData["Action"] = "Edit";
 }
+
 <section class="container px-5 py-3">
-    <h3 style="margin-bottom: 2rem;">Agregar Cuenta de Banco</h3>
-
+    <h3 style="margin-bottom: 2rem;">Modificar Tipo de Pago</h3>
     <partial name="_BankAccountForm" model="Model" view-data="ViewData">
-
-    </partial>
 </section>
 
 @section Scripts {
@@ -51,8 +49,4 @@
 
         ViewData["ErrorMessage"] = null;
     }
-
-
-
 }
-

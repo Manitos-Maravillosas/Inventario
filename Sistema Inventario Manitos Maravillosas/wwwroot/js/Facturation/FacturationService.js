@@ -83,7 +83,6 @@ function removeProductFromCart(id) {
         .then(tableBodyHtml => {
             // 'html' es el HTML de tu PartialView
             // Inserta este HTML en la tabla o donde necesites actualizar
-
             addRow(tableBodyHtml);
             applyEventListenersToRow();
         })
@@ -242,7 +241,6 @@ function UpdateQuanty(idProduct, quanty) {
                 return response.text().then(html => {
                     // Process HTML data
                     addRow(html);
-                    noProductsVisibleFalse();
                     applyEventListenersToRow();
                 });
             } else {

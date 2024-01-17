@@ -10,6 +10,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Filters;
 using SistemaInventario.Data;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,7 +107,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
     name: "areas",
-    pattern: "{area?}/{controller=Purchase}/{action=Index}/{id?}");
+    pattern: "{area?}/{controller=PurchaseConfiguration}/{action=Index}/{id?}");
 });
 
 

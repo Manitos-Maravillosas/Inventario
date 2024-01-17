@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
 {
-    [Area("Admin")]
+    [Area("AdminPayment")]
+
+    [Authorize]
     public class BankAccountController : Controller
     {
         private readonly IBankAccountService _BankAccountService;

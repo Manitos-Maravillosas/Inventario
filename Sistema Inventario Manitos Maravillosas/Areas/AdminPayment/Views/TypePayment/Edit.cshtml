@@ -1,7 +1,8 @@
-﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.BankAccount
+﻿@model TypePayment
+
 
 @{
-    ViewData["Title"] = "Modificar Cuenta de Banco";
+    ViewData["Title"] = "Modificar Tipo de Pago";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     ViewData["Action"] = "Edit";
@@ -9,11 +10,11 @@
 
 <section class="container px-5 py-3">
     <h3 style="margin-bottom: 2rem;">Modificar Tipo de Pago</h3>
-    <partial name="_BankAccountForm" model="Model" view-data="ViewData">
+    <partial name="_TypePaymentForm" model="Model" view-data="ViewData">
 </section>
 
 @section Scripts {
-
+    
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
@@ -28,7 +29,7 @@
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/Admin/BankAccount/Index';
+                        window.location.href = '/Admin/TypePayment/Index'; 
                     }
                 });
             });
@@ -50,3 +51,4 @@
         ViewData["ErrorMessage"] = null;
     }
 }
+

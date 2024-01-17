@@ -233,6 +233,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
             _httpContextAccessor.HttpContext.Session.SetString("Bill", sessionData);
         }
 
+        public void SaveBill(Bill bill)
+        {
+            var sessionData = JsonConvert.SerializeObject(bill);
+            _httpContextAccessor.HttpContext.Session.SetString("Bill", sessionData);
+        }
+
         public float GetMoneyValue()
         {
             string value = _httpContextAccessor.HttpContext.Session.GetString("MoneyValue");

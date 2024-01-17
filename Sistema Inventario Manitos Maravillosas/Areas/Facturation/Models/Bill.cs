@@ -65,6 +65,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public Delivery delivery { get; set; }
 
+        public TypePayment typePayment { get; set; }
 
     }
 
@@ -96,5 +97,21 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public int IdBill { get; set; }
         public virtual Bill Bill { get; set; }
+    }
+
+    public class BillxTypePayment
+    {
+        public BillxTypePayment()
+        {
+            AmountPaid = 0.0f;
+            IdTypePayment = 0;
+
+        }
+        [Key]
+
+        // Foreign keys
+        public float AmountPaid { get; set; }
+        public int IdTypePayment { get; set; }
+        public virtual TypePayment TypePayment { get; set; }
     }
 }
