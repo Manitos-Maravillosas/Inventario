@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Net;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services
 {
     public interface IBankAccountService
     {
@@ -195,7 +195,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.Add(new SqlParameter("@idBankAccount", newBankAccount.Id != 0 ? (object)newBankAccount.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@idBankAccount", newBankAccount.Id != 0 ? newBankAccount.Id : DBNull.Value));
                         command.Parameters.Add(new SqlParameter("@accountNumber", string.IsNullOrEmpty(newBankAccount.AccountNumber) ? DBNull.Value : newBankAccount.AccountNumber));
                         command.Parameters.Add(new SqlParameter("@bankName", string.IsNullOrEmpty(newBankAccount.BankName) ? DBNull.Value : newBankAccount.BankName));
                         command.Parameters.Add(new SqlParameter("@typePaymentName", string.IsNullOrEmpty(newBankAccount.TypePaymentName) ? DBNull.Value : newBankAccount.TypePaymentName));
@@ -300,7 +300,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.Add(new SqlParameter("@idBankAccount", newBankAccount.Id != 0 ? (object)newBankAccount.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@idBankAccount", newBankAccount.Id != 0 ? newBankAccount.Id : DBNull.Value));
                         command.Parameters.Add(new SqlParameter("@accountNumber", string.IsNullOrEmpty(newBankAccount.AccountNumber) ? DBNull.Value : newBankAccount.AccountNumber));
                         command.Parameters.Add(new SqlParameter("@bankName", string.IsNullOrEmpty(newBankAccount.BankName) ? DBNull.Value : newBankAccount.BankName));
                         command.Parameters.Add(new SqlParameter("@typePaymentName", string.IsNullOrEmpty(newBankAccount.TypePaymentName) ? DBNull.Value : newBankAccount.TypePaymentName));

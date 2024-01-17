@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TypePaymentViewModel>
+﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models.TypePaymentxCoin>
 
 
 @{
@@ -30,7 +30,7 @@
                             <label class="form-label m-0 p-0" for="rowsPerPage">Mostrar:</label>
                         </div>
                         <div class="col-auto">
-                            <select id="showCantRow" class="form-select form-select-sm showCantRow" aria-label="Default select example" id="rowsPerPage">
+                            <select id="showCantRow" class="form-select form-select-sm showCantRow" aria-label="Default select example">
                                 <option value="10" selected>10</option>
                                 <option value="20">20</option>
                                 <option value="30">30</option>
@@ -165,7 +165,7 @@
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/Admin/TypePayment/Index'; 
+                        window.location.href = '/AdminPayment/TypePayment/Index'; 
                     }
                 });
             });

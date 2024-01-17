@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
 using System.ComponentModel.DataAnnotations;
 
@@ -65,7 +66,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public Delivery delivery { get; set; }
 
-        public TypePayment typePayment { get; set; }
+        public TypePaymentxCoin typePayment { get; set; }
 
     }
 
@@ -112,6 +113,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         // Foreign keys
         public float AmountPaid { get; set; }
         public int IdTypePayment { get; set; }
-        public virtual TypePayment TypePayment { get; set; }
+        public virtual TypePaymentxCoin TypePayment { get; set; }
     }
 }

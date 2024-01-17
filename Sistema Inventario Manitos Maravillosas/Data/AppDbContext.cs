@@ -90,7 +90,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data
         public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models.ProductCategory>? ProductCategories { get; set; }
 
         //Admin
-        public DbSet<TypePayment>? TypePayment { get; set; }
+        public DbSet<TypePaymentxCoin>? TypePayment { get; set; }
         //login
 
 

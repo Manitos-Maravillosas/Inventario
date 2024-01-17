@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 
@@ -47,10 +48,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
         // POST: TypePaymentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(TypePayment typePayment)
+        public ActionResult Create(TypePaymentxCoin typePayment)
         {
-            if (ModelState.IsValid)
-            {
+            typePayment.CoinName = _CoinService.GetNameFromDescription(typePayment.CoinDescription);
+            
                 OperationResult result = _TypePaymentService.Add(typePayment);
                 if (!result.Success)
                 {
@@ -58,15 +59,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
                 }
                 ViewData["Success"] = "Tipo de pago agregado correctamente!";
 
-            }
             ViewBag.CoinDescriptions = new SelectList(_CoinService.GetCoinDescriptions());
-            return View(typePayment);
+            return RedirectToAction("Index");
         }
 
         // GET: TypePaymentController/Edit/5
         public ActionResult Edit(int id)
         {
-            TypePayment typePayment = _TypePaymentService.GetById(id);
+            TypePaymentxCoin typePayment = _TypePaymentService.GetById(id);
             if (typePayment == null)
             {
                 return NotFound();
@@ -78,10 +78,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
         // POST: TypePaymentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(TypePayment typePayment)
+        public ActionResult Edit(TypePaymentxCoin typePayment)
         {
-            if (ModelState.IsValid)
-            {
+            typePayment.CoinName = _CoinService.GetNameFromDescription(typePayment.CoinDescription);
+    
+   
                 OperationResult result = _TypePaymentService.Update(typePayment);
                 if (!result.Success)
                 {
@@ -89,7 +90,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
                 }
                 ViewData["Success"] = "Se ha modificado los datos del tipo de pago!";
 
-            }
             return View();
         }
 
