@@ -27,7 +27,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
                 <!-- Fila 2: Fecha, Cantidad -->
                 <div class="row mb-3">
@@ -52,7 +52,7 @@
                     <div class="col-md-6">
                         <label asp-for="ProviderName" class="control-label mb-2">Proveedor</label>
                         <div class="select-wrapper">
-                            <select asp-for="ProviderName" class="form-control" asp-items="ViewBag.BankNames">
+                            <select asp-for="ProviderName" class="form-control" asp-items="ViewBag.ProviderNames">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -64,14 +64,14 @@
                     <div class="col-md-6">
                         <label asp-for="BusinessName" class="control-label mb-2">Negocio</label>
                         <div class="select-wrapper">
-                            <select asp-for="BusinessName" class="form-control" asp-items="ViewBag.BankNames">
+                            <select asp-for="BusinessName" class="form-control" asp-items="ViewBag.BusinessNames">
                                 <option value=""></option>
                             </select>
                         </div>
                         <span asp-validation-for="BusinessName" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Precio Nuevo del Producto</label>
+                        <label class="form-label">Precio de venta</label>
                         <input type="text" class="form-control" asp-for="Price" aria-label="Precio Nuevo">
                         <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
@@ -124,34 +124,44 @@
                             </li>
                         }
                     }
-                </ul>                
+                </ul>  
+                <form id="redirectForm" method="post" style="display: inline-block;">
+                    <button type="button" onclick="confirmRedirect()" class="btn btn-outline-primary mt-2"> <i class="bi bi-card-checklist"></i> Nuevo Producto</button>
+                </form>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" tabindex="-1" id="addProduct">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Crear Producto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                @{
-                    ViewData["Action"] = "CreateProduct";
-
-                    ViewData["Controller"] = "PurchaseProvider";
-                    Product ProductModel = new Product();
-                }
-                <partial name="_ProductForm" model="ProductModel" view-data="ViewData">
-
-            </div>
-
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script src="~/js/supplier/purchaseprovider.js"></script>
+    <script>
+        function confirmRedirect() {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Quieres redireccionar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, redireccionar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'IMPORTANTE',
+                        text: 'Desactive la opción del stock al agregar el producto, después de agregarlo, regrese para llenar la información de la compra.',
+                        icon: 'warning',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Aceptar'
+                    }).then(() => {
+                        
+                        window.location.href = '/Inventory/Product/Create'; 
+                    });
+                }
+            });
+        }
+    </script>
+
 }

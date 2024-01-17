@@ -15,6 +15,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         OperationResult Delete(string id);
         Provider GetById(int id);       
         OperationResult Update(Provider newProvider);
+        List<string> GetProviderNames();
     }
 
     public class ProviderService : IProviderService
@@ -289,6 +290,46 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return result;
         }
 
+        //------------------------------------------------------------------------------------
+        //                              GetProviderNames                                             
+        //------------------------------------------------------------------------------------
+        public List<string> GetProviderNames()
+        {
+            List<string> providerNames = new List<string>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null;
 
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand getProviderNamesCommand = new SqlCommand("spProviderNames", connection))
+                {
+                    getProviderNamesCommand.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataReader businessDataReader = getProviderNamesCommand.ExecuteReader())
+                    {
+                        while (businessDataReader.Read())
+                        {
+                            string providerName = businessDataReader["name"].ToString();
+                            providerNames.Add(providerName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            return providerNames;
+        }
     }
 }

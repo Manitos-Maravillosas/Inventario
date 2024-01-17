@@ -18,11 +18,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
         private readonly IProductService _ProductService;
         private readonly IProductCategoryService _productCategoryService;
         private readonly IBusinessService _businessService;
-        public PurchaseProviderController(IPurchaseProviderService purchaseProviderService, IProductService productService, IProductCategoryService productCategoryService, IBusinessService businessService)
+        private readonly IProviderService _ProviderService;
+        public PurchaseProviderController(IPurchaseProviderService purchaseProviderService, IProductService productService, IProviderService providerService, IBusinessService businessService)
         {
             _PurchaseProviderService = purchaseProviderService;
             _ProductService = productService;
-            _productCategoryService = productCategoryService;
+            _ProviderService = providerService;
             _businessService = businessService;
         }
         // GET: PurchaseProviderController
@@ -44,6 +45,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
         {
             PurchaseProvider purchaseProvider = new PurchaseProvider(); 
             purchaseProvider.Products = _ProductService.GetAll();
+
+            var businessNames = _businessService.GetBusinessNames();
+            ViewBag.BusinessNames = new SelectList(businessNames);
+
+            var providerNames = _ProviderService.GetProviderNames();
+            ViewBag.ProviderNames = new SelectList(providerNames);
 
             return View(purchaseProvider);
         }

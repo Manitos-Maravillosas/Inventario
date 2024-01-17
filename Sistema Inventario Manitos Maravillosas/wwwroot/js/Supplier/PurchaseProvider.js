@@ -32,7 +32,7 @@
 
                 document.getElementById('productNameInput').value =  name;
 
-                modal.hide();
+                modalProduct.hide();
             });
         }
     }
