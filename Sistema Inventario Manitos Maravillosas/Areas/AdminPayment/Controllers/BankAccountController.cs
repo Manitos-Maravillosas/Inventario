@@ -93,14 +93,24 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
         {
             if (ModelState.IsValid)
             {
-                OperationResult result = _BankAccountService.Update(bankAccount);
-                if (!result.Success)
+                bankAccount.idTypePaymentxCoin = _typePaymentService.GetIdTypePaymentxCoin(bankAccount.IdTypePayment, bankAccount.IdCoin);
+                if (bankAccount.idTypePaymentxCoin != 0)
                 {
-                    ViewData["ErrorMessage"] = result.Message;
+                    OperationResult result = _BankAccountService.Update(bankAccount);
+                    if (!result.Success)
+                    {
+                        ViewData["ErrorMessage"] = result.Message;
+                    }
+                    ViewData["Success"] = "Se ha modificado los datos de la cuenta de Banco!";
                 }
-                ViewData["Success"] = "Se ha modificado los datos de la cuenta de Banco!";
+                else
+                {
+                    ViewData["ErrorMessage"] = "No se puede agregar la cuenta de banco, ya que no existe un tipo de pago para la moneda seleccionada.";
+                }
 
             }
+
+            LoadSelect();
             return View();
         }
 
