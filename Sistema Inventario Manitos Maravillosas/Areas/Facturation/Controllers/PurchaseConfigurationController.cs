@@ -17,6 +17,9 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Models;
+using System.Globalization;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
@@ -30,7 +33,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly IClientService _clientService;
         private readonly BillHandler _billHandler;
 
-        private readonly ICoinService _CoinService;
+        private readonly ICoinService _coinService;
         private readonly ITypePaymentService _typePaymentService;
         private readonly IBankAccountService _bankAccountService;
         private Bill bill;
@@ -43,7 +46,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             _billHandler = billHandler;
             _typePaymentService = typePaymentService;
             _bankAccountService = bankAccountService;
-            _CoinService = coinService;
+            _coinService = coinService;
         }
 
         public IActionResult Index()
@@ -52,8 +55,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             // The JSON string
             string json = "{\"idBill\":0,\"date\":\"2024-01-16T21:42:57.6021551-06:00\",\"percentDiscount\":0,\"amountDiscount\":0,\"subTotal\":1020,\"totalCost\":1023,\"idEmployee\":\"defaultEmployeeId\",\"employee\":null,\"idClient\":\"109710812\",\"client\":{\"id\":\"109710812\",\"name\":\"Ingrid\",\"lastName1\":\"Mena\",\"lastName2\":\"Barboza\",\"phoneNumber\":\"84252989\",\"idAddress\":14,\"departmentName\":\"Chinandega\",\"cityName\":\"El Realejo\",\"signs\":\"que le importa\"},\"idBusiness\":1,\"business\":null,\"cartXProducts\":[{\"idCartXProduct\":0,\"quantity\":4,\"cost\":50,\"price\":55,\"subTotal\":220,\"idProduct\":\"321\",\"product\":{\"idProduct\":\"321\",\"productName\":\"Headphones\",\"stock\":50,\"cost\":50,\"price\":55,\"description\":\"Wireless headphones with noise cancellation.\",\"status\":true,\"idBusiness\":1,\"business\":null,\"idProductCategory\":1,\"category\":\"Electronics\"},\"idBill\":0,\"bill\":null},{\"idCartXProduct\":0,\"quantity\":8,\"cost\":50,\"price\":60,\"subTotal\":480,\"idProduct\":\"987987\",\"product\":{\"idProduct\":\"987987\",\"productName\":\"Naranja\",\"stock\":80,\"cost\":50,\"price\":60,\"description\":\"Producto citrico de calidad\",\"status\":true,\"idBusiness\":1,\"business\":null,\"idProductCategory\":7,\"category\":\"Frutas y verduras\"},\"idBill\":0,\"bill\":null},{\"idCartXProduct\":0,\"quantity\":8,\"cost\":35,\"price\":40,\"subTotal\":320,\"idProduct\":\"456\",\"product\":{\"idProduct\":\"456\",\"productName\":\"Garden Hose\",\"stock\":40,\"cost\":35,\"price\":40,\"description\":\"Flexible 50ft garden hose with adjustable nozzle.\",\"status\":true,\"idBusiness\":2,\"business\":null,\"idProductCategory\":2,\"category\":\"Gardening Tools\"},\"idBill\":0,\"bill\":null}],\"products\":[],\"optionMoney\":1,\"listClients\":null,\"deliveryFlag\":true,\"delivery\":{\"id\":0,\"total\":3,\"internalCost\":3,\"notes\":null,\"dateAprox\":\"2024-01-20T00:00:00\",\"signs\":null,\"nameTypeDelivery\":null,\"idAddress\":0,\"idTypeDelivery\":1,\"idBill\":0,\"address\":null,\"typeDelivery\":null,\"bill\":null,\"deliveryxCompanyTrans\":{\"aditionalCompanyCost\":0,\"idCompanyTrans\":0,\"inChargePaymentDelivery\":\"2\"}}}";
 
-            var coinDescriptions = _CoinService.GetCoinDescriptions();
-            ViewBag.CoinDescriptions = new SelectList(coinDescriptions);
+            LoadSelect();
             // Deserialize the JSON string to a Bill object
             bill = JsonConvert.DeserializeObject<Bill>(json);
             _billHandler.SaveBill(bill);
@@ -63,7 +65,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             }
             else
             {
-                return View();                
+                return View(bill);                
             }
 
         }
@@ -98,7 +100,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             Document document = new Document(pdf, pageSize);
 
             // Set margins if necessary, can be adjusted as needed
-            document.SetMargins(10, 0, 0, 0);
+            document.SetMargins(10, 10, 10, 10);
 
 
 
@@ -130,8 +132,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             // Invoice details
             document.Add(new Paragraph("FACTURA N°: FACT - 1999")
                             .AddStyle(boldStyle));
-            document.Add(new Paragraph("Cliente: Daniela Baltodano"));
-            document.Add(new Paragraph("Fecha: 31 dic 2023"));
+            document.Add(new Paragraph("Cliente: "+bill.Client.Name + " "+ bill.Client.LastName1));
+            document.Add(new Paragraph("Fecha: "+ bill.Date.ToString("dd/MM/yyyy")));
             document.Add(new Paragraph("Tipo de Factura: En Tienda"));
             document.Add(new Paragraph("Atendido: Ericka Arévalo"));
 
@@ -164,29 +166,43 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             //--------------------------------------------------------------------- tablePrice
             Table tablePrice = new Table(UnitValue.CreatePercentArray(new float[] { 3, 1, 1, 1 })).UseAllAvailableWidth();
 
+            // Subtotal ROW
+            tablePrice.AddCell(new Cell().Add(new Paragraph("").AddStyle(boldStyle)).AddStyle(noBorderStyle));
+            tablePrice.AddCell(new Cell().Add(new Paragraph("")).AddStyle(noBorderStyle));
+            tablePrice.AddCell(new Cell().Add(new Paragraph("Subtotal").AddStyle(boldStyle)).AddStyle(noBorderStyle));
+            tablePrice.AddCell(new Cell().Add(new Paragraph("$ " + bill.SubTotal * 0.15).AddStyle(boldStyle)).AddStyle(noBorderStyle));
+
             // IVA ROW
             tablePrice.AddCell(new Cell().Add(new Paragraph("IVA - Incluido").AddStyle(boldStyle)).AddStyle(noBorderStyle));
             tablePrice.AddCell(new Cell().Add(new Paragraph("")).AddStyle(noBorderStyle));
             tablePrice.AddCell(new Cell().Add(new Paragraph("15 %").AddStyle(boldStyle)).AddStyle(noBorderStyle));
-            tablePrice.AddCell(new Cell().Add(new Paragraph("$63").AddStyle(boldStyle)).AddStyle(noBorderStyle));
+            tablePrice.AddCell(new Cell().Add(new Paragraph("$ "+ bill.TotalCost * 0.15).AddStyle(boldStyle)).AddStyle(noBorderStyle));            
 
             // Discount ROW
             tablePrice.AddCell(new Cell().Add(new Paragraph("Desceunto").AddStyle(boldStyle)).AddStyle(noBorderStyle));
             tablePrice.AddCell(new Cell().Add(new Paragraph("")).AddStyle(noBorderStyle));
             tablePrice.AddCell(new Cell().Add(new Paragraph("0 %").AddStyle(boldStyle)).AddStyle(noBorderStyle));
-            tablePrice.AddCell(new Cell().Add(new Paragraph("$63").AddStyle(boldStyle)).AddStyle(noBorderStyle));
+            tablePrice.AddCell(new Cell().Add(new Paragraph("$ "+ bill.TotalCost*bill.PercentDiscount).AddStyle(boldStyle)).AddStyle(noBorderStyle));
 
             // Delevery ROW
             tablePrice.AddCell(new Cell().Add(new Paragraph("Envío").AddStyle(boldStyle)).AddStyle(noBorderStyle));
             tablePrice.AddCell(new Cell().Add(new Paragraph("")).AddStyle(noBorderStyle));
-            tablePrice.AddCell(new Cell().Add(new Paragraph("Sí").AddStyle(boldStyle)).AddStyle(noBorderStyle));
-            tablePrice.AddCell(new Cell().Add(new Paragraph("$435").AddStyle(boldStyle)).AddStyle(noBorderStyle));
+            if(bill.deliveryFlag)
+            {
+                tablePrice.AddCell(new Cell().Add(new Paragraph("Sí").AddStyle(boldStyle)).AddStyle(noBorderStyle));
+                tablePrice.AddCell(new Cell().Add(new Paragraph("$ " + bill.delivery.Total).AddStyle(boldStyle)).AddStyle(noBorderStyle));
+            }
+            else
+            {
+                tablePrice.AddCell(new Cell().Add(new Paragraph("No").AddStyle(boldStyle)).AddStyle(noBorderStyle));
+                tablePrice.AddCell(new Cell().Add(new Paragraph("$ 0").AddStyle(boldStyle)).AddStyle(noBorderStyle));
+            }  
 
             // Total ROW
             tablePrice.AddCell(new Cell().Add(new Paragraph("").AddStyle(boldStyle)).AddStyle(noBorderStyle));
             tablePrice.AddCell(new Cell().Add(new Paragraph("").AddStyle(boldStyle)).AddStyle(noBorderStyle));
             tablePrice.AddCell(new Cell().Add(new Paragraph("TOTAL").AddStyle(boldStyle)).AddStyle(noBorderStyle));
-            tablePrice.AddCell(new Cell().Add(new Paragraph("$435").AddStyle(boldStyle)).AddStyle(noBorderStyle));
+            tablePrice.AddCell(new Cell().Add(new Paragraph("$ "+bill.TotalCost).AddStyle(boldStyle)).AddStyle(noBorderStyle));
 
 
 
@@ -218,11 +234,104 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             return height;
         }
 
+        public void LoadSelect()
+        {
+
+            {
+                // Creating a list of coin SelectListItem
+                List<Coin> coins = _coinService.GetALlCoins();
+                var selectCoin = new List<SelectListItem>();
+                foreach (var item in coins)
+                {
+                    selectCoin.Add(new SelectListItem
+                    {
+                        Value = item.IdCoin.ToString(),
+                        Text = item.Description + " "+ item.Name
+                    });
+                }
+                ViewBag.CoinSelect = selectCoin;
+
+
+                // Creating a list of typePayment SelectListItem
+                List<TypePayment> typePayment = _typePaymentService.GetAllTypePayments();
+                var selectTypePayment = new List<SelectListItem>();
+                foreach (var item in typePayment)
+                {
+                    selectTypePayment.Add(new SelectListItem
+                    {
+                        Value = item.IdTypePayment.ToString(),
+                        Text = item.Name
+                    });
+                }
+                ViewBag.TypePaymentSelect = selectTypePayment;
+
+                // Creating a list of bank SelectListItem
+                List<Bank> banks = _bankAccountService.GetAllBanks();
+                var selectBank = new List<SelectListItem>();
+                foreach (var item in banks)
+                {
+                    selectBank.Add(new SelectListItem
+                    {
+                        Value = item.IdBank.ToString(),
+                        Text = item.Name
+                    });
+                }
+                ViewBag.BankSelect = selectBank;
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ConvertMoney(int option, string value)
+        {
+            float valueF = float.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
+            //option 658 = USD -> C$
+
+            try
+            {
+                if (option == 658)
+                {
+                    //store the money in the session
+                    HttpContext.Session.SetString("MoneyValue", value);
+                    HttpContext.Session.SetString("MoneyId", value);
+                    _billHandler.UpdateMoneyBill(valueF, 2);
+
+
+                }
+                //option 12 = C$ -> USD
+                else if (option == 12)
+                {
+                    //store the money in the session
+                    HttpContext.Session.SetString("MoneyValue", value);
+                    HttpContext.Session.SetString("MoneyId", value);
+                    _billHandler.UpdateMoneyBill(valueF, 1);
+                }
+                return PartialView("_tableProducts", _billHandler.GetBill());
+
+            }
+            catch (CustomDataException ex)
+            {
+                if (ex.Message == "Sql")
+                {
+                    return Json(new { success = false, message = ex.InnerException.Message });
+                }
+                else
+                {
+                    throw new CustomDataException("An error occurred: " + ex.Message, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+        }
+
 
     }
     public class PrintPdfViewModel
     {
         public string PdfUrl { get; set; }
     }
+
+
 
 }

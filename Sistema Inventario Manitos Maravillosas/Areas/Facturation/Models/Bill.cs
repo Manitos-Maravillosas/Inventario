@@ -3,6 +3,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 {
@@ -23,6 +24,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
             optionMoney = 1;
             deliveryFlag = false;
             delivery = new Delivery();
+            bankAccount = new BankAccount();
+            billxTypePayment = new BillxTypePayment();
+            billxTypePaymentxBankAccout = new BillxTypePaymentxBankAccout();
+
         }
 
     
@@ -66,8 +71,20 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public Delivery delivery { get; set; }
 
-        public TypePaymentxCoin typePayment { get; set; }
+        public BankAccount bankAccount { get; set; }
 
+        public BillxTypePayment billxTypePayment { get; set; }
+
+        public BillxTypePaymentxBankAccout billxTypePaymentxBankAccout { get; set; }
+
+        public bool mixPayment { get; set; }
+    }
+
+    public class BillxTypePaymentxBankAccout
+    {
+        public int IdBillxTypePaymentxBankAccout { get; set; }
+        public int idBillxIdTypePayment { get; set; }
+        public int idBankAccount { get; set; }
     }
 
     public class CartXProduct
@@ -104,15 +121,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
     {
         public BillxTypePayment()
         {
-            AmountPaid = 0.0f;
-            IdTypePayment = 0;
+            amountPaid = 0.0f;
+            idTypePaymentxCoin = 0;
+            typePaymentxCoin = new TypePaymentxCoin();            
 
         }
         [Key]
 
         // Foreign keys
-        public float AmountPaid { get; set; }
-        public int IdTypePayment { get; set; }
-        public virtual TypePaymentxCoin TypePayment { get; set; }
+        public float amountPaid { get; set; }
+        public int idTypePaymentxCoin { get; set; }
+        public virtual TypePaymentxCoin typePaymentxCoin { get; set; }
     }
 }

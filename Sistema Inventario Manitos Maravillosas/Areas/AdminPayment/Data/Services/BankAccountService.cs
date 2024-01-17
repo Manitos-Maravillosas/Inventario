@@ -66,7 +66,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                             {
                                 BankAccount bankAccount = new BankAccount
                                 {
-                                    Id = Convert.ToInt32(dataReader["iBankAccount"]),
+                                    Id = Convert.ToInt32(dataReader["idBankAccount"]),
                                     AccountNumber = dataReader["accountNumber"].ToString(),
                                     IdBank = Convert.ToInt32(dataReader["idBank"]),
                                     BankName = dataReader["bankName"].ToString(),
@@ -266,7 +266,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                             {
                                 bankAccount = new BankAccount
                                 {
-                                    Id = Convert.ToInt32(dataReader["iBankAccount"]),
+                                    Id = Convert.ToInt32(dataReader["idBankAccount"]),
                                     AccountNumber = dataReader["accountNumber"].ToString(),
                                     IdBank = Convert.ToInt32(dataReader["idBank"]),
                                     BankName = dataReader["bankName"].ToString(),

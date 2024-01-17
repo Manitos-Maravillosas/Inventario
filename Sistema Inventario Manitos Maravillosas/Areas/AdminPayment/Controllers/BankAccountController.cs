@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
@@ -16,19 +15,19 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
     [Authorize]
     public class BankAccountController : Controller
     {
-        private readonly IBankAccountService _BankAccountService;
+        private readonly IBankAccountService _bankAccountService;
         private readonly ICoinService _CoinService;
         private readonly ITypePaymentService _typePaymentService;
         public BankAccountController(IBankAccountService bankAccountService, ICoinService coinService, ITypePaymentService typePaymentService)
         {
-            _BankAccountService = bankAccountService;
+            _bankAccountService = bankAccountService;
             _CoinService = coinService;
             _typePaymentService = typePaymentService;
         }
         // GET: BankAccountController
         public ActionResult Index()
         {
-            var bankAccounts = _BankAccountService.GetAll();
+            var bankAccounts = _bankAccountService.GetAll();
 
             return View(bankAccounts);
         }
@@ -56,7 +55,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
                 bankAccount.idTypePaymentxCoin = _typePaymentService.GetIdTypePaymentxCoin(bankAccount.IdTypePayment, bankAccount.IdCoin);
                 if (bankAccount.idTypePaymentxCoin != 0)
                 {
-                    OperationResult result = _BankAccountService.Add(bankAccount);
+                    OperationResult result = _bankAccountService.Add(bankAccount);
                     if (!result.Success)
                     {
                         ViewData["ErrorMessage"] = result.Message;
@@ -77,7 +76,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
         // GET: BankAccountController/Edit/5
         public ActionResult Edit(int id)
         {
-            BankAccount bankAccount = _BankAccountService.GetById(id);
+            BankAccount bankAccount = _bankAccountService.GetById(id);
             if (bankAccount == null)
             {
                 return NotFound();
@@ -96,7 +95,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
                 bankAccount.idTypePaymentxCoin = _typePaymentService.GetIdTypePaymentxCoin(bankAccount.IdTypePayment, bankAccount.IdCoin);
                 if (bankAccount.idTypePaymentxCoin != 0)
                 {
-                    OperationResult result = _BankAccountService.Update(bankAccount);
+                    OperationResult result = _bankAccountService.Update(bankAccount);
                     if (!result.Success)
                     {
                         ViewData["ErrorMessage"] = result.Message;
@@ -125,7 +124,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(string id)
         {
-            OperationResult result = _BankAccountService.Delete(id);
+            OperationResult result = _bankAccountService.Delete(id);
             if (!result.Success)
             {
                 ViewData["ErrorMessage"] = result.Message;
@@ -134,7 +133,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
             {
                 ViewData["Success"] = "Se ha eliminado la cuenta de banco!";
             }
-            var bankAccounts = _BankAccountService.GetAll();
+            var bankAccounts = _bankAccountService.GetAll();
             return View("Index", bankAccounts);
         }
 
@@ -168,7 +167,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
             ViewBag.TypePaymentSelect = selectTypePayment;
 
             // Creating a list of bank SelectListItem
-            List<Bank> banks = _BankAccountService.GetAllBanks();
+            List<Bank> banks = _bankAccountService.GetAllBanks();
             var selectBank = new List<SelectListItem>();
             foreach (var item in banks)
             {
