@@ -14,7 +14,8 @@ function assignClientToBill(idClient) {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.text(); // Usa response.text() ya que esperas HTML como respuesta
+            //redirect to the same page
+            window.location.href = '/Facturation/Purchase';
         })
         .catch(error => {
             console.error('Error al obtener los departamentos:', error);
@@ -109,8 +110,20 @@ function applyEventListenersToRow() {
     var assignDelivery = document.querySelector('#assignDelivery');
     if (assignDelivery) {
         assignDelivery.addEventListener('click', function () {
+            var idAddressClient = document.getElementById('idAddressClient').value;
 
-            deliveryModal.show();
+            if (idAddressClient == '') {
+                //swall alert
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Debe seleccionar un cliente para obtener su direccion',
+                    icon: 'error'
+                })
+            } else {
+
+                deliveryModal.show();
+            }
+
         });
     }
 

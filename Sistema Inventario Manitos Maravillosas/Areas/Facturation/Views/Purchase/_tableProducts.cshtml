@@ -96,13 +96,13 @@
             @* Envio *@
             <tr class="fw-bold no-border">
                 <th scope="row" colspan="3"></th>
-                <td class="text-end"><button id="assignDelivery" type="button" class="btn btn-secondary btn-sm"><i class="bi bi-gear-fill"></i></button></td>
+                <td class="text-end"><button id="assignDelivery" type="button" class="btn btn-@((Model.deliveryFlag ==true) ? "primary" : "secondary") btn-sm"><i class="bi bi-gear-fill"></i></button></td>
                 <td>Envío</td>
                 <td colspan="2">
                     <span class="addonMoney">
                         @((Model.optionMoney == 1) ? "$" : "C$")
                     </span>
-                    3015
+                    @Model.delivery.Total
                 </td>
             </tr>
             @* Desceunto *@

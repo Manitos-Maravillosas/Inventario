@@ -1,4 +1,8 @@
-﻿using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
+using System.Net.Sockets;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 {
@@ -9,13 +13,25 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public string PhoneNumber { get; set; }
     }
 
+
     public class Delivery
     {
-        public int IdDelivery { get; set; }
+        public Delivery()
+        {
+            Total = 0.0f;
+            InternalCost = 0.0f;
+            deliveryxCompanyTrans = new DeliveryxCompanyTrans();
+            DateAprox = DateTime.Now;
+
+        }
+        public int Id { get; set; }
         public float Total { get; set; }
         public float InternalCost { get; set; }
         public string Notes { get; set; }
+        [BindProperty]
         public DateTime DateAprox { get; set; }
+        public string Signs { get; set; }
+        public string NameTypeDelivery { get; set; }
 
         // Foreign keys
         public int IdAddress { get; set; }
@@ -26,21 +42,22 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public Address Address { get; set; }
         public TypeDelivery TypeDelivery { get; set; }
         public Bill Bill { get; set; }
+
+        //public
+        public DeliveryxCompanyTrans deliveryxCompanyTrans { get; set;}         
     }
     public class DeliveryxCompanyTrans
     {
-        public int IdDeliveryxCompanyTrans { get; set; }
-        public float CompanyCost { get; set; }
-
-        // Foreign keys
-        public int IdDelivery { get; set; }
-        public int IdInChargePaymentDelivery { get; set; }
+        public DeliveryxCompanyTrans()
+        {
+            AditionalCompanyCost = 0.0f;
+            InChargePaymentDelivery = "2";
+        }
+        public float AditionalCompanyCost { get; set; }
         public int IdCompanyTrans { get; set; }
-
-        // Navigation properties (optional)
-        public Delivery Delivery { get; set; }
-        public int InChargePaymentDelivery { get; set; }
-        public CompanyTrans CompanyTrans { get; set; }
+        [BindProperty]
+        public string InChargePaymentDelivery { get; set; }
+        public string[] InChargePaymentDeliveries = new[] { "1", "2"};
     }
 
 }

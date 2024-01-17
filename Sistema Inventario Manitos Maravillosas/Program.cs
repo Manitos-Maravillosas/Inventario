@@ -13,8 +13,8 @@ using SistemaInventario.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//-------------------------------------SERVICES------------------------------------------------//
 // Facturation SErvices
-
 builder.Services.AddScoped<IProductServiceFacturation, ProductServiceFacturation>();
 builder.Services.AddScoped<IDeleveryService, DeleveryService>();
 
@@ -41,7 +41,7 @@ var emailConfig = builder.Configuration
         .Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-
+//-------------------------------------END SERVICES------------------------------------------------//
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
 {

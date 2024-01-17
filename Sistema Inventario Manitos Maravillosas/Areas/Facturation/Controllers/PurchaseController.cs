@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
@@ -40,21 +41,43 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         // GET: FacturationController
         public ActionResult Index()
         {
-            List<Client> clients = _clientService.GetAll();
+            Bill b = _billHandler.GetBill();
+            b.listClients = _clientService.GetAll();
             var sessionData = HttpContext.Session.GetString("Bill");
-            if (!string.IsNullOrEmpty(sessionData))
+            ViewData["isBill"] = true;
+            if (b.Client != null)
             {
-                ViewData["isBill"] = true;
-                Bill b = _billHandler.GetBill();
-                ViewData["bill"] = b;
-                if (b.Client != null)
+                ViewData["isClient"] = true;
+            }
+            //typeDelivery
+            List<TypeDelivery> typeDeliverries = _typeDeliveryService.GetAll();
+            // Creating a list of SelectListItem
+            var selectTypeDeliveriesList = new List<SelectListItem>();
+            foreach (var item in typeDeliverries)
+            {
+                selectTypeDeliveriesList.Add(new SelectListItem
                 {
-
-                    ViewData["isClient"] = true;
-                }
+                    Value = item.Id.ToString(),
+                    Text = item.Name
+                });
             }
 
-            return View(clients);
+            //Compnies trans
+            List<CompanyTrans> companies = _deleveryService.GetAllCompanies();
+            // Creating a list of SelectListItem
+            var selectCompaniesList = new List<SelectListItem>();
+            foreach (var item in companies)
+            {
+                selectCompaniesList.Add(new SelectListItem
+                {
+                    Value = item.IdCompanyTrans.ToString(),
+                    Text = item.Name
+                });
+            }
+            ViewBag.CompanyTrans = selectCompaniesList;
+            ViewBag.TypeDelivery = selectTypeDeliveriesList;
+
+            return View(b);
         }
         //-------------------------------------------------------------------------------------//
         //                           Product                                                  //
@@ -192,10 +215,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         //-------------------------------------------------------------------------------------//
 
         [HttpPost]
-        public void AssingClientToBill(string id)
+        public IActionResult AssingClientToBill(string id)
         {
             _billHandler.updateClientBill(id);
-
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -237,6 +260,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         {
             List<CompanyTrans> companies = _deleveryService.GetAllCompanies();
             return Json(companies);
+        }
+
+        [HttpPost]
+        public IActionResult AssingDeliveryToBill(Bill bill)
+        {
+            _billHandler.UpdateDeliveryBill(bill.deliveryFlag, bill.delivery);
+            return RedirectToAction("Index");
         }
 
         //-------------------------------------------------------------------------------------//

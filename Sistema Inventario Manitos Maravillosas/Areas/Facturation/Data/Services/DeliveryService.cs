@@ -14,6 +14,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
 
         List<CompanyTrans> GetAllCompanies();
 
+        List<string> GetAllCompaniesString();
+
 
     }
     public class DeleveryService : IDeleveryService
@@ -74,7 +76,48 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
             }
 
             return companies;
-        }   
+        }
+        public List<string> GetAllCompaniesString()
+        {
+            List<string> companies = new List<string>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spGetCompanyTrans", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        connection.Open();
+
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+                            if (!dataReader.HasRows)
+                            {
+                                // Handle the case when no data is returned
+                                // You might want to log this or handle it according to your application's logic
+                                return null; // Return the empty list
+                            }
+
+                            while (dataReader.Read())
+                            {
+                               companies.Add(dataReader["name"].ToString());
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here
+                // Handle the exception as per your application's policy
+                companies.Clear(); // This will return an empty list in case of an error.
+            }
+
+            return companies;
+        }
         public OperationResult Add(ProductFacturation newProduct)
         {
             throw new NotImplementedException();

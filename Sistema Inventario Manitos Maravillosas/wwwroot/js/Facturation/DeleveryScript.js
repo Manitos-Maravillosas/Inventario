@@ -6,30 +6,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var divForDepartamental = document.getElementById('divForDepartamental');
     var dvInChargeAditionalCost = document.getElementById('dvInChargeAditionalCost');
-    if (allowDeleverySwitch != null) {
 
+    var inputDateAprox = document.getElementById('inputDateAprox');
+    var inputInternalCost = document.getElementById('inputInternalCost');
 
-        
+    if (allowDeleverySwitch != null) {        
         allowDeleverySwitch.addEventListener('change', function () {
            
 
             if (allowDeleverySwitch.checked) {
-                typeDeliverySelect.disabled = false;
-
-                // Llamando directamente a GetTypeDeliveries
-                GetTypeDeliveries().then(jsonData => {
-                    // Limpiar opciones existentes
-                    typeDeliverySelect.innerHTML = '<option disabled>Seleccione un método de Envío</option>';
-
-                    if (jsonData.length > 0) {
-                        jsonData.forEach(function (deliveryType) {
-                            var option = new Option(deliveryType.name, deliveryType.id);
-                            typeDeliverySelect.add(option);
-                        });
-                    }
-                }).catch(error => {
-                    console.error('Error:', error);
-                });
+                typeDeliverySelect.disabled = false;  
+                inputDateAprox.disabled = false;
+                inputInternalCost.disabled = false;
+                
             } else {
                 restartDeleveryOff()
             }
@@ -40,25 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         typeDeliverySelect.addEventListener('change', function () {
 
             if (this.value == '2') {
-                GetCompanyTrans().then(jsonData => {
-                    //load companyTrans                    
-                    companyTransSelect.innerHTML = '<option disabled>Seleccione una Compañia de Transporte</option>';
-
-                    if (jsonData.length > 0) {
-                        jsonData.forEach(function (companyTrans) {
-                            console.log(companyTrans);
-                            var option = new Option(companyTrans.name, companyTrans.idCompanyTrans);
-                            companyTransSelect.add(option);
-                        });
-                    }
-
-
-                }).catch(error => {
-                    console.error('Error:', error);
-                });
-
                 divForDepartamental.classList.remove('d-none');
-
             } else {
                 divForDepartamental.classList.add('d-none');
             }
@@ -67,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (companyTransSelect != null) {
         companyTransSelect.addEventListener('change', function () {
-            console.log(this.value);
             if (this.value == '2') {
                 dvInChargeAditionalCost.classList.remove('d-none');
             }else {
@@ -77,12 +47,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
 
-    function restartDeleveryOff(){
+    function restartDeleveryOff() {
         allowDeleverySwitch.checked = false;
         typeDeliverySelect.disabled = true;
-        typeDeliverySelect.innerHTML = '<option disabled selected>Seleccione un método de Envío</option>';
+        inputDateAprox.disabled = true;
+        inputInternalCost.disabled = true;
         divForDepartamental.classList.add('d-none');
     }
+
+    //Reload page
+    if (allowDeleverySwitch.checked) {
+        typeDeliverySelect.disabled = false;
+        inputDateAprox.disabled = false;
+        inputInternalCost.disabled = false;
+
+    }
+
+
+    if (typeDeliverySelect.value == '2') {
+        divForDepartamental.classList.remove('d-none');
+
+    } else {
+        divForDepartamental.classList.add('d-none');
+    }
+
+    if (companyTransSelect.value == '2') {
+        dvInChargeAditionalCost.classList.remove('d-none');
+    } else {
+        dvInChargeAditionalCost.classList.add('d-none');
+    }
+
+    var radios = document.querySelectorAll('input[type="radio"][name="radioCharge"]');
+
+    radios.forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            console.log('radio changed');
+            console.log('radio.value:', radio.value);
+            radio.setAttribute('checked', true);
+            radios.forEach(function (otherRadio) {
+                if (otherRadio !== radio) {
+                    otherRadio.setAttribute('checked', false);
+                    otherRadio.checked = false;
+                }
+            });
+        });
+    });
 
  });
 

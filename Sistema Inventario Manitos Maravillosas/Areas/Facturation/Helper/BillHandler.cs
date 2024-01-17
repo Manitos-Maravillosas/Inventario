@@ -131,11 +131,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
         {
             //Update bill
             bill.SubTotal = bill.CartXProducts.Sum(x => x.SubTotal);
-            bill.TotalDelivery = 0;
             bill.amountDiscount = 0;
-            bill.TotalCost = bill.SubTotal - (bill.SubTotal * (bill.PercentDiscount / 100));
+            bill.TotalCost = bill.SubTotal + (bill.delivery.Total) - (bill.SubTotal * (bill.PercentDiscount / 100));
             SaveBill();
         }
+        //-------------------------------------------------------------------------------------//
+        //                           Client Handler                                               //
+        //-------------------------------------------------------------------------------------//
 
         public void updateClientBill(string id)
         {
@@ -146,6 +148,33 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
             updatePriceBill();
             SaveBill();
         }
+
+        //-------------------------------------------------------------------------------------//
+        //                           DElivery Handler                                               //
+        //-------------------------------------------------------------------------------------//
+        public void UpdateDeliveryBill(bool flag,Delivery delivery)
+        {
+            if (bill == null)
+                bill = GetBill();
+
+            bill.deliveryFlag = flag;
+            if (flag)
+            {
+                bill.delivery = delivery;
+                bill.delivery.Total = bill.delivery.InternalCost + bill.delivery.deliveryxCompanyTrans.AditionalCompanyCost; //update total delivery
+                updatePriceBill();
+            }
+            else
+            {
+                bill.delivery = new Delivery();
+                updatePriceBill();
+            }
+            SaveBill();
+        }
+        //-------------------------------------------------------------------------------------//
+        //                           Money Handler                                                //
+        //-------------------------------------------------------------------------------------//
+
 
         //optionMoney 1 = NIC -> USD
 
@@ -178,6 +207,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
             }
             SaveBill();
         }
+
+        //-------------------------------------------------------------------------------------//
+        //                           Session Handler                                             //
+        //-------------------------------------------------------------------------------------//
 
         public Bill GetBill()
         {
