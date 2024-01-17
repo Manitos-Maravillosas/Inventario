@@ -1,6 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
+using Sistema_Inventario_Manitos_Maravillosas.Models;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
 {
@@ -8,15 +15,21 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
     public class PurchaseProviderController : Controller
     {
         private readonly IPurchaseProviderService _PurchaseProviderService;
-        public PurchaseProviderController(IPurchaseProviderService purchaseProviderService)
+        private readonly IProductService _ProductService;
+        private readonly IProductCategoryService _productCategoryService;
+        private readonly IBusinessService _businessService;
+        public PurchaseProviderController(IPurchaseProviderService purchaseProviderService, IProductService productService, IProductCategoryService productCategoryService, IBusinessService businessService)
         {
             _PurchaseProviderService = purchaseProviderService;
+            _ProductService = productService;
+            _productCategoryService = productCategoryService;
+            _businessService = businessService;
         }
         // GET: PurchaseProviderController
         public ActionResult Index()
         {
             var purchases = _PurchaseProviderService.GetAll();
-
+            
             return View(purchases);
         }
 
@@ -29,7 +42,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
         // GET: PurchaseProviderController/Create
         public ActionResult Create()
         {
-            return View();
+            PurchaseProvider purchaseProvider = new PurchaseProvider(); 
+            purchaseProvider.Products = _ProductService.GetAll();
+
+            return View(purchaseProvider);
         }
 
         // POST: PurchaseProviderController/Create

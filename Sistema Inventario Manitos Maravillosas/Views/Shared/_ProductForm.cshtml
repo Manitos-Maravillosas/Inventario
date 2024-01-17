@@ -1,6 +1,7 @@
 ﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models.Product
 @{
     var action = ViewData["Action"] as string;
+    var controllerCall = ViewData["Controller"] as string;
 }
 
 <div class="card">
@@ -9,12 +10,12 @@
             <span> <i class="bi bi-arrow-left-short"></i></span>
         </button>
     </div>
-</div>
+</div>         
 
-<div class="card">
+<div class="card">                                
     <div class="card-body">
 
-        <form id="productForm" asp-controller="Product" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+        <form id="productForm" asp-controller="@(controllerCall)" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
             @Html.AntiForgeryToken()
             <!-- Fila 1: Identificación, Nombre -->
             <div class="row mb-3">
