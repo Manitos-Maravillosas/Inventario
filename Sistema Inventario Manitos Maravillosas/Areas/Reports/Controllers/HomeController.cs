@@ -32,6 +32,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             if (ModelState.IsValid)
             {
                 //TODO: Generate report
+                return RedirectToAction("ExportReport", reportsView);
 
             }
             return RedirectToAction("Index");
@@ -57,7 +58,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
 
         // PDF Generation
 
-        public Document GeneratePDFLayout(string reportType, MemoryStream stream)
+        public Document GeneratePDFLayout(string reportType, MemoryStream stream, DateTime startDate, DateTime endDate)
         {
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(stream));
             Document doc = new Document(pdfDoc);
@@ -75,6 +76,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             doc.Add(new Paragraph(reportType)
                             .AddStyle(boldStyle)
                             .SetTextAlignment(TextAlignment.CENTER));
+            doc.Add(new Paragraph(
+                $"Fecha de inicio: {startDate.ToString("dd/MM/yyyy")}\n" +
+                $"Fecha de fin: {endDate.ToString("dd/MM/yyyy")}\n" +
+                $"Fecha de generación: {DateTime.Now.ToString("dd/MM/yyyy")}")
+                .AddStyle(boldStyle)
+                .SetTextAlignment(TextAlignment.CENTER));
 
             return doc;
         }
@@ -83,23 +90,29 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
         {
             // Memory stream to store the PDF
             MemoryStream stream;
+            string fileName = "";
             // switch to check for type of report
             switch (reportsView.ReportType)
             {
                 case "totalSales":
                     stream = ExportTotalSalesPDF(reportsView);
+                    fileName = "ReporteVentasTotales.pdf";
                     break;
                 case "totalPurchases":
                     stream = ExportTotalPurchasesPDF(reportsView);
+                    fileName = "ReporteComprasTotales.pdf";
                     break;
                 case "byProduct":
                     stream = ExportTotalProductsPDF(reportsView);
+                    fileName = "ReportePorProductos.pdf";
                     break;
                 case "byCategory":
                     stream = ExportTotalCategoriesPDF(reportsView);
+                    fileName = "ReportePorCategorias.pdf";
                     break;
                 case "byBusiness":
                     stream = ExportTotalBusinessPDF(reportsView);
+                    fileName = "ReportePorNegocios.pdf";
                     break;
                 default:
                     stream = null;
@@ -108,7 +121,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
 
             // Return the file
             var content = stream.ToArray();
-            return File(content, "application/pdf", "Reporte.pdf");
+            return Content($"<script>window.open('data:application/pdf;base64,{Convert.ToBase64String(content)}');</script>", "text/html");
         }
 
         private MemoryStream ExportTotalSalesPDF(ReportsViewModel reportsView)
@@ -117,10 +130,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             MemoryStream stream = new MemoryStream();
 
             // Generate the PDF layout
-            Document doc = GeneratePDFLayout("Reporte de ventas", stream);
+            Document doc = GeneratePDFLayout("Reporte de ventas totales", stream, reportsView.StartDate, reportsView.EndDate);
 
             // Add the table
-            Table table = new Table(7, false);
+            Table table = new Table(8, false);
             table.SetWidth(UnitValue.CreatePercentValue(100));
 
             // Add the headers
@@ -137,7 +150,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             foreach (TotalSalesModel sale in _reportsService.GetTotalSales(reportsView.StartDate, reportsView.EndDate))
             {
                 table.AddCell(sale.IdBill.ToString());
-                table.AddCell(sale.Date.ToString());
+                table.AddCell(sale.Date.ToString(("dd/MM/yyyy")));
                 table.AddCell(sale.PercentDiscount.ToString());
                 table.AddCell(sale.SubTotal.ToString());
                 table.AddCell(sale.TotalCost.ToString());

@@ -51,7 +51,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Data.Services
                             {
                                 IdBill = Convert.ToInt32(dataReader["idBill"]),
                                 Date = Convert.ToDateTime(dataReader["date"]),
-                                PercentDiscount = Convert.ToSingle(dataReader["percentDiscount"]),
+                                PercentDiscount = Convert.ToSingle(dataReader["percentDicount"]),
                                 SubTotal = Convert.ToSingle(dataReader["subTotal"]),
                                 TotalCost = Convert.ToSingle(dataReader["totalCost"]),
                                 EmployeeName = Convert.ToString(dataReader["employeeName"]),
