@@ -147,7 +147,7 @@
                
             </div>
 
-            <div class="accordion-item">
+   @*          <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                         Resumen de Envío
@@ -176,7 +176,7 @@
                         }
                     </div>
                 </div>
-            </div>
+            </div> *@
 
         </div>
     </div>
@@ -188,8 +188,11 @@
             <h4>Gestión de Cobro</h4>
             <div class="d-flex justify-content-between">
                 <div>
-                    <button type="button" class="btn btn-warning">Limpiar Datos   <i class="bi bi-stars"></i></button>
-                    <button type="button" class="btn btn-outline-secondary">Dejar Pendiente  <i class="bi bi-file-earmark-bar-graph-fill"></i></button>
+                    <form asp-controller="Purchase" asp-action="ClearData" method="post">
+                        <button type="submit" class="btn btn-warning">Limpiar Datos   <i class="bi bi-stars"></i></button>
+</form>
+                    
+                    @* <button type="button" class="btn btn-outline-secondary">Dejar Pendiente  <i class="bi bi-file-earmark-bar-graph-fill"></i></button> *@
                 </div>
                 <div class="fw-bold fs-4">
                     @* Total a Cobrar:  <span id="totalCostBill">@(isBill ? bill.TotalCost : "0")</span> <span class="addonMoney">$</span> *@

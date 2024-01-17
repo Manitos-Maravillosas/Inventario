@@ -211,6 +211,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
         //-------------------------------------------------------------------------------------//
         //                           Session Handler                                             //
         //-------------------------------------------------------------------------------------//
+        public void ClearData()
+        {
+            bill = new Bill();
+            var sessionData = JsonConvert.SerializeObject(bill);
+            _httpContextAccessor.HttpContext.Session.SetString("Bill", sessionData);
+
+        }
 
         public Bill GetBill()
         {

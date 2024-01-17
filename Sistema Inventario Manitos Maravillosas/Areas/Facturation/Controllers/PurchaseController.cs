@@ -269,6 +269,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult ClearData()
+        {
+            _billHandler.ClearData();
+            return RedirectToAction("Index");
+        }
+
+
         //-------------------------------------------------------------------------------------//
         //                           Money                                                  //
         //-------------------------------------------------------------------------------------//
