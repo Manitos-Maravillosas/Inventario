@@ -1,6 +1,11 @@
 ﻿@using Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models
 @model Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models.PurchaseProvider
 
+<div id="productInfo" style="display:none;">
+    <div id="selectedProductId" data-product-id=""></div>
+    <div id="selectedProductName" data-product-name=""></div>
+</div>
+
 <section>
     <h3 style="margin-bottom: 2rem;">Agregar Compra Inventario</h3>
     <div class="card">
@@ -22,6 +27,7 @@
                                         <label class="fw-bold">Producto:</label>
                                         <div class="row">
                                             <input type="text" id="productNameInput" class="form-control" disabled value="No se ha asignado un producto" style="background-color: transparent;">
+                                            <input type="hidden" asp-for="ProductName" id="hiddenProductName">
                                         </div>
                                     </div>
                                 </div>
@@ -164,4 +170,37 @@
         }
     </script>
 
+    @if (ViewData["Success"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: "Perfecto!",
+                    text: "@ViewData["Success"]",
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Supplier/PurchaseProvider/Index';
+                    }
+                });
+            });
+        </script>
+
+        ViewData["Success"] = null;
+    }
+
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Error',
+                    text: '@ViewData["ErrorMessage"]',
+                    icon: 'error'
+                });
+            });
+        </script>
+
+        ViewData["ErrorMessage"] = null;
+    }
 }

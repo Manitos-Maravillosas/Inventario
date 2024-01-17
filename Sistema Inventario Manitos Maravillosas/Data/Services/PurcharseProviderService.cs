@@ -11,7 +11,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
     public interface IPurchaseProviderService
     {
         List<PurchaseProvider> GetAll();
-        OperationResult Add(Provider newProvider);        
+        OperationResult Add(PurchaseProvider newPurchaseProvider);        
     }
 
     public class PurchaseProviderService : IPurchaseProviderService
@@ -48,9 +48,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                             new SqlParameter("@cant", DBNull.Value),
                             new SqlParameter("@cost", DBNull.Value),
                             new SqlParameter("@total", DBNull.Value),
-                            new SqlParameter("@idProduct", DBNull.Value),
-                            new SqlParameter("@idProvider", DBNull.Value),
-                            new SqlParameter("@idBusiness", DBNull.Value),
+                            new SqlParameter("@productName", DBNull.Value),
+                            new SqlParameter("@providerName", DBNull.Value),
+                            new SqlParameter("@businessName", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -91,7 +91,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         //------------------------------------------------------------------------------------
         //                              Add                                             
         //------------------------------------------------------------------------------------
-        public OperationResult Add(Provider newProvider)
+        public OperationResult Add(PurchaseProvider newPurchaseProvider)
         {
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
@@ -99,20 +99,25 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("spProviderCRUD", connection))
+                    using (SqlCommand command = new SqlCommand("spPurchaseInventoryCRUD", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.Add(new SqlParameter("@idProvider", newProvider.Id != 0 ? (object)newProvider.Id : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newProvider.Name) ? DBNull.Value : newProvider.Name));
-                        command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(newProvider.PhoneNumber) ? DBNull.Value : newProvider.PhoneNumber));
-                        command.Parameters.Add(new SqlParameter("@description", string.IsNullOrEmpty(newProvider.Description) ? DBNull.Value : newProvider.Description));
+                        command.Parameters.Add(new SqlParameter("@idPurchaseInventory", newPurchaseProvider.Id != 0 ? (object)newPurchaseProvider.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@date", newPurchaseProvider.Date != null ? (object)newPurchaseProvider.Date : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@cant", newPurchaseProvider.Cant != null ? (object)newPurchaseProvider.Cant : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@cost", newPurchaseProvider.Cost != null ? (object)newPurchaseProvider.Cost : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@total", newPurchaseProvider.Total != null ? (object)newPurchaseProvider.Total : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@productName", string.IsNullOrEmpty(newPurchaseProvider.ProductName) ? DBNull.Value : newPurchaseProvider.ProductName));
+                        command.Parameters.Add(new SqlParameter("@providerName", string.IsNullOrEmpty(newPurchaseProvider.ProviderName) ? DBNull.Value : newPurchaseProvider.ProviderName));
+                        command.Parameters.Add(new SqlParameter("@businessName", string.IsNullOrEmpty(newPurchaseProvider.BusinessName) ? DBNull.Value : newPurchaseProvider.BusinessName));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
                         connection.Open();
                         command.ExecuteNonQuery();
                         connection.Close();
                     }
+
                 }
             }
             catch (SqlException sqlEx)

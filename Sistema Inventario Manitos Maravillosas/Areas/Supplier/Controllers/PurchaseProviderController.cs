@@ -58,16 +58,21 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
         // POST: PurchaseProviderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(PurchaseProvider purchaseProvider)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                OperationResult result = _PurchaseProviderService.Add(purchaseProvider);
+                if (!result.Success)
+                {
+                    ViewData["ErrorMessage"] = result.Message;
+                }
+                ViewData["Success"] = "Compra a Inventario agregada correctamente!";
+
             }
-            catch
-            {
-                return View();
-            }
+            ViewBag.BusinessNames = new SelectList(_businessService.GetBusinessNames());
+            ViewBag.ProviderNames = new SelectList(_ProviderService.GetProviderNames());
+            return View(purchaseProvider);
         }
 
         // GET: PurchaseProviderController/Edit/5
