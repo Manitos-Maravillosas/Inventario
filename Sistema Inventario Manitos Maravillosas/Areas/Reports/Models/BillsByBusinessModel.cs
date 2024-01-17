@@ -1,6 +1,6 @@
 ﻿namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Models
 {
-    public class TotalSalesModel
+    public class BillsByBusinessModel
     {
         public int IdBill { get; set; }
         public DateTime Date { get; set; }
