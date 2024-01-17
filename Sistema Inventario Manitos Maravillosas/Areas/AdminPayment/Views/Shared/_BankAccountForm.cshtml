@@ -4,13 +4,6 @@
 
 }
 
-<div class="card">
-    <div class="card-body">
-        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "BankAccount", new { area = "Admin" })'">
-            <span> <i class="bi bi-arrow-left-short"></i></span>
-        </button>
-    </div>
-</div>
 
 <div class="card">
     <div class="card-body">
@@ -27,35 +20,35 @@
                         <span asp-validation-for="AccountNumber" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label asp-for="BankName" class="control-label mb-2">Banco</label>
+                        <label asp-for="IdBank" class="control-label mb-2">Banco</label>
                         <div class="select-wrapper">
-                            <select asp-for="BankName" class="form-control" asp-items="ViewBag.BankSelect">
-                                <option value="">Seleccione un Banco</option>
+                            <select asp-for="IdBank" class="form-control" asp-items="ViewBag.BankSelect">
+                                <option disabled selected>Seleccione un Banco</option>
                             </select>
                         </div>
-                        <span asp-validation-for="CoinDescription" class="text-danger"></span>
+                        <span asp-validation-for="IdBank" class="text-danger"></span>
                     </div>
                 </div>
 
                 <!-- Fila 2: Moneda, Tipo de Pago -->
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label asp-for="CoinDescription" class="control-label mb-2">Moneda</label>
+                        <label asp-for="IdCoin" class="control-label mb-2">Moneda</label>
                         <div class="select-wrapper">
-                            <select asp-for="CoinDescription" class="form-control" asp-items="ViewBag.CoinSelect">
-                                <option value="">Seleccione una moneda</option>
+                            <select asp-for="IdCoin" class="form-control" asp-items="ViewBag.CoinSelect">
+                                <option disabled selected>Seleccione una moneda</option>
                             </select>
                         </div>
-                        <span asp-validation-for="CoinDescription" class="text-danger"></span>
+                        <span asp-validation-for="IdCoin" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label asp-for="TypePaymentName" class="control-label mb-2">Tipo de Pago</label>
+                        <label asp-for="IdTypePayment" class="control-label mb-2">Tipo de Pago</label>
                         <div class="select-wrapper">
-                            <select asp-for="TypePaymentName" class="form-control" asp-items="ViewBag.TypePaymentSelect">
-                                <option value="">Seleccione un tipo de Pago</option>
+                            <select asp-for="IdTypePayment" class="form-control" asp-items="ViewBag.TypePaymentSelect">
+                                <option disabled selected>Seleccione un tipo de Pago</option>
                             </select>
                         </div>
-                        <span asp-validation-for="TypePaymentName" class="text-danger"></span>
+                        <span asp-validation-for="IdTypePayment" class="text-danger"></span>
                     </div>
                 </div>
             }
@@ -79,35 +72,35 @@
                 <!-- Fila 2: Banco y Descripción Moneda -->
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label asp-for="BankName" class="control-label mb-2">Banco</label>
+                        <label asp-for="IdBank" class="control-label mb-2">Banco</label>
                         <div class="select-wrapper">
-                            <select asp-for="BankName" class="form-control" asp-items="ViewBag.BankNames">
-                                <option value="">Seleccione un Banco</option>
+                            <select asp-for="IdBank" class="form-control" asp-items="ViewBag.BankSelect">
+                                <option disabled selected>Seleccione un Banco</option>
                             </select>
                         </div>
-                        <span asp-validation-for="CoinDescription" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="CoinDescription" class="control-label mb-2">Moneda</label>
-                        <div class="select-wrapper">
-                            <select asp-for="CoinDescription" class="form-control" asp-items="ViewBag.CoinDescriptions">
-                                <option value="">Seleccione una moneda</option>
-                            </select>
-                        </div>
-                        <span asp-validation-for="CoinDescription" class="text-danger"></span>
+                        <span asp-validation-for="IdBank" class="text-danger"></span>
                     </div>
                 </div>
 
-                <!-- Fila 2: Tipo de Pago -->
+                <!-- Fila 2: Moneda, Tipo de Pago -->
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label asp-for="TypePaymentName" class="control-label mb-2">Tipo de Pago</label>
+                        <label asp-for="IdCoin" class="control-label mb-2">Moneda</label>
                         <div class="select-wrapper">
-                            <select asp-for="TypePaymentName" class="form-control" asp-items="ViewBag.TypePaymentNames">
-                                <option value="">Seleccione un tipo de Pago</option>
+                            <select asp-for="IdCoin" class="form-control" asp-items="ViewBag.CoinSelect">
+                                <option disabled selected>Seleccione una moneda</option>
                             </select>
                         </div>
-                        <span asp-validation-for="TypePaymentName" class="text-danger"></span>
+                        <span asp-validation-for="IdCoin" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="IdTypePayment" class="control-label mb-2">Tipo de Pago</label>
+                        <div class="select-wrapper">
+                            <select asp-for="IdTypePayment" class="form-control" asp-items="ViewBag.TypePaymentSelect">
+                                <option disabled selected>Seleccione un tipo de Pago</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="IdTypePayment" class="text-danger"></span>
                     </div>
                 </div>
             }           

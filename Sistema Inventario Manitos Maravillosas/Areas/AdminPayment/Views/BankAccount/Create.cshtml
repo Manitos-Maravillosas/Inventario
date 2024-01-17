@@ -7,7 +7,12 @@
     ViewData["Action"] = "Create";
 }
 <section class="container px-5 py-3">
-    <h3 style="margin-bottom: 2rem;">Agregar Cuenta de Banco</h3>
+    <div class="d-flex justify-content-between mb-2 align-items-center">
+        <h3 class="m-0">Agregar Cuenta de Banco</h3>
+        <a class="fs-1 px-1" asp-area="AdminPayment" asp-controller="BankAccount" asp-action="Index">
+            <i class="bi bi-arrow-left-short"></i>
+        </a>
+    </div>
 
     <partial name="_BankAccountForm" model="Model" view-data="ViewData">
 

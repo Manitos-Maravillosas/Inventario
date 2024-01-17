@@ -18,12 +18,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
     {
         private readonly IBankAccountService _BankAccountService;
         private readonly ICoinService _CoinService;
-        private readonly ITypePaymentService _TypePaymentService;
+        private readonly ITypePaymentService _typePaymentService;
         public BankAccountController(IBankAccountService bankAccountService, ICoinService coinService, ITypePaymentService typePaymentService)
         {
             _BankAccountService = bankAccountService;
             _CoinService = coinService;
-            _TypePaymentService = typePaymentService;
+            _typePaymentService = typePaymentService;
         }
         // GET: BankAccountController
         public ActionResult Index()
@@ -42,45 +42,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
         // GET: BankAccountController/Create
         public ActionResult Create()
         {
-            // Creating a list of coin SelectListItem
-            List<Coin> coins = _CoinService.GetALlCoins();
-            var selectCoin = new List<SelectListItem>();
-            foreach (var item in coins)
-            {
-                selectCoin.Add(new SelectListItem
-                {
-                    Value = item.IdCoin.ToString(),
-                    Text = item.Name
-                });
-            }
-            ViewBag.CoinSelect =selectCoin;
-
-
-            // Creating a list of typePayment SelectListItem
-            List<TypePayment> typePayment= _TypePaymentService.GetAllTypePayments();
-            var selectTypePayment = new List<SelectListItem>();
-            foreach (var item in typePayment)
-            {
-                selectTypePayment.Add(new SelectListItem
-                {
-                    Value = item.IdTypePayment.ToString(),
-                    Text = item.Name
-                });
-            }
-            ViewBag.TypePaymentSelect = selectTypePayment;
-
-            // Creating a list of bank SelectListItem
-            List<Bank> banks = _BankAccountService.GetAllBanks();
-            var selectBank = new List<SelectListItem>();
-            foreach (var item in banks)
-            {
-                selectBank.Add(new SelectListItem
-                {
-                    Value = item.IdBank.ToString(),
-                    Text = item.Name
-                });
-            }
-            ViewBag.BankSelect = selectBank;
+            LoadSelect();
             return View();
         }
 
@@ -91,17 +53,24 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
         {
             if (ModelState.IsValid)
             {
-                OperationResult result = _BankAccountService.Add(bankAccount);
-                if (!result.Success)
+                bankAccount.idTypePaymentxCoin = _typePaymentService.GetIdTypePaymentxCoin(bankAccount.IdTypePayment, bankAccount.IdCoin);
+                if (bankAccount.idTypePaymentxCoin != 0)
                 {
-                    ViewData["ErrorMessage"] = result.Message;
+                    OperationResult result = _BankAccountService.Add(bankAccount);
+                    if (!result.Success)
+                    {
+                        ViewData["ErrorMessage"] = result.Message;
+                    }
+                    ViewData["Success"] = "Cuenta de Banco agregada correctamente!";
                 }
-                ViewData["Success"] = "Cuenta de Banco agregada correctamente!";
+                else
+                {
+                    ViewData["ErrorMessage"] = "No se puede agregar la cuenta de banco, ya que no existe un tipo de pago para la moneda seleccionada.";
+                }
+               
 
             }
-            ViewBag.CoinDescriptions = new SelectList(_CoinService.GetCoinDescriptions());
-            ViewBag.TypePaymentNames = new SelectList(_TypePaymentService.GetTypePayments());
-            ViewBag.BankNames = new SelectList(_BankAccountService.GetBankNames());
+            LoadSelect();
             return View(bankAccount);
         }
 
@@ -113,9 +82,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
             {
                 return NotFound();
             }
-            ViewBag.CoinDescriptions = new SelectList(_CoinService.GetCoinDescriptions());
-            ViewBag.TypePaymentNames = new SelectList(_TypePaymentService.GetTypePayments());
-            ViewBag.BankNames = new SelectList(_BankAccountService.GetBankNames());
+            LoadSelect();
             return View(bankAccount);
         }
 
@@ -159,6 +126,49 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
             }
             var bankAccounts = _BankAccountService.GetAll();
             return View("Index", bankAccounts);
+        }
+
+        public void LoadSelect()
+        {
+            // Creating a list of coin SelectListItem
+            List<Coin> coins = _CoinService.GetALlCoins();
+            var selectCoin = new List<SelectListItem>();
+            foreach (var item in coins)
+            {
+                selectCoin.Add(new SelectListItem
+                {
+                    Value = item.IdCoin.ToString(),
+                    Text = item.Name
+                });
+            }
+            ViewBag.CoinSelect = selectCoin;
+
+
+            // Creating a list of typePayment SelectListItem
+            List<TypePayment> typePayment = _typePaymentService.GetAllTypePayments();
+            var selectTypePayment = new List<SelectListItem>();
+            foreach (var item in typePayment)
+            {
+                selectTypePayment.Add(new SelectListItem
+                {
+                    Value = item.IdTypePayment.ToString(),
+                    Text = item.Name
+                });
+            }
+            ViewBag.TypePaymentSelect = selectTypePayment;
+
+            // Creating a list of bank SelectListItem
+            List<Bank> banks = _BankAccountService.GetAllBanks();
+            var selectBank = new List<SelectListItem>();
+            foreach (var item in banks)
+            {
+                selectBank.Add(new SelectListItem
+                {
+                    Value = item.IdBank.ToString(),
+                    Text = item.Name
+                });
+            }
+            ViewBag.BankSelect = selectBank;
         }
     }
 }

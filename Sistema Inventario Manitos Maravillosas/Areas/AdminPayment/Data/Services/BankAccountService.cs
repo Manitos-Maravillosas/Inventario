@@ -51,7 +51,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                         {
                             new SqlParameter("@idBankAccount", DBNull.Value),
                             new SqlParameter("@accountNumber", DBNull.Value),
-                            new SqlParameter("@bankName", DBNull.Value),
+                            new SqlParameter("@idBank", DBNull.Value),
                             new SqlParameter("@idtypePaymentxCoin", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
@@ -108,9 +108,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                         {
                             new SqlParameter("@idBankAccount", id),
                             new SqlParameter("@accountNumber", DBNull.Value),
-                            new SqlParameter("@bankName", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
-                            new SqlParameter("@typePaymentName", DBNull.Value),
+                            new SqlParameter("@idBank", DBNull.Value),
+                            new SqlParameter("@idtypePaymentxCoin", DBNull.Value),
                             new SqlParameter("@operation", '4')
                         };
 
@@ -199,11 +198,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.Add(new SqlParameter("@idBankAccount", newBankAccount.Id != 0 ? newBankAccount.Id : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@accountNumber", string.IsNullOrEmpty(newBankAccount.AccountNumber) ? DBNull.Value : newBankAccount.AccountNumber));
-                        command.Parameters.Add(new SqlParameter("@bankName", string.IsNullOrEmpty(newBankAccount.BankName) ? DBNull.Value : newBankAccount.BankName));
-                        command.Parameters.Add(new SqlParameter("@typePaymentName", string.IsNullOrEmpty(newBankAccount.TypePaymentName) ? DBNull.Value : newBankAccount.TypePaymentName));
-                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newBankAccount.CoinDescription) ? DBNull.Value : newBankAccount.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@idBankAccount",  DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@accountNumber", newBankAccount.AccountNumber));
+                        command.Parameters.Add(new SqlParameter("@idBank", newBankAccount.IdBank));
+                        command.Parameters.Add(new SqlParameter("@idtypePaymentxCoin", newBankAccount.idTypePaymentxCoin));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
                         connection.Open();
@@ -252,10 +250,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                         var parameters = new SqlParameter[]
                         {
                             new SqlParameter("@idBankAccount", id),
-                            new SqlParameter("@accountNumber", DBNull.Value),
-                            new SqlParameter("@bankName", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
-                            new SqlParameter("@typePaymentName", DBNull.Value),
+                           new SqlParameter("@accountNumber", DBNull.Value),
+                            new SqlParameter("@idBank", DBNull.Value),
+                            new SqlParameter("@idtypePaymentxCoin", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -274,7 +271,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                                     IdBank = Convert.ToInt32(dataReader["idBank"]),
                                     BankName = dataReader["bankName"].ToString(),
                                     IdCoin = Convert.ToInt32(dataReader["idCoin"]),
-                                    CoinName = Convert.ToInt32(dataReader["coinName"]),
+                                    CoinName = dataReader["coinName"].ToString(),
                                     CoinDescription = dataReader["coinDescription"].ToString(),
                                     idTypePaymentxCoin = Convert.ToInt32(dataReader["idtypePaymentxCoin"]),
                                     IdTypePayment = Convert.ToInt32(dataReader["idTypePayment"]),
@@ -310,10 +307,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                         command.CommandType = CommandType.StoredProcedure;
 
                         command.Parameters.Add(new SqlParameter("@idBankAccount", newBankAccount.Id != 0 ? newBankAccount.Id : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@accountNumber", string.IsNullOrEmpty(newBankAccount.AccountNumber) ? DBNull.Value : newBankAccount.AccountNumber));
-                        command.Parameters.Add(new SqlParameter("@bankName", string.IsNullOrEmpty(newBankAccount.BankName) ? DBNull.Value : newBankAccount.BankName));
-                        command.Parameters.Add(new SqlParameter("@typePaymentName", string.IsNullOrEmpty(newBankAccount.TypePaymentName) ? DBNull.Value : newBankAccount.TypePaymentName));
-                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newBankAccount.CoinDescription) ? DBNull.Value : newBankAccount.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@accountNumber", newBankAccount.AccountNumber));
+                        command.Parameters.Add(new SqlParameter("@idBank", newBankAccount.IdBank));
+                        command.Parameters.Add(new SqlParameter("@idtypePaymentxCoin", newBankAccount.idTypePaymentxCoin));
                         command.Parameters.Add(new SqlParameter("@operation", 3));
 
                         connection.Open();
