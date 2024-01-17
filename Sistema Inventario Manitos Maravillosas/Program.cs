@@ -13,18 +13,27 @@ using SistemaInventario.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IClientService, ClientService>();
+//-------------------------------------SERVICES------------------------------------------------//
+// Facturation SErvices
 builder.Services.AddScoped<IProductServiceFacturation, ProductServiceFacturation>();
+builder.Services.AddScoped<IDeleveryService, DeleveryService>();
+
+//Admin Services
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IBusinessService, BusinessService>();
 builder.Services.AddScoped<ITypePaymentService, TypePaymentService>();
 builder.Services.AddScoped<ICoinService, CoinService>();
-builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
-builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 builder.Services.AddScoped<IProviderService, ProviderService>();
 builder.Services.AddScoped<ITypeDeliveryService, TypeDeliveryService>();
+
+//Inventory Services
+builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
+//Other Services
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
 builder.Services.AddScoped<BillHandler>();
 
@@ -33,7 +42,7 @@ var emailConfig = builder.Configuration
         .Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-
+//-------------------------------------END SERVICES------------------------------------------------//
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
 {

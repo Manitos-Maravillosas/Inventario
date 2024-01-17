@@ -135,13 +135,13 @@
                 <div class="d-flex flex-column align-items-start mb-3">                   
                     <label class="form-label">Departmento</label>
                     <select class="form-select my-2" id="departmentSelect" aria-label="Selector de Departamento">
-                        <option value="">Selecciona un Departamento</option>
+                        <option selected disabled>Seleccione un Departamento</option>
                     </select>
                     <span asp-validation-for="DepartmentName" class="text-danger"></span>
 
                     <label class="form-label">Municipio</label>
                     <select class="form-select my-2" asp-for="CityName" id="citySelect" aria-label="Selector de Ciudad" disabled>
-                        <option value="">Primero seleccione un Departamento</option>
+                        <option selected disabled>Primero seleccione un Departamento</option>
                     </select>
                     <span asp-validation-for="CityName" class="text-danger"></span>
                     <label class="form-label">Dirección Exacta</label>

@@ -51,7 +51,7 @@
         fetch('/Admin/Client/GetDepartmentNames')
             .then(response => response.json())
             .then(data => {
-                departmentSelect.innerHTML = '<option value="">Selecciona un Departamento</option>';
+                departmentSelect.innerHTML = '<option disabled >Seleccione un Departamento</option>';
                 data.forEach(function (department) {
                     var option = new Option(department, department);
                     departmentSelect.add(option);
@@ -72,7 +72,7 @@
         fetch('/Admin/Client/GetCitiesByDepartment?departmentName=' + encodeURIComponent(departmentName))
             .then(response => response.json())
             .then(data => {
-                citySelect.innerHTML = '<option value="">Selecciona una Ciudad</option>';
+                citySelect.innerHTML = '<option disabled>Seleccione una Ciudad</option>';
                 data.forEach(function (city) {
                     var option = new Option(city, city);
                     citySelect.add(option);
