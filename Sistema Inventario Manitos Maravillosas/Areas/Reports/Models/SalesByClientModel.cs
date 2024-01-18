@@ -2,7 +2,7 @@
 {
     public class SalesByClientModel
     {
-        public int IdClient { get; set; }
+        public string IdClient { get; set; }
         public string Name { get; set; }
         public string LastName1 { get; set; }
         public string LastName2 { get; set; }

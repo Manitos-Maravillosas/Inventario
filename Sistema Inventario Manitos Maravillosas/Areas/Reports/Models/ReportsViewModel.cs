@@ -8,10 +8,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Models
     {
         //Start Date
         [Required]
-        public DateOnly StartDate { get; set; }
+        public DateTime StartDate { get; set; }
         //End Date
         [Required]
-        public DateOnly EndDate { get; set; }
+        public DateTime EndDate { get; set; }
         //Report Type
         [Required]
         public string ReportType { get; set; }
