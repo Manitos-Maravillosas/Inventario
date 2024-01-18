@@ -16,13 +16,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
     public class ProductService : IProductService
     {
-        private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
         private OperationResult result = new OperationResult(true, "");
 
-        public ProductService(AppDbContext context, IConfiguration configuration)
+        public ProductService(IConfiguration configuration)
         {
-            _context = context;
             _configuration = configuration;
         }
 

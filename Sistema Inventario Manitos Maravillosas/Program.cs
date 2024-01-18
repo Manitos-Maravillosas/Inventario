@@ -1,11 +1,12 @@
-using DinkToPdf.Contracts;
 using DinkToPdf;
+using DinkToPdf.Contracts;
 using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Filters;
@@ -34,6 +35,9 @@ builder.Services.AddScoped<ITypeDeliveryService, TypeDeliveryService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
+// Reports Services
+builder.Services.AddScoped<IReportsService, ReportsService>();
+
 //Other Services
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
 builder.Services.AddScoped<BillHandler>();
@@ -44,6 +48,7 @@ var emailConfig = builder.Configuration
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 //-------------------------------------END SERVICES------------------------------------------------//
+
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
 {
