@@ -146,21 +146,22 @@ function sortTableByColumn(tableId, column, asc = true) {
 
     const rows = Array.from(tbody.querySelectorAll("tr"));
 
+    // Se modifica la función de comparación para manejar números correctamente
     const sortedRows = rows.sort((a, b) => {
         const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
         const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
 
-        // Intenta convertir a números para la comparación numérica
+        // Intenta convertir a números flotantes para comparación numérica
         const aColNumber = parseFloat(aColText);
         const bColNumber = parseFloat(bColText);
 
-        // Verifica si ambos valores son números
-        if (!isNaN(aColNumber) && !isNaN(bColNumber)) {
+        // Verifica si ambos valores son números y si el texto original es un número
+        if (!isNaN(aColNumber) && !isNaN(bColNumber) && aColText == aColNumber.toString() && bColText == bColNumber.toString()) {
             return (aColNumber - bColNumber) * dirModifier;
         }
 
         // De lo contrario, realiza una comparación de cadenas
-        return aColText.toLowerCase() > bColText.toLowerCase() ? (1 * dirModifier) : (-1 * dirModifier);
+        return aColText.toLowerCase().localeCompare(bColText.toLowerCase(), undefined, { numeric: true, sensitivity: 'base' }) * dirModifier;
     });
 
     while (tbody.firstChild) {
@@ -169,7 +170,10 @@ function sortTableByColumn(tableId, column, asc = true) {
 
     tbody.append(...sortedRows);
 
+    // Actualiza las clases para los iconos de ordenamiento
     table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
     table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
     table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
 }
+
+

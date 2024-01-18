@@ -41,13 +41,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                         var parameters = new SqlParameter[]
                         {
                             new SqlParameter("@idDelivery", DBNull.Value),
-                            new SqlParameter("@total", DBNull.Value),
-                            new SqlParameter("@internalCost", DBNull.Value),
-                            new SqlParameter("@notes", DBNull.Value),
-                            new SqlParameter("@dateAprox", DBNull.Value),
-                            new SqlParameter("@idAddress", DBNull.Value),
-                            new SqlParameter("@idTypeDelivery", DBNull.Value),
-                            new SqlParameter("@idBill", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -64,6 +57,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                                     Id = Convert.ToInt32(dataReader["idDelivery"]),
                                     NameTypeDelivery = dataReader["TypeDeliveryName"].ToString(),
                                     Signs = dataReader["Signs"].ToString(),
+                                    Notes = dataReader["notes"].ToString(),
                                     DateAprox = Convert.ToDateTime(dataReader["dateAprox"]).Date, // Modificado aquí
                                     Total = Convert.ToSingle(dataReader["total"]),
                                     InternalCost = Convert.ToSingle(dataReader["internalCost"]),
@@ -103,13 +97,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                         var parameters = new SqlParameter[]
                         {
                             new SqlParameter("@idDelivery", id),
-                            new SqlParameter("@total", DBNull.Value),
-                            new SqlParameter("@internalCost", DBNull.Value),
-                            new SqlParameter("@notes", DBNull.Value),
-                            new SqlParameter("@dateAprox", DBNull.Value),
-                            new SqlParameter("@idAddress", DBNull.Value),
-                            new SqlParameter("@idTypeDelivery", DBNull.Value),
-                            new SqlParameter("@idBill", DBNull.Value),
                             new SqlParameter("@operation", '3') 
                         };
 

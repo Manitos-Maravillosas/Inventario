@@ -45,9 +45,10 @@
                             <th scope="col">Identificación <i class="bi bi-sort-numeric-down sort-icon" data-column="0"></i></th>
                             <th scope="col">Tipo de Envío <i class="bi bi-sort-alpha-down sort-icon" data-column="1"></i></th>
                             <th scope="col">Dirección Exacta <i class="bi bi-sort-alpha-down sort-icon" data-column="2"></i></th>
-                            <th scope="col">Fecha Llegada Apróx. <i class="bi bi-sort-numeric-down sort-icon" data-column="3"></i></th>
-                            <th scope="col">Costo Interno <i class="bi bi-sort-numeric-down sort-icon" data-column="4"></i></th>
-                            <th scope="col">Total <i class="bi bi-sort-numeric-down sort-icon" data-column="5"></i></th>                                                       
+                            <th scope="col">Notas <i class="bi bi-sort-alpha-down sort-icon" data-column="3"></i></th>
+                            <th scope="col">Fecha Llegada Apróx. <i class="bi bi-sort-numeric-down sort-icon" data-column="4"></i></th>
+                            <th scope="col">Costo Interno <i class="bi bi-sort-numeric-down sort-icon" data-column="5"></i></th>
+                            <th scope="col">Total <i class="bi bi-sort-numeric-down sort-icon" data-column="6"></i></th>                                                       
                             <th scope="col">Completar</th>
                         </tr>
                     </thead>
@@ -61,6 +62,7 @@
                                     <td>@delivery.Id</td>
                                     <td>@delivery.NameTypeDelivery</td>
                                     <td>@delivery.Signs</td>
+                                    <td>@delivery.Notes</td>
                                     <td>@delivery.DateAprox.ToString("dd-MM-yyyy")</td>
                                     <td>@delivery.InternalCost</td>
                                     <td>@delivery.Total</td>
@@ -76,7 +78,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="7" class="text-center">No hay envíos registrados</td>
+                                <td colspan="7" class="text-center">No hay envíos pendientes registrados</td>
                             </tr>
                         }
 
