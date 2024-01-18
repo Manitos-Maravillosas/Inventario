@@ -83,7 +83,6 @@ function removeProductFromCart(id) {
         .then(tableBodyHtml => {
             // 'html' es el HTML de tu PartialView
             // Inserta este HTML en la tabla o donde necesites actualizar
-
             addRow(tableBodyHtml);
             applyEventListenersToRow();
         })
@@ -236,13 +235,14 @@ function UpdateQuanty(idProduct, quanty) {
                             text: data.message,
                             icon: 'error'
                         })
+                    } else {
+                        console.log(data.message);
                     }
                 });
             } else if (contentType && contentType.indexOf("text/html") !== -1) {
                 return response.text().then(html => {
                     // Process HTML data
                     addRow(html);
-                    noProductsVisibleFalse();
                     applyEventListenersToRow();
                 });
             } else {

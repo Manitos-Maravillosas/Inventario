@@ -1,7 +1,39 @@
-﻿
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Bill
 @{
     ViewData["Title"] = "View PDF";
 }
+<section class="secctionFixed">
+    <div class="divMoney-container">
+        <div id="optionsMoney" class="card divMoney">
+            <div class="card-body p-2">
+                <label class="form-label mb-1">Ver sistema en:</label>
+                <div class="checkbox-container w-15 mb-2" role="radiogroup" aria-labelledby="CobrarPorLabel">
+                    <div class="form-check form-check-inline radio-item  mt-0">
+                        <input id="usdRadio" type="radio" name="radioMoney" value="1" role="radio" aria-label="Opción Cliente" @(Model.optionMoney == 1 ? "checked" : "")>
+                        <label for="usdRadio">Dólar ($ USD) </label>
+                    </div>
+                    <div class="form-check form-check-inline radio-item mt-0">
+                        <input id="nicRadio" type="radio" name="radioMoney" value="2" role="radio" aria-label="Opción Manitos Maravillosas" @(Model.optionMoney == 2 ? "checked" : "")>
+                        <label for="nicRadio">Córdoba (C$ NIC)  </label>
+                    </div>
+
+                </div>
+                <label class="form-label mb-1">Cambio del dólar:</label>
+                <div class="input-group mb-3 d-flex align-items-center">
+                    <span class="input-group-text" id="basic-addon1"><span class="">$</span></span>
+                    <input disabled type="number" class="form-control" placeholder="1.00">
+                    <span class="px-2"> <i class="bi bi-chevron-double-right"></i></span>
+                    <span class="input-group-text" id="basic-addon1"><span class="">C$</span></span>
+                    <input id="exchangeMoney" type="number" class="form-control" placeholder="36.68" value="36.68">
+                </div>
+
+                <div class="divButtonMoney-container">
+                    <button id="divMoneyButton" type="button"><i class="bi bi-chevron-double-down"></i> Moneda</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section class="container-fluid content-page w-100 px-3 py3">
     <div class="d-flex justify-content-between mb-2 align-items-center">
@@ -25,7 +57,7 @@
                 </div>
                 <div class="pdfControllerButtons">
 
-                    <button id="download-button" class="pdf-IconButton p-1"><i class="bi bi-printer"></i></button>
+                    <button class="pdf-IconButton p-1"><i class="bi bi-printer"></i></button>
                     <button id="download-button" class="pdf-IconButton p-1"><i class="bi bi-download"></i></button>
                 </div>
             </div>
@@ -35,19 +67,16 @@
             </div>
         </div>
 
-        <div class="col-6">
+        <div class="col-6 h-100">
             <div class="card">
                 <div class="card-body">
                     <h4>
                         Gestión de Cobro
                     </h4>
 
-                    <form>
-                        <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar Pago Mixto</label>
-                        </div>
-                        <!--Cargar todos los métodos de pago que hay-->
+                    <form asp-controller="PurchaseConfiguration" asp-action="PurchaseComplete" method="post">
+                 
+                      @*   <!--Cargar todos los métodos de pago que hay-->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                             <label class="form-check-label" for="flexCheckDefault">
@@ -59,44 +88,69 @@
                             <label class="form-check-label" for="flexCheckChecked">
                                 Cuenta
                             </label>
-                        </div>
+                        </div> *@
                         <!--this select should querry from the data base-->
                         <div class="mb-3">
-                            <label class="form-label">Tipo de Pago</label>
-                            <select class="form-select " aria-label="Seleccione un tipo de pago">
-                                <option disabled>Seleccione un método de Envío</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <label class="form-label">Negocio de la factura:</label>
+                            <div class="select-wrapper">
+                                <select id="" asp-for="IdBusiness" class="form-control" asp-items="ViewBag.BusinessSelect">
+                                    <option disabled selected>Seleccione un Negocio</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="billxTypePayment.typePaymentxCoin.idTypePayment" class="control-label mb-2">Tipo de Pago</label>
+                            <div class="select-wrapper">
+                                <select id="typePaymentSelect" asp-for="billxTypePayment.typePaymentxCoin.idTypePayment" class="form-control" asp-items="ViewBag.TypePaymentSelect">
+                                    <option disabled selected>Seleccione un tipo de Pago</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="billxTypePayment.typePaymentxCoin.idTypePayment" class="text-danger"></span>
                         </div>
 
-                        <!--this select should querry from the data base-->
-                        <div class="mb-3">
-                            <label class="form-label">Entidad Bancaría</label>
-                            <select class="form-select mb-3" aria-label="Seleccione una Entidad Bancaria">
-                                <option selected>Seleccione una Empresa</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                        <div id="allowMixPaymentDiv" class="form-check form-switch mb-3 d-none">
+                            <input id="allowMixPaymentSwitch" asp-for="billxTypePayment.bothCoins" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar pago para ambas monedas</label>
                         </div>
-
-
-                        <div class="mb-3">
-                            <label class="form-label">Moneda</label>
-                            <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
-                                <div class="form-check form-check-inline radio-item">
-                                    <input type="radio" name="radioPub" id="public" value="1" role="radio" aria-label="Opción público">
-                                    <label for="public">Córdoba NIC </label>
-                                </div>
-                                <div class="form-check form-check-inline radio-item">
-                                    <input type="radio" name="radioPub" id="private" value="0" role="radio" aria-label="Opción privado">
-                                    <label for="private">Dólar USD</label>
-                                </div>
+                        <div id="divRadioCoin" class="mb-3">
+                            <label class="form-label">Moneda:</label>
+                            <div class="select-wrapper">
+                                <select id="typePaymentSelect" asp-for="billxTypePayment.typePaymentxCoin.idCoin" class="form-control" asp-items="ViewBag.CoinSelect">
+                                    <option disabled selected>Seleccione una Moneda</option>
+                                </select>
                             </div>
                         </div>
 
+                        
+                        <div id="divCoinAmountPaid" class="d-none">
+                            <label class="form-label mb-1">Monto en dólares:</label>
+                            <div class="input-group mb-3 ">
+                                <span class="input-group-text" id="basic-addon1"><span class="">$</span></span>
+                                <input id="amountPaidDolar" step="0.1" asp-for="billxTypePayment.amountPaidDolar" type="number" class="form-control" placeholder="00.00">
+
+                            </div>
+
+                            <label class="form-label mb-1">Monto en córdobas:</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><span class="">C$</span></span>
+                                <input id="amountPaidCordoba" step="0.1" asp-for="billxTypePayment.amountPaidCordoba" type="number" class="form-control" placeholder="00.00">
+                            </div>
+                        </div>
+
+                        <div id="bankAccountId" class="mb-3 d-none">
+                            <label asp-for="bankAccount.IdBank" class="control-label mb-2">Banco</label>
+                            <div class="select-wrapper">
+                                <select asp-for="bankAccount.IdBank" class="form-control" asp-items="ViewBag.BankSelect">
+                                    <option disabled selected>Seleccione un Banco</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                       <input id="totalToPay" type="hidden" asp-for="billxTypePayment.amountPaid" value="@Model.TotalCost" />
+                        <button type="submit" class="btn btn-primary w-100">
+                            Facturar <i class="bi bi-cash-stack"></i>
+                        </button>
                     </form>
 
                 </div>
@@ -115,5 +169,42 @@
         var pdfUrl = '@Url.Action("GeneratePdf", "PurchaseConfiguration", new { area = "Facturation" })';
     </script>
     <script src="~/js/facturation/pdfscript.js"></script>
+    <script src="~/js/facturation/moneyscriptconfig.js"></script>
 
+    @if (TempData["Success"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: "Perfecto!",
+                    text: "@TempData["Success"]",
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Facturation/Purchase/Index'; // Replace with your desired URL
+                    }
+                });
+            });
+        </script>
+    }
+    else
+    {
+
+        <script src="~/js/facturation/purchaseconfig.js"></script>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Error',
+                    text: '@TempData["ErrorMessage"]',
+                    icon: 'error'
+                });
+            });
+        </script>
+
+        TempData["ErrorMessage"] = null;
+    }
 }

@@ -9,6 +9,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
     {
         List<Employee> GetAll();
         Employee GetById(string id);
+        Employee GetEmployeeByEmail(string email);
         List<string> GetRoleNames();
         public string GetUserId(string employeeId);
         List<string> GetUserEmails();
@@ -379,6 +380,59 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                                     BusinessName = dataReader["businessName"].ToString(),
                                     Email = dataReader["email"].ToString(),
                                     Role = dataReader["roleName"].ToString(),
+                                };
+
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+
+            return employee;
+        }
+
+        //------------------------------------------------------------------------------------
+        public Employee GetEmployeeByEmail(string email)
+        {
+            Employee employee = new Employee();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spGetEmployeeByEmail", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        var parameters = new SqlParameter[]
+                        {
+                            new SqlParameter("@email", email)
+                        };
+
+                        command.Parameters.AddRange(parameters);
+
+                        connection.Open();
+
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+
+                            while (dataReader.Read())
+                            {
+                                employee = new Employee
+                                {
+                                    IdEmployee = dataReader["idEmployee"].ToString(),
+                                    Name = dataReader["name"].ToString(),
+                                    LastName1 = dataReader["lastName1"].ToString(),
+                                    LastName2 = dataReader["lastName2"].ToString(),
+                                    Position = dataReader["position"].ToString(),
+                                    PhoneNumber = dataReader["phoneNumber"].ToString(),
+                                    IdBusiness =Convert.ToInt32(dataReader["IdBusiness"]),
+                                    Email = dataReader["email"].ToString()
                                 };
 
                             }

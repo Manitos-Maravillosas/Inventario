@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 {
@@ -14,7 +16,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
             PercentDiscount = 0.0f;
             SubTotal = 0.0f;
             TotalCost = 0.0f;
-            IdEmployee = "defaultEmployeeId"; // Set a default or fetch from user context
             IdClient = "defaultClientId";     // Set a default or fetch from user context
             IdBusiness = 1;                   // Set a default business ID
             CartXProducts = new List<CartXProduct>();
@@ -22,6 +23,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
             optionMoney = 1;
             deliveryFlag = false;
             delivery = new Delivery();
+            bankAccount = new BankAccount();
+            billxTypePayment = new BillxTypePayment();
+            billxTypePaymentxBankAccout = new BillxTypePaymentxBankAccout();
+
         }
 
     
@@ -40,19 +45,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public float TotalCost { get; set; }
 
-        // Foreign keys
-        public string IdEmployee { get; set; }
+  
         public virtual Employee Employee { get; set; }
 
         public string IdClient { get; set; }
         public virtual Client Client { get; set; }
 
         public int IdBusiness { get; set; }
-        public string BusinessName { get; set; }
-        public virtual Business Business { get; set; }
 
         // Navigation property for CartXProduct
-        public virtual ICollection<CartXProduct> CartXProducts { get; set; }
+        public virtual List<CartXProduct> CartXProducts { get; set; }
 
         public List<ProductFacturation> Products { get; set; }
 
@@ -66,7 +68,20 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public Delivery delivery { get; set; }
 
+        public BankAccount bankAccount { get; set; }
 
+        public BillxTypePayment billxTypePayment { get; set; }
+
+        public BillxTypePaymentxBankAccout billxTypePaymentxBankAccout { get; set; }
+
+        public bool mixPayment { get; set; }
+    }
+
+    public class BillxTypePaymentxBankAccout
+    {
+        public int IdBillxTypePaymentxBankAccout { get; set; }
+        public int idBillxIdTypePayment { get; set; }
+        public int idBankAccount { get; set; }
     }
 
     public class CartXProduct
@@ -97,5 +112,30 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public int IdBill { get; set; }
         public virtual Bill Bill { get; set; }
+    }
+
+    public class BillxTypePayment
+    {
+        public BillxTypePayment()
+        {
+            amountPaid = 0.0f;
+            idTypePaymentxCoin = 0;
+            typePaymentxCoin = new TypePaymentxCoin();       
+            
+            bothCoins = false;
+            amountPaidDolar = 0.0f;
+            amountPaidCordoba = 0.0f;
+
+        }
+        [Key]
+        public bool bothCoins { get; set; }
+        public float amountPaidDolar { get; set; }
+        public float amountPaidCordoba { get; set; }
+
+
+        // Foreign keys
+        public float amountPaid { get; set; }
+        public int idTypePaymentxCoin { get; set; }
+        public virtual TypePaymentxCoin typePaymentxCoin { get; set; }
     }
 }

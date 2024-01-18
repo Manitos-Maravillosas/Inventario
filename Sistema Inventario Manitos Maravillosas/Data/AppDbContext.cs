@@ -1,8 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models;
+
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
+
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models;
+
 namespace Sistema_Inventario_Manitos_Maravillosas.Data
 {
     public class AppDbContext : DbContext
@@ -91,7 +95,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data
         public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models.ProductCategory>? ProductCategories { get; set; }
 
         //Admin
-        public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.TypePayment>? TypePayment { get; set; }
+        public DbSet<TypePaymentxCoin>? TypePayment { get; set; }
         //login
 
 
@@ -111,7 +115,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data
         //Inventory
 
         //Admin
-        public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.BankAccount>? BankAccount { get; set; }
+        public DbSet<BankAccount>? BankAccount { get; set; }
         //login
 
 

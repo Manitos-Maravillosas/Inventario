@@ -1,21 +1,24 @@
-﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.TypePayment
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models.BankAccount
 
 @{
-    ViewData["Title"] = "Crear Tipo de Pago";
+    ViewData["Title"] = "Modificar Cuenta de Banco";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    ViewData["Action"] = "Create";
+    ViewData["Action"] = "Edit";
 }
+
 <section class="container px-5 py-3">
-    <h3 style="margin-bottom: 2rem;">Agregar Tipo de Pago</h3>
-
-    <partial name="_TypePaymentForm" model="Model" view-data="ViewData">
-
-    </partial>
+    <div class="d-flex justify-content-between mb-2 align-items-center">
+        <h3 class="m-0">Modificar Cuenta de Banco</h3>
+        <a class="fs-1 px-1" asp-area="AdminPayment" asp-controller="BankAccount" asp-action="Index">
+            <i class="bi bi-arrow-left-short"></i>
+        </a>
+    </div>
+    <partial name="_BankAccountForm" model="Model" view-data="ViewData">
 </section>
 
 @section Scripts {
-    
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
@@ -30,7 +33,7 @@
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/Admin/TypePayment/Index';
+                        window.location.href = '/AdminPayment/BankAccount/Index';
                     }
                 });
             });
@@ -51,7 +54,4 @@
 
         ViewData["ErrorMessage"] = null;
     }
-
-
-
 }

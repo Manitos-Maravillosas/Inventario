@@ -27,8 +27,10 @@
     //option 658 = USD -> C$
     //option 12 = C$ -> USD
     function ConvertMoney(option, val) {
+        var pathName = window.location.pathname;
+        console.log(pathName); // Outputs the path part of the URL
 
-        fetch('/Facturation/Purchase/ConvertMoney', {
+        fetch('/Facturation/PurchaseConfiguration/ConvertMoney', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

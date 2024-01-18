@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
@@ -10,12 +12,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IClientService _clientService;
+        private readonly IBillService _billService;
+
         private Bill bill;
         private float moneyValue;
-        public BillHandler(IHttpContextAccessor httpContextAccessor, IClientService clientService)
+        public BillHandler(IHttpContextAccessor httpContextAccessor, IClientService clientService, IBillService billService)
         {
             _httpContextAccessor = httpContextAccessor;
             _clientService = clientService;
+            _billService = billService;
         }
 
 
@@ -150,6 +155,18 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
         }
 
         //-------------------------------------------------------------------------------------//
+        //                           Client Handler                                               //
+        //-------------------------------------------------------------------------------------//
+
+        public void AssingEmployee(Employee employee)
+        {
+            if (bill == null)
+                bill = GetBill();
+            bill.Employee = employee;
+            SaveBill();
+        }
+
+        //-------------------------------------------------------------------------------------//
         //                           DElivery Handler                                               //
         //-------------------------------------------------------------------------------------//
         public void UpdateDeliveryBill(bool flag,Delivery delivery)
@@ -160,6 +177,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
             bill.deliveryFlag = flag;
             if (flag)
             {
+                //this is beacuse the client should be selected before
+                delivery.IdAddress  = bill.Client.IdAddress;
+
                 bill.delivery = delivery;
                 bill.delivery.Total = bill.delivery.InternalCost + bill.delivery.deliveryxCompanyTrans.AditionalCompanyCost; //update total delivery
                 updatePriceBill();
@@ -208,6 +228,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
             SaveBill();
         }
 
+        public void UpdateTypePayment(Bill b)
+        {
+            if (bill == null)
+                bill = GetBill();
+            bill.IdBusiness = b.IdBusiness;
+            bill.bankAccount = b.bankAccount;
+            bill.billxTypePaymentxBankAccout = b.billxTypePaymentxBankAccout;
+            bill.billxTypePayment = b.billxTypePayment;
+            SaveBill();
+        }
+
         //-------------------------------------------------------------------------------------//
         //                           Session Handler                                             //
         //-------------------------------------------------------------------------------------//
@@ -233,11 +264,26 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
             _httpContextAccessor.HttpContext.Session.SetString("Bill", sessionData);
         }
 
+        public void SaveBill(Bill bill)
+        {
+            var sessionData = JsonConvert.SerializeObject(bill);
+            _httpContextAccessor.HttpContext.Session.SetString("Bill", sessionData);
+        }
+
         public float GetMoneyValue()
         {
             string value = _httpContextAccessor.HttpContext.Session.GetString("MoneyValue");
             return float.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
             
         }
+
+        public Boolean PurchaseComplete()
+        {
+            if (bill == null)
+                bill = GetBill();
+
+            return _billService.SaveBill(bill);
+
+        }   
     }
 }

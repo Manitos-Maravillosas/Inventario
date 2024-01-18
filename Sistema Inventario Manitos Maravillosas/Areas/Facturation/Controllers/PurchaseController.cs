@@ -20,30 +20,40 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly IProductServiceFacturation _productService;
         private readonly IClientService _clientService;
         private readonly ITypeDeliveryService _typeDeliveryService;
+
         private readonly IDeliveryService _deliveryService;
-        private readonly ITypePaymentService _typePaymentService;
-        private readonly IBankAccountService _bankAccountService;
+        private readonly IEmployeeService _employeeService;
+        private readonly IBusinessService _businessService;
+
         private readonly BillHandler _billHandler;
 
 
 
-        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService, IDeliveryService deleveryService,
-            ITypePaymentService typePaymentService, BillHandler billHandler)
 
+        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService,
+            IDeliveryService deliveryService, IEmployeeService employeeService,  BillHandler billHandler, IBusinessService businessService)
         {
 
             _productService = productService;
             _clientService = clientService;
             _typeDeliveryService = typeDeliveryService;
+
+            _deliveryService = deliveryService;
+            _employeeService = employeeService;
+
             _deliveryService = deleveryService;
             _typePaymentService = typePaymentService;
+
             _billHandler = billHandler;
+            _businessService = businessService;
         }
 
         // GET: FacturationController
         public ActionResult Index()
         {
+            string userEmail = User.Identity.Name;
             Bill b = _billHandler.GetBill();
+            _billHandler.AssingEmployee(_employeeService.GetEmployeeByEmail(userEmail));
             b.listClients = _clientService.GetAll();
             var sessionData = HttpContext.Session.GetString("Bill");
             ViewData["isBill"] = true;
@@ -167,7 +177,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                     if (product != null)
                     {
                         _billHandler.UpdateProductSubtotalPrice(cartXProduct, quantity);
-                        return PartialView("_tableProducts", _billHandler.GetBill());
+                        //return PartialView("_tableProducts", _billHandler.GetBill());
+                        return Json(new { success = true, message = _billHandler.GetBill() });
                     }
                     else
                     {
@@ -205,6 +216,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             if (_billHandler.RemoveProductFromCartXBill(id))
             {
                 return PartialView("_tableProducts", _billHandler.GetBill());
+               
             }
             else
             {

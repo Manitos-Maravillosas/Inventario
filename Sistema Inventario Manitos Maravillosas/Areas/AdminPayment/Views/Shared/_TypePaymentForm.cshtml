@@ -1,0 +1,79 @@
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models.TypePaymentxCoin
+@{
+    var action = ViewData["Action"] as string;
+}
+
+
+<div class="card">
+    <div class="card-body">
+
+        <form id="typePaymentForm" asp-controller="TypePayment" asp-action="@(action == "Edit" ? "Edit" : "Create")" method="post">
+            @Html.AntiForgeryToken()
+            @if (action == "Create")
+            {
+                <!-- Fila 2: Moneda, Tipo de Pago -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="idCoin" class="control-label mb-2">Moneda</label>
+                        <div class="select-wrapper">
+                            <select asp-for="idCoin" class="form-control" asp-items="ViewBag.CoinSelect">
+                                <option disabled selected>Seleccione una moneda</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="idCoin" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="idTypePayment" class="control-label mb-2">Tipo de Pago</label>
+                        <div class="select-wrapper">
+                            <select asp-for="idTypePayment" class="form-control" asp-items="ViewBag.TypePaymentSelect">
+                                <option disabled selected>Seleccione un tipo de Pago</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="idTypePayment" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <input type="text" class="form-control" asp-for="idTypePayment" hidden>
+                <!-- Fila 2: Moneda, Tipo de Pago -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="idCoin" class="control-label mb-2">Moneda</label>
+                        <div class="select-wrapper">
+                            <select asp-for="idCoin" class="form-control" asp-items="ViewBag.CoinSelect">
+                                <option disabled selected>Seleccione una moneda</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="idCoin" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="idTypePayment" class="control-label mb-2">Tipo de Pago</label>
+                        <div class="select-wrapper">
+                            <select asp-for="idTypePayment" class="form-control" asp-items="ViewBag.TypePaymentSelect">
+                                <option disabled selected>Seleccione un tipo de Pago</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="idTypePayment" class="text-danger"></span>
+                    </div>
+                </div>
+            }                        
+
+            <!-- Botón de envío -->
+            <div class="d-flex justify-content-end mb-3">
+                <button type="submit" class="btn btn-primary">
+                    @if (action == "Edit")
+                    {
+                        <span>Modificar <i class="bi bi-pencil-square"></i></span>
+                    }
+                    else
+                    {
+                        <span>Agregar <i class="bi bi-plus-circle"></i></span>
+                    }
+                </button>
+
+            </div>
+        </form>
+
+    </div>
+</div>

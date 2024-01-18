@@ -1,21 +1,27 @@
-﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.BankAccount
+﻿@model Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models.TypePaymentxCoin
 
 @{
-    ViewData["Title"] = "Crear Cuenta de Banco";
+    ViewData["Title"] = "Crear Tipo de Pago";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     ViewData["Action"] = "Create";
 }
 <section class="container px-5 py-3">
-    <h3 style="margin-bottom: 2rem;">Agregar Cuenta de Banco</h3>
+    <div class="d-flex justify-content-between mb-2 align-items-center">
+        <h3 class="m-0">Agregar Tipo de pago</h3>
+        <a class="fs-1 px-1" asp-area="AdminPayment" asp-controller="TypePayment" asp-action="Index">
+            <i class="bi bi-arrow-left-short"></i>
+        </a>
+    </div>
 
-    <partial name="_BankAccountForm" model="Model" view-data="ViewData">
+    <partial name="_TypePaymentForm" model="Model" view-data="ViewData">
 
     </partial>
 </section>
 
-@section Scripts {
 
+@section Scripts {
+    
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
@@ -30,7 +36,7 @@
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/Admin/BankAccount/Index';
+                        window.location.href = '/AdminPayment/TypePayment/Index';
                     }
                 });
             });
@@ -55,4 +61,3 @@
 
 
 }
-

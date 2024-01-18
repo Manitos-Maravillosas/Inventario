@@ -1,20 +1,23 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Net;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
+namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services
 {
     public interface ITypePaymentService
     {
-        List<TypePaymentViewModel> GetAll();
-        OperationResult Add(TypePayment newTypePayment);
-        TypePayment GetById(int id);
+        List<TypePaymentxCoin> GetAll();
+        OperationResult Add(TypePaymentxCoin newTypePayment);
+        TypePaymentxCoin GetById(int id);
         OperationResult Delete(string id);
-        OperationResult Update(TypePayment newTypePayment);
+        OperationResult Update(TypePaymentxCoin newTypePayment);
         List<string> GetTypePayments();
+        int GetIdTypePaymentxCoin(int idTypePayment, int idCoin);
+        public List<TypePayment> GetAllTypePayments();
     }
 
 
@@ -32,9 +35,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         //------------------------------------------------------------------------------------
         //                              GetAll                                             
         //------------------------------------------------------------------------------------
-        public List<TypePaymentViewModel> GetAll()
+        public List<TypePaymentxCoin> GetAll()
         {
-            List<TypePaymentViewModel> typePayments = new List<TypePaymentViewModel>();
+            List<TypePaymentxCoin> typePayments = new List<TypePaymentxCoin>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
             try
@@ -47,9 +50,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         var parameters = new SqlParameter[]
                         {
+                            new SqlParameter("@idTypePaymentxCoin", DBNull.Value),
                             new SqlParameter("@idTypePayment", DBNull.Value),
-                            new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@idCoin", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -61,9 +64,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         {
                             while (dataReader.Read())
                             {
-                                TypePaymentViewModel typePayment = new TypePaymentViewModel
+                                TypePaymentxCoin typePayment = new TypePaymentxCoin
                                 {
-                                    Id = Convert.ToInt32(dataReader["idTypePayment"]),
+                                    Id = Convert.ToInt32(dataReader["idTypePaymentxCoin"]),
+                                    
                                     Name = dataReader["name"].ToString(),
                                     CoinDescription = dataReader["coinDescription"].ToString(),
                                     CoinName = dataReader["coinName"].ToString(),
@@ -86,7 +90,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         //------------------------------------------------------------------------------------
         //                              Add                                             
         //------------------------------------------------------------------------------------
-        public OperationResult Add(TypePayment newTypePayment)
+        public OperationResult Add(TypePaymentxCoin newTypePayment)
         {
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
@@ -98,9 +102,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.Add(new SqlParameter("@idTypePayment", newTypePayment.Id != 0 ? (object)newTypePayment.Id : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newTypePayment.Name) ? DBNull.Value : newTypePayment.Name));
-                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newTypePayment.CoinDescription) ? DBNull.Value : newTypePayment.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@idTypePaymentxCoin", newTypePayment.Id != 0 ? newTypePayment.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@idTypePayment", newTypePayment.idTypePayment));
+                        command.Parameters.Add(new SqlParameter("@idCoin", newTypePayment.idCoin));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
                         connection.Open();
@@ -147,9 +151,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         var parameters = new SqlParameter[]
                         {
-                            new SqlParameter("@idTypePayment", id),
-                            new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@idTypePaymentxCoin", id),
+                            new SqlParameter("@idTypePayment", DBNull.Value),
+                            new SqlParameter("@idCoin", DBNull.Value),
                             new SqlParameter("@operation", '4')
                         };
 
@@ -184,9 +188,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         //------------------------------------------------------------------------------------
         //                              GetById                                             
         //------------------------------------------------------------------------------------
-        public TypePayment GetById(int id)
+        public TypePaymentxCoin GetById(int id)
         {
-            TypePayment typePayment = null; 
+            TypePaymentxCoin typePayment = null;
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
             try
@@ -199,7 +203,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 
                         var parameters = new SqlParameter[]
                         {
-                            new SqlParameter("@idTypePayment", id),
+                            new SqlParameter("@idTypePaymentxCoin", id),
                             new SqlParameter("@name", DBNull.Value),
                             new SqlParameter("@coinDescription", DBNull.Value),
                             new SqlParameter("@operation", '2')
@@ -213,12 +217,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         {
                             if (dataReader.Read())
                             {
-                                typePayment = new TypePayment
+                                typePayment = new TypePaymentxCoin
                                 {
-                                    Id = Convert.ToInt32(dataReader["idTypePayment"]),
+                                    Id = Convert.ToInt32(dataReader["idTypePaymentxCoin"]),
                                     Name = dataReader["name"].ToString(),
                                     CoinDescription = dataReader["coinDescription"].ToString(),
-                                    
+                                    CoinName = dataReader["coinName"].ToString(),
+                                    idTypePayment = Convert.ToInt32(dataReader["idTypePayment"]),
+
                                 };
                             }
                         }
@@ -236,7 +242,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         //------------------------------------------------------------------------------------
         //                              Update                                             
         //------------------------------------------------------------------------------------
-        public OperationResult Update(TypePayment newTypePayment)
+        public OperationResult Update(TypePaymentxCoin newTypePayment)
         {
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
@@ -248,9 +254,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.Add(new SqlParameter("@idTypePayment", newTypePayment.Id != 0 ? (object)newTypePayment.Id : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newTypePayment.Name) ? DBNull.Value : newTypePayment.Name));
-                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newTypePayment.CoinDescription) ? DBNull.Value : newTypePayment.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@idTypePaymentxCoin", newTypePayment.Id));
+                        command.Parameters.Add(new SqlParameter("@idTypePayment", newTypePayment.idTypePayment));
+                        command.Parameters.Add(new SqlParameter("@name", newTypePayment.Name));
+                        command.Parameters.Add(new SqlParameter("@coinDescription", newTypePayment.CoinDescription));
                         command.Parameters.Add(new SqlParameter("@operation", 3));
 
                         connection.Open();
@@ -325,6 +332,91 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             return TypePaymentNames;
         }
+        public List<TypePayment> GetAllTypePayments()
+        {
+            List<TypePayment> typePayment = new List<TypePayment>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null;
 
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand GetTypePaymentsCommand = new SqlCommand("spGetTypePayment", connection))
+                {
+                    GetTypePaymentsCommand.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataReader typePaymentDataReader = GetTypePaymentsCommand.ExecuteReader())
+                    {
+                        while (typePaymentDataReader.Read())
+                        {
+                            TypePayment typePaymentName = new TypePayment
+                            {
+                                IdTypePayment = Convert.ToInt32(typePaymentDataReader["idTypePayment"]),
+                                Name = typePaymentDataReader["name"].ToString(),
+                            };
+                            typePayment.Add(typePaymentName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            return typePayment;
+        }
+
+        public int GetIdTypePaymentxCoin(int idTypePayment, int idCoin)
+        {
+           int typePaymentxCoin = 0;
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null;
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand command = new SqlCommand("spGetIdTypePaymentxCoin", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    
+                    command.Parameters.Add(new SqlParameter("@idTypePayment", idTypePayment));
+                    command.Parameters.Add(new SqlParameter("@idCoin", idCoin));
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader typePaymentDataReader = command.ExecuteReader())
+                    {
+                        while (typePaymentDataReader.Read())
+                        {
+                            typePaymentxCoin = Convert.ToInt32(typePaymentDataReader["idTypePaymentxCoin"]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            return typePaymentxCoin;
+        }
     }
 }
