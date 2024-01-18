@@ -27,6 +27,7 @@ builder.Services.AddScoped<ITypePaymentService, TypePaymentService>();
 builder.Services.AddScoped<ICoinService, CoinService>();
 builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 builder.Services.AddScoped<IProviderService, ProviderService>();
+builder.Services.AddScoped<IPurchaseProviderService, PurchaseProviderService>();
 builder.Services.AddScoped<ITypeDeliveryService, TypeDeliveryService>();
 
 //Inventory Services
