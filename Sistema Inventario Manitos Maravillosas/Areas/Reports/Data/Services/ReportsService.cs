@@ -13,7 +13,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Data.Services
         public List<SalesByClientModel> GetSalesByClient(DateTime startDate, DateTime endDate);
         public List<SalesByBusinessModel> GetSalesByBusiness(DateTime startDate, DateTime endDate);
         public List<BillsByClientModel> GetBillsByClient(DateTime startDate, DateTime endDate, string idClient);
-        public List<BillsByBusinessModel> GetBillsByBusiness(DateTime startDate, DateTime endDate);
+        public List<BillsByBusinessModel> GetBillsByBusiness(DateTime startDate, DateTime endDate, int idBusiness);
         public FinancialSummary GetFinancialSummary(DateTime startDate, DateTime endDate);
     }
 
@@ -367,7 +367,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Data.Services
             return bills;
         }
 
-        public List<BillsByBusinessModel> GetBillsByBusiness(DateTime startDate, DateTime endDate)
+        public List<BillsByBusinessModel> GetBillsByBusiness(DateTime startDate, DateTime endDate, int idBusiness)
         {
             List<BillsByBusinessModel> bills = new List<BillsByBusinessModel>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
@@ -383,7 +383,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Data.Services
                     var parameters = new SqlParameter[]
                     {
                         new SqlParameter("@startDate", startDate),
-                        new SqlParameter("@endDate", endDate)
+                        new SqlParameter("@endDate", endDate),
+                        new SqlParameter("@idBusiness", idBusiness)
                     };
 
                     command.Parameters.AddRange(parameters);

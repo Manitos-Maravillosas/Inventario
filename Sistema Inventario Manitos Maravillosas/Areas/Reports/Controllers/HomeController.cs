@@ -305,13 +305,87 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             return new MemoryStream(stream.ToArray());
         }
 
+        private MemoryStream ExportTotalCategoriesPDF(ReportsViewModel reportsView)
+        {
+            // Memory stream to store the PDF
+            MemoryStream stream = new MemoryStream();
+
+            // Generate the PDF layout
+            Document doc = GeneratePDFLayout("Reporte de ventas por categoria", stream, reportsView.StartDate, reportsView.EndDate);
+
+            // Style for the table headers
+            Style headerStyle = new Style()
+                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD))
+                .SetFontSize(10);
+
+            // Font size 8 for the table data
+            Style tableDataStyle = new Style()
+                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
+                .SetFontSize(8);
+
+            // Create style bg color light gray
+            Style lightGrayStyle = new Style()
+                .SetBackgroundColor(ColorConstants.LIGHT_GRAY);
+
+
+            // Add the table
+            Table table = new Table(6, false);
+            table.SetWidth(UnitValue.CreatePercentValue(100));
+
+            // Add the headers with style
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Id Categoria").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Nombre").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Cantidad Vendida").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Costo Total").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total Vendido").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Ganancia Total").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+
+            table.AddStyle(tableDataStyle);
+
+            int cont = 1;
+
+            // Add the data
+            foreach (SalesByProductCategoryModel sale in _reportsService.GetSalesByProductCategory(reportsView.StartDate, reportsView.EndDate))
+            {
+                //Every other row is gray
+                if (cont % 2 == 0)
+                {
+                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.IdCategory.ToString())).AddStyle(lightGrayStyle));
+                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.CategoryName)).AddStyle(lightGrayStyle));
+                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.AmountSold.ToString())).AddStyle(lightGrayStyle));
+                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.TotalCost.ToString())).AddStyle(lightGrayStyle));
+                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.TotalSold.ToString())).AddStyle(lightGrayStyle));
+                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.TotalProfit.ToString())).AddStyle(lightGrayStyle));
+                }
+                else
+                {
+                    table.AddCell(sale.IdCategory.ToString());
+                    table.AddCell(sale.CategoryName);
+                    table.AddCell(sale.AmountSold.ToString());
+                    table.AddCell(sale.TotalCost.ToString());
+                    table.AddCell(sale.TotalSold.ToString());
+                    table.AddCell(sale.TotalProfit.ToString());
+                }
+                cont++;
+            }
+
+            // Add the table to the document
+            doc.Add(table);
+
+            // Close the document
+            doc.Close();
+
+            // Return the stream
+            return new MemoryStream(stream.ToArray());
+        }
+
         private MemoryStream ExportTotalClientsPDF(ReportsViewModel reportsView)
         {
             // Memory stream to store the PDF
             MemoryStream stream = new MemoryStream();
 
             // Generate the PDF layout
-            Document doc = GeneratePDFLayout("Reporte de ventas por producto", stream, reportsView.StartDate, reportsView.EndDate);
+            Document doc = GeneratePDFLayout("Reporte de ventas por cliente", stream, reportsView.StartDate, reportsView.EndDate);
 
             // bold style
             Style boldStyle = new Style()
@@ -413,16 +487,20 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             return new MemoryStream(stream.ToArray());
         }
 
-        private MemoryStream ExportTotalCategoriesPDF(ReportsViewModel reportsView)
+        private MemoryStream ExportTotalBusinessPDF(ReportsViewModel reportsView)
         {
             // Memory stream to store the PDF
             MemoryStream stream = new MemoryStream();
 
             // Generate the PDF layout
-            Document doc = GeneratePDFLayout("Reporte de ventas por categoria", stream, reportsView.StartDate, reportsView.EndDate);
+            Document doc = GeneratePDFLayout("Reporte de ventas por negocio", stream, reportsView.StartDate, reportsView.EndDate);
+
+            // bold style
+            Style boldStyle = new Style()
+                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
 
             // Style for the table headers
-            Style headerStyle = new Style()
+            Style headerStyleTable = new Style()
                 .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD))
                 .SetFontSize(10);
 
@@ -435,50 +513,84 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             Style lightGrayStyle = new Style()
                 .SetBackgroundColor(ColorConstants.LIGHT_GRAY);
 
+            // Create style for header
+            Style header1Style = new Style()
+                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD))
+                .SetFontSize(14);
 
-            // Add the table
-            Table table = new Table(6, false);
-            table.SetWidth(UnitValue.CreatePercentValue(100));
+            Style header2Style = new Style()
+                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD))
+                .SetFontSize(12);
 
-            // Add the headers with style
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Id Categoria").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Nombre").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Cantidad Vendida").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Costo Total").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total Vendido").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Ganancia Total").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            List<SalesByBusinessModel> salesByClient = _reportsService.GetSalesByBusiness(reportsView.StartDate, reportsView.EndDate);
 
-            table.AddStyle(tableDataStyle);
-
-            int cont = 1;
-
-            // Add the data
-            foreach (SalesByProductCategoryModel sale in _reportsService.GetSalesByProductCategory(reportsView.StartDate, reportsView.EndDate))
+            // Loop through the clients sales by clients
+            foreach (SalesByBusinessModel sale in salesByClient)
             {
-                //Every other row is gray
-                if (cont % 2 == 0)
-                {
-                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.IdCategory.ToString())).AddStyle(lightGrayStyle));
-                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.CategoryName)).AddStyle(lightGrayStyle));
-                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.AmountSold.ToString())).AddStyle(lightGrayStyle));
-                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.TotalCost.ToString())).AddStyle(lightGrayStyle));
-                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.TotalSold.ToString())).AddStyle(lightGrayStyle));
-                    table.AddCell(new Cell(1, 1).Add(new Paragraph(sale.TotalProfit.ToString())).AddStyle(lightGrayStyle));
-                }
-                else
-                {
-                    table.AddCell(sale.IdCategory.ToString());
-                    table.AddCell(sale.CategoryName);
-                    table.AddCell(sale.AmountSold.ToString());
-                    table.AddCell(sale.TotalCost.ToString());
-                    table.AddCell(sale.TotalSold.ToString());
-                    table.AddCell(sale.TotalProfit.ToString());
-                }
-                cont++;
-            }
+                // Add the client name header1 style
+                doc.Add(new Paragraph($"{sale.BusinessName}").AddStyle(header1Style));
 
-            // Add the table to the document
-            doc.Add(table);
+                // Add the totalCost, totalSold and totalProfit bold for tag
+                doc.Add(new Paragraph()
+                    .Add(new Text("Total gastado: ").AddStyle(boldStyle)).Add($"${sale.TotalCost}")
+                    .Add(new Text("\nTotal vendido: ").AddStyle(boldStyle)).Add($"${sale.TotalSold}")
+                    .Add(new Text("\nGanancia total: ").AddStyle(boldStyle)).Add($"${sale.TotalProfit}\n\n")
+                );
+                // Add the header for the table
+                doc.Add(new Paragraph("Facturas").AddStyle(header2Style));
+
+                // Add the table
+                Table tableBillsByBusiness = new Table(7, false);
+                tableBillsByBusiness.SetWidth(UnitValue.CreatePercentValue(100));
+
+                // Add the headers with style
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Id Factura").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Fecha").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Descuento").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Subtotal").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Cliente").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Empleado").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+
+                tableBillsByBusiness.AddStyle(tableDataStyle);
+
+                int cont = 1;
+
+                // Add the data
+                foreach (BillsByBusinessModel bill in _reportsService.GetBillsByBusiness(reportsView.StartDate, reportsView.EndDate, sale.IdBusiness))
+                {
+                    //Every other row is gray
+                    if (cont % 2 == 0)
+                    {
+                        tableBillsByBusiness.AddCell(new Cell(1, 1).Add(new Paragraph(bill.IdBill.ToString())).AddStyle(lightGrayStyle));
+                        tableBillsByBusiness.AddCell(new Cell(1, 1).Add(new Paragraph(bill.Date.ToString(("dd/MM/yyyy")))).AddStyle(lightGrayStyle));
+                        tableBillsByBusiness.AddCell(new Cell(1, 1).Add(new Paragraph(bill.PercentDiscount.ToString())).AddStyle(lightGrayStyle));
+                        tableBillsByBusiness.AddCell(new Cell(1, 1).Add(new Paragraph(bill.SubTotal.ToString())).AddStyle(lightGrayStyle));
+                        tableBillsByBusiness.AddCell(new Cell(1, 1).Add(new Paragraph(bill.TotalCost.ToString())).AddStyle(lightGrayStyle));
+                        tableBillsByBusiness.AddCell(new Cell(1, 1).Add(new Paragraph(bill.ClientName)).AddStyle(lightGrayStyle));
+                        tableBillsByBusiness.AddCell(new Cell(1, 1).Add(new Paragraph(bill.EmployeeName)).AddStyle(lightGrayStyle));
+                    }
+                    else
+                    {
+                        tableBillsByBusiness.AddCell(bill.IdBill.ToString());
+                        tableBillsByBusiness.AddCell(bill.Date.ToString(("dd/MM/yyyy")));
+                        tableBillsByBusiness.AddCell(bill.PercentDiscount.ToString());
+                        tableBillsByBusiness.AddCell(bill.SubTotal.ToString());
+                        tableBillsByBusiness.AddCell(bill.TotalCost.ToString());
+                        tableBillsByBusiness.AddCell(bill.ClientName);
+                        tableBillsByBusiness.AddCell(bill.EmployeeName);
+                    }
+                    cont++;
+                }
+                // Add the table to the document
+                doc.Add(tableBillsByBusiness);
+
+                // Add a page break if there are more clients
+                if (sale != salesByClient.Last())
+                {
+                    doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                }
+            }
 
             // Close the document
             doc.Close();
@@ -488,11 +600,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
         }
 
         private MemoryStream ExportTotalPurchasesPDF(ReportsViewModel reportsView)
-        {
-            throw new NotImplementedException();
-        }
-
-        private MemoryStream ExportTotalBusinessPDF(ReportsViewModel reportsView)
         {
             throw new NotImplementedException();
         }
