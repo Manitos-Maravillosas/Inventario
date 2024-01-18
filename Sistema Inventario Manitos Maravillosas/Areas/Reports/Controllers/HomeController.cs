@@ -145,7 +145,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
 
             // Return the file
             var content = stream.ToArray();
-            return Content($"<script>window.open('data:application/pdf;base64,{Convert.ToBase64String(content)}');window.location.href=\"/Reports/Home/Index\";</script>", "text/html");
+            return File(content, "application/pdf", "Reporte.pdf");
         }
 
         private MemoryStream ExportTotalSalesPDF(ReportsViewModel reportsView)
