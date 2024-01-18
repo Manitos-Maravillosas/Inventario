@@ -16,10 +16,15 @@
 <div id="addressInfo" data-address="@address" style="display:none;"></div>
 
 <div id="actionInfo" data-action="@action" style="display:none;"></div>
-
 <div class="card">
     <div class="card-body">
-        
+        <button type="button" class="btn btn-custom" onclick="location.href='@Url.Action("Index", "Client", new { area = "Admin" })'">
+            <span> <i class="bi bi-arrow-left-short"></i></span>
+        </button>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">       
 
         <form id="clientForm" asp-controller="@(controllerCall)" asp-action="@action" method="post">
             <input type="hidden" id="hiddenCityField" vale="CityName" name="CityName">

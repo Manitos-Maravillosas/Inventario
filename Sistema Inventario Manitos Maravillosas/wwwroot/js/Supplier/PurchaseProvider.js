@@ -31,11 +31,18 @@
         var clickedElement = event.target.closest('li');
         if (clickedElement) {
             var productName = clickedElement.getAttribute('data-name');
+            var productCost = clickedElement.getAttribute('data-cost'); 
+            var productPrice = clickedElement.getAttribute('data-price');
             // Guardar en Local Storage
             localStorage.setItem('selectedProductName', productName);
+            localStorage.setItem('selectedProductCost', productCost);
+            localStorage.setItem('selectedProductPrice', productPrice);
 
             document.getElementById('productNameInput').value = productName;
             document.getElementById('hiddenProductName').value = productName;
+            // Guarda estos valores en algún lugar, por ejemplo, en divs ocultos
+            document.getElementById('selectedProductCost').dataset.cost = productCost;
+            document.getElementById('selectedProductPrice').dataset.price = productPrice;
 
             modalProduct.hide();
             
