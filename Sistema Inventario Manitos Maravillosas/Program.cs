@@ -15,9 +15,11 @@ using SistemaInventario.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 //-------------------------------------SERVICES------------------------------------------------//
-// Facturation SErvices
+// Facturation Services
 builder.Services.AddScoped<IProductServiceFacturation, ProductServiceFacturation>();
 builder.Services.AddScoped<IDeleveryService, DeleveryService>();
+builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 
 //Admin Services
 builder.Services.AddScoped<IClientService, ClientService>();

@@ -191,7 +191,31 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data
         //Inventory
 
         //Admin
+
+        public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Delivery>? Delivery { get; set; }
+        //login
+
+
+        //Facturation
+
+
+        //Inventory
+
+        //Admin
+        //public DbSet<Client> Client { get; set; }
+        //login
+
+
+        //Facturation
+
+
+        //Inventory
+
+        //Admin
+        public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Bill>? Bill { get; set; }
+
         public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models.PurchaseProvider>? PurchaseProvider { get; set; }
+
 
 
     }
