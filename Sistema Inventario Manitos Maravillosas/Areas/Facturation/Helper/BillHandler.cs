@@ -2,6 +2,7 @@
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
+using System.Globalization;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
 {
@@ -10,6 +11,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IClientService _clientService;
         private Bill bill;
+        private float moneyValue;
         public BillHandler(IHttpContextAccessor httpContextAccessor, IClientService clientService)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -39,7 +41,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
 
         public void addProductToCartXBill(ProductFacturation product)
         {
-            var flagProductFound = false;
+            if (bill.optionMoney == 2)
+                product.Price = product.Price * GetMoneyValue();
+            bool flagProductFound = false;
             if (bill.CartXProducts.Count == 0)
             {
                 bill.CartXProducts.Add(new CartXProduct
@@ -127,9 +131,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
         {
             //Update bill
             bill.SubTotal = bill.CartXProducts.Sum(x => x.SubTotal);
-            bill.TotalCost = bill.SubTotal - (bill.SubTotal * (bill.PercentDiscount / 100));
+            bill.amountDiscount = 0;
+            bill.TotalCost = bill.SubTotal + (bill.delivery.Total) - (bill.SubTotal * (bill.PercentDiscount / 100));
             SaveBill();
         }
+        //-------------------------------------------------------------------------------------//
+        //                           Client Handler                                               //
+        //-------------------------------------------------------------------------------------//
 
         public void updateClientBill(string id)
         {
@@ -139,6 +147,76 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
             bill.Client = _clientService.GetById(id);
             updatePriceBill();
             SaveBill();
+        }
+
+        //-------------------------------------------------------------------------------------//
+        //                           DElivery Handler                                               //
+        //-------------------------------------------------------------------------------------//
+        public void UpdateDeliveryBill(bool flag,Delivery delivery)
+        {
+            if (bill == null)
+                bill = GetBill();
+
+            bill.deliveryFlag = flag;
+            if (flag)
+            {
+                bill.delivery = delivery;
+                bill.delivery.Total = bill.delivery.InternalCost + bill.delivery.deliveryxCompanyTrans.AditionalCompanyCost; //update total delivery
+                updatePriceBill();
+            }
+            else
+            {
+                bill.delivery = new Delivery();
+                updatePriceBill();
+            }
+            SaveBill();
+        }
+        //-------------------------------------------------------------------------------------//
+        //                           Money Handler                                                //
+        //-------------------------------------------------------------------------------------//
+
+
+        //optionMoney 1 = NIC -> USD
+
+        //optionMoney 2 = USD -> NIC
+        public void UpdateMoneyBill(float money, int optionMoney)
+        {
+            if (bill == null)
+                bill = GetBill();
+            if(optionMoney == 1)
+            {
+                foreach (var item in bill.CartXProducts)
+                {
+                    item.Price = item.Price / money;
+                    item.SubTotal = item.Price * item.Quantity;
+                }
+                bill.SubTotal = bill.CartXProducts.Sum(x => x.SubTotal);
+                bill.TotalCost = bill.SubTotal - (bill.SubTotal * (bill.PercentDiscount / 100));
+                bill.optionMoney = 1;
+            }
+            else
+            {
+                foreach (var item in bill.CartXProducts)
+                {
+                    item.Price = item.Price * money;
+                    item.SubTotal = item.Price * item.Quantity;
+                }
+                bill.SubTotal = bill.CartXProducts.Sum(x => x.SubTotal);
+                bill.TotalCost = bill.SubTotal - (bill.SubTotal * (bill.PercentDiscount / 100));
+                bill.optionMoney = 2;
+            }
+            SaveBill();
+        }
+
+        //-------------------------------------------------------------------------------------//
+        //                           Session Handler                                             //
+        //-------------------------------------------------------------------------------------//
+        public void ClearData()
+        {
+            bill = new Bill();
+            var sessionData = JsonConvert.SerializeObject(bill);
+            _httpContextAccessor.HttpContext.Session.SetString("Bill", sessionData);
+
         }
 
         public Bill GetBill()
@@ -153,6 +231,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
                 bill = GetBill();
             var sessionData = JsonConvert.SerializeObject(bill);
             _httpContextAccessor.HttpContext.Session.SetString("Bill", sessionData);
+        }
+
+        public float GetMoneyValue()
+        {
+            string value = _httpContextAccessor.HttpContext.Session.GetString("MoneyValue");
+            return float.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
+            
         }
     }
 }

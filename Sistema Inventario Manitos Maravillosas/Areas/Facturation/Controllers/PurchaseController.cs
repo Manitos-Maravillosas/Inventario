@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
+using System.Globalization;
 using IProductServiceFacturation = Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services.IProductServiceFacturation;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
@@ -15,16 +19,23 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
     {
         private readonly IProductServiceFacturation _productService;
         private readonly IClientService _clientService;
+        private readonly ITypeDeliveryService _typeDeliveryService;
+        private readonly IDeleveryService _deleveryService;
         private readonly ITypePaymentService _typePaymentService;
         private readonly IBankAccountService _bankAccountService;
         private readonly BillHandler _billHandler;
 
 
-        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypePaymentService typePaymentService, BillHandler billHandler)
+
+        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService, IDeleveryService deleveryService,
+            ITypePaymentService typePaymentService, BillHandler billHandler)
+
         {
 
             _productService = productService;
             _clientService = clientService;
+            _typeDeliveryService = typeDeliveryService;
+            _deleveryService = deleveryService;
             _typePaymentService = typePaymentService;
             _billHandler = billHandler;
         }
@@ -32,21 +43,43 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         // GET: FacturationController
         public ActionResult Index()
         {
-            List<Client> clients = _clientService.GetAll();
+            Bill b = _billHandler.GetBill();
+            b.listClients = _clientService.GetAll();
             var sessionData = HttpContext.Session.GetString("Bill");
-            if (!string.IsNullOrEmpty(sessionData))
+            ViewData["isBill"] = true;
+            if (b.Client != null)
             {
-                ViewData["isBill"] = true;
-                Bill b = _billHandler.GetBill();
-                ViewData["bill"] = b;
-                if (b.Client != null)
+                ViewData["isClient"] = true;
+            }
+            //typeDelivery
+            List<TypeDelivery> typeDeliverries = _typeDeliveryService.GetAll();
+            // Creating a list of SelectListItem
+            var selectTypeDeliveriesList = new List<SelectListItem>();
+            foreach (var item in typeDeliverries)
+            {
+                selectTypeDeliveriesList.Add(new SelectListItem
                 {
-
-                    ViewData["isClient"] = true;
-                }
+                    Value = item.Id.ToString(),
+                    Text = item.Name
+                });
             }
 
-            return View(clients);
+            //Compnies trans
+            List<CompanyTrans> companies = _deleveryService.GetAllCompanies();
+            // Creating a list of SelectListItem
+            var selectCompaniesList = new List<SelectListItem>();
+            foreach (var item in companies)
+            {
+                selectCompaniesList.Add(new SelectListItem
+                {
+                    Value = item.IdCompanyTrans.ToString(),
+                    Text = item.Name
+                });
+            }
+            ViewBag.CompanyTrans = selectCompaniesList;
+            ViewBag.TypeDelivery = selectTypeDeliveriesList;
+
+            return View(b);
         }
         //-------------------------------------------------------------------------------------//
         //                           Product                                                  //
@@ -184,13 +217,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         //-------------------------------------------------------------------------------------//
 
         [HttpPost]
-        public void AssingClientToBill(string id)
+        public IActionResult AssingClientToBill(string id)
         {
             _billHandler.updateClientBill(id);
-
+            return RedirectToAction("Index");
         }
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -212,11 +243,90 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 
 
             }
-            Bill z = _billHandler.GetBill();
-            var sessionData = HttpContext.Session.GetString("Bill");
             return RedirectToAction("Index");
         }
 
+        //-------------------------------------------------------------------------------------//
+        //                           Delevery                                                  //
+        //-------------------------------------------------------------------------------------//
+
+        [HttpGet]
+        public IActionResult GetTypeDeliveries()
+        {
+            List<TypeDelivery> deliveries = _typeDeliveryService.GetAll();
+            return Json(deliveries);
+        }
+
+        [HttpGet]
+        public IActionResult GetCompanyTrans()
+        {
+            List<CompanyTrans> companies = _deleveryService.GetAllCompanies();
+            return Json(companies);
+        }
+
+        [HttpPost]
+        public IActionResult AssingDeliveryToBill(Bill bill)
+        {
+            _billHandler.UpdateDeliveryBill(bill.deliveryFlag, bill.delivery);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult ClearData()
+        {
+            _billHandler.ClearData();
+            return RedirectToAction("Index");
+        }
+
+
+        //-------------------------------------------------------------------------------------//
+        //                           Money                                                  //
+        //-------------------------------------------------------------------------------------//
+
+        [HttpPost]
+        public IActionResult ConvertMoney(int option, string value)
+        {
+            float valueF = float.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
+            //option 658 = USD -> C$
+            
+            try
+            {
+                if (option == 658)
+                {
+                    //store the money in the session
+                    HttpContext.Session.SetString("MoneyValue", value);
+                    HttpContext.Session.SetString("MoneyId", value);
+                    _billHandler.UpdateMoneyBill(valueF, 2);
+
+
+                }
+                //option 12 = C$ -> USD
+                else if (option == 12)
+                {
+                    //store the money in the session
+                    HttpContext.Session.SetString("MoneyValue", value);
+                    HttpContext.Session.SetString("MoneyId", value);
+                    _billHandler.UpdateMoneyBill(valueF, 1);
+                }
+                return PartialView("_tableProducts", _billHandler.GetBill());           
+
+            }
+            catch (CustomDataException ex)
+            {
+                if (ex.Message == "Sql")
+                {
+                    return Json(new { success = false, message = ex.InnerException.Message });
+                }
+                else
+                {
+                    throw new CustomDataException("An error occurred: " + ex.Message, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+        }
 
 
     }

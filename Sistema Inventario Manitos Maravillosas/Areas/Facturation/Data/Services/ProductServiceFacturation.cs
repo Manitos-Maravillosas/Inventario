@@ -100,6 +100,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                 // Log the exception here
                 // Handle the exception as per your application's policy
                 products.Clear(); // This will return an empty list in case of an error.
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return products;
@@ -171,14 +172,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                     // You can use different strategies to relay this message back to the user.
                     // For example, you might throw a new exception with the user-friendly message,
                     // or you could return an error response that your frontend can use to display the alert.
-                    throw new ApplicationException("Error executing SQL command: " + sqlEx.Message, sqlEx);
+                    throw new CustomDataException("Error executing SQL command: " + sqlEx.Message, sqlEx);
                 }
             }
             catch (Exception ex)
             {
                 // Log the exception
                 // Consider whether to throw a custom exception or handle it differently
-                throw new ApplicationException("An error occurred: " + ex.Message, ex);
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
 
             return product;
