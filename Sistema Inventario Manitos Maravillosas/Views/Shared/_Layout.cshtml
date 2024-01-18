@@ -55,8 +55,11 @@
                             <a class="aside-linkSubItem" asp-area="Facturation" asp-controller="Purchase" asp-action="Index">Caja</a>
                         </li>
                         <li class="subMenuNavItem">
-                            <a class="aside-linkSubItem" asp-area="asdf" asp-controller="Acha" asp-action="Index">2</a>
+                            <a class="aside-linkSubItem" asp-area="Facturation" asp-controller="Delivery" asp-action="Index">Envíos Pendientes</a>
                         </li>
+                        <li class="subMenuNavItem">
+                            <a class="aside-linkSubItem" asp-area="Facturation" asp-controller="Bill" asp-action="Index">Facturas</a>
+                        </li>                        
                     </ul>
                 </li>
 
@@ -119,6 +122,9 @@
                         <li class="subMenuNavItem">
                             <a class="aside-linkSubItem" asp-area="Supplier" asp-controller="Provider" asp-action="Index">Proveedor</a>
                         </li>
+                        <li class="subMenuNavItem">
+                            <a class="aside-linkSubItem" asp-area="Supplier" asp-controller="PurchaseProvider" asp-action="Index">Compra de Inventario</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -141,8 +147,10 @@
                         {
                             <li class="subMenuNavItem">
                                 <a class="aside-linkSubItem" asp-area="Admin" asp-controller="Employee" asp-action="Index">Empleado</a>
+
                             </li>                 
                         }
+
                         <li class="subMenuNavItem">
                             <a class="aside-linkSubItem" asp-area="Admin" asp-controller="TypeDelivery" asp-action="Index">Tipo de Envío</a>
                         </li>                       

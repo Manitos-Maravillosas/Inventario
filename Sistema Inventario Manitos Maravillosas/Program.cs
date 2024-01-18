@@ -1,11 +1,12 @@
-using DinkToPdf.Contracts;
 using DinkToPdf;
+using DinkToPdf.Contracts;
 using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Filters;
@@ -17,10 +18,12 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 //-------------------------------------SERVICES------------------------------------------------//
-// Facturation SErvices
+// Facturation Services
 builder.Services.AddScoped<IProductServiceFacturation, ProductServiceFacturation>();
-builder.Services.AddScoped<IDeleveryService, DeleveryService>();
+
 builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+
 
 //Admin Services
 builder.Services.AddScoped<IClientService, ClientService>();
@@ -31,11 +34,15 @@ builder.Services.AddScoped<ITypePaymentService, TypePaymentService>();
 builder.Services.AddScoped<ICoinService, CoinService>();
 builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 builder.Services.AddScoped<IProviderService, ProviderService>();
+builder.Services.AddScoped<IPurchaseProviderService, PurchaseProviderService>();
 builder.Services.AddScoped<ITypeDeliveryService, TypeDeliveryService>();
 
 //Inventory Services
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+
+// Reports Services
+builder.Services.AddScoped<IReportsService, ReportsService>();
 
 //Other Services
 builder.Services.AddSingleton<IFileLogger, FileLogger>();
@@ -47,6 +54,7 @@ var emailConfig = builder.Configuration
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 //-------------------------------------END SERVICES------------------------------------------------//
+
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
 {

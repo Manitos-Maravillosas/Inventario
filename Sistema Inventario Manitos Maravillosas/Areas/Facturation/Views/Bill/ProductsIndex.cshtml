@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Bill>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PercentDiscount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalCost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdEmployee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdClient)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdBusiness)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BusinessName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PercentDiscount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubTotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdEmployee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdClient)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdBusiness)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BusinessName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdBill">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdBill">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdBill">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

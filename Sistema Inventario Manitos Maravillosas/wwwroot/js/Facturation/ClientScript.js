@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (openNewClient) {
         openNewClient.addEventListener('click', function () {
 
-            clientModal.hide();            
+            clientModal.hide(); openNewClient
             newClient.show();
         });
     }
