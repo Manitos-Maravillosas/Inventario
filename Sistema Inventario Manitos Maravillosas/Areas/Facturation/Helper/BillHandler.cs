@@ -232,6 +232,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
         {
             if (bill == null)
                 bill = GetBill();
+            bill.IdBusiness = b.IdBusiness;
             bill.bankAccount = b.bankAccount;
             bill.billxTypePaymentxBankAccout = b.billxTypePaymentxBankAccout;
             bill.billxTypePayment = b.billxTypePayment;
@@ -276,12 +277,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
             
         }
 
-        public void PurchaseComplete()
+        public Boolean PurchaseComplete()
         {
             if (bill == null)
                 bill = GetBill();
-            _billService.SaveBill(bill);
 
+            return _billService.SaveBill(bill);
 
         }   
     }

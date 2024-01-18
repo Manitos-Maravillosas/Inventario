@@ -20,6 +20,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
 using System.Globalization;
+using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 {
@@ -36,9 +37,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly ICoinService _coinService;
         private readonly ITypePaymentService _typePaymentService;
         private readonly IBankAccountService _bankAccountService;
+        private readonly IBusinessService _businessService; 
         private Bill bill;
         public PurchaseConfigurationController(IProductService productService, IClientService clientService, ITypePaymentService typePaymentService,
-            IBankAccountService bankAccountService,  BillHandler billHandler, ICoinService coinService)
+            IBankAccountService bankAccountService,  BillHandler billHandler, ICoinService coinService, IBusinessService businessService)
         {
 
             _productService = productService;
@@ -47,6 +49,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             _typePaymentService = typePaymentService;
             _bankAccountService = bankAccountService;
             _coinService = coinService;
+            _businessService = businessService;
         }
 
         public IActionResult Index()
@@ -115,7 +118,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             // Define the regular style with 12pt font size
             Style regularStyle = new Style()
                 .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
-                .SetFontSize(8);
+                .SetFontSize(10);
 
             // Define the bold style with 12pt font size
             Style boldStyle = new Style()
@@ -137,10 +140,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             // Invoice details
             document.Add(new Paragraph("FACTURA N°: FACT - 1999")
                             .AddStyle(boldStyle));
-            document.Add(new Paragraph("Cliente: "+bill.Client.Name + " "+ bill.Client.LastName1));
-            document.Add(new Paragraph("Fecha: "+ bill.Date.ToString("dd/MM/yyyy")));
-            document.Add(new Paragraph("Tipo de Factura: En Tienda"));
-            document.Add(new Paragraph("Atendido: "+ bill.Employee.Name+" "+ bill.Employee.LastName1));
+            document.Add(new Paragraph("Cliente: "+bill.Client.Name + " "+ bill.Client.LastName1).AddStyle(regularStyle));
+            document.Add(new Paragraph("Fecha: "+ bill.Date.ToString("dd/MM/yyyy")).AddStyle(regularStyle));
+            document.Add(new Paragraph("Tipo de Factura: En Tienda").AddStyle(regularStyle));
+            document.Add(new Paragraph("Atendido: " + bill.Employee.Name + " " + bill.Employee.LastName1).AddStyle(regularStyle));
 
 
             ////--------------------------------------------------------------------- tableHeader
@@ -162,10 +165,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             foreach (var item in bill.CartXProducts)
             {
                 // Add rows of items with no borders
-                tableProducts.AddCell(new Cell().Add(new Paragraph(item.Product.ProductName)).AddStyle(noBorderStyle));
-                tableProducts.AddCell(new Cell().Add(new Paragraph(item.Quantity.ToString())).AddStyle(noBorderStyle));
-                tableProducts.AddCell(new Cell().Add(new Paragraph("$ "+item.Price.ToString())).AddStyle(noBorderStyle));
-                tableProducts.AddCell(new Cell().Add(new Paragraph("$ "+item.SubTotal.ToString())).AddStyle(noBorderStyle));
+                tableProducts.AddCell(new Cell().Add(new Paragraph(item.Product.ProductName).AddStyle(regularStyle)).AddStyle(noBorderStyle));
+                tableProducts.AddCell(new Cell().Add(new Paragraph(item.Quantity.ToString()).AddStyle(regularStyle)).AddStyle(noBorderStyle));
+                tableProducts.AddCell(new Cell().Add(new Paragraph("$ " + item.Price.ToString()).AddStyle(regularStyle)).AddStyle(noBorderStyle));
+                tableProducts.AddCell(new Cell().Add(new Paragraph("$ " + item.SubTotal.ToString()).AddStyle(regularStyle)).AddStyle(noBorderStyle));
             }
 
             //--------------------------------------------------------------------- tablePrice
@@ -241,48 +244,59 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 
         public void LoadSelect()
         {
-
+            //creating list of bussiones
+            List<Business> businesses = _businessService.GetAll();
+            var selectBusiness = new List<SelectListItem>();
+            foreach (var bus in businesses)
             {
-                // Creating a list of coin SelectListItem
-                List<Coin> coins = _coinService.GetALlCoins();
-                var selectCoin = new List<SelectListItem>();
-                foreach (var item in coins)
+                selectBusiness.Add(new SelectListItem
                 {
-                    selectCoin.Add(new SelectListItem
-                    {
-                        Value = item.IdCoin.ToString(),
-                        Text = item.Description + " "+ item.Name
-                    });
-                }
-                ViewBag.CoinSelect = selectCoin;
-
-
-                // Creating a list of typePayment SelectListItem
-                List<TypePayment> typePayment = _typePaymentService.GetAllTypePayments();
-                var selectTypePayment = new List<SelectListItem>();
-                foreach (var item in typePayment)
-                {
-                    selectTypePayment.Add(new SelectListItem
-                    {
-                        Value = item.IdTypePayment.ToString(),
-                        Text = item.Name
-                    });
-                }
-                ViewBag.TypePaymentSelect = selectTypePayment;
-
-                // Creating a list of bank SelectListItem
-                List<Bank> banks = _bankAccountService.GetAllBanks();
-                var selectBank = new List<SelectListItem>();
-                foreach (var item in banks)
-                {
-                    selectBank.Add(new SelectListItem
-                    {
-                        Value = item.IdBank.ToString(),
-                        Text = item.Name
-                    });
-                }
-                ViewBag.BankSelect = selectBank;
+                    Value = bus.IdBusiness.ToString(),
+                    Text = bus.Name
+                });
             }
+            ViewBag.BusinessSelect = selectBusiness;
+
+            // Creating a list of coin SelectListItem
+            List<Coin> coins = _coinService.GetALlCoins();
+            var selectCoin = new List<SelectListItem>();
+            foreach (var item in coins)
+            {
+                selectCoin.Add(new SelectListItem
+                {
+                    Value = item.IdCoin.ToString(),
+                    Text = item.Description + " "+ item.Name
+                });
+            }
+            ViewBag.CoinSelect = selectCoin;
+
+
+            // Creating a list of typePayment SelectListItem
+            List<TypePayment> typePayment = _typePaymentService.GetAllTypePayments();
+            var selectTypePayment = new List<SelectListItem>();
+            foreach (var item in typePayment)
+            {
+                selectTypePayment.Add(new SelectListItem
+                {
+                    Value = item.IdTypePayment.ToString(),
+                    Text = item.Name
+                });
+            }
+            ViewBag.TypePaymentSelect = selectTypePayment;
+
+            // Creating a list of bank SelectListItem
+            List<Bank> banks = _bankAccountService.GetAllBanks();
+            var selectBank = new List<SelectListItem>();
+            foreach (var item in banks)
+            {
+                selectBank.Add(new SelectListItem
+                {
+                    Value = item.IdBank.ToString(),
+                    Text = item.Name
+                });
+            }
+            ViewBag.BankSelect = selectBank;
+                    
         }
 
         [HttpPost]
@@ -335,6 +349,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             //validations
             var typePaymentxCoinFlag = _typePaymentService.GetIdTypePaymentxCoin(b.billxTypePayment.typePaymentxCoin.idTypePayment, b.billxTypePayment.typePaymentxCoin.idCoin);
             b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
+            
+            var flagComplete = false;
             if (b.billxTypePayment.typePaymentxCoin.idTypePayment == 1) //Efectivo
             {
                 if (b.billxTypePayment.bothCoins)
@@ -352,27 +368,27 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                     {
                         b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
                         _billHandler.UpdateTypePayment(b);
-                        _billHandler.PurchaseComplete();
+                        flagComplete = _billHandler.PurchaseComplete();
                     }
                 }
                 else
                 {
                     b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
                     _billHandler.UpdateTypePayment(b);
-                    _billHandler.PurchaseComplete();
+                    flagComplete = _billHandler.PurchaseComplete();
                 }
             }
             else if (b.billxTypePayment.typePaymentxCoin.idTypePayment == 2) //Transferencia
             {
                 b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
                 _billHandler.UpdateTypePayment(b);
-                _billHandler.PurchaseComplete();
+                flagComplete = _billHandler.PurchaseComplete();
             }
             else if (b.billxTypePayment.typePaymentxCoin.idTypePayment == 3) //tarjeta
             {
                 b.billxTypePayment.typePaymentxCoin.Id = 3;
                 _billHandler.UpdateTypePayment(b);
-                _billHandler.PurchaseComplete();
+                flagComplete= _billHandler.PurchaseComplete();
             }
             else if(b.billxTypePayment.amountPaid == 0)
             {
@@ -387,9 +403,20 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             {
                 b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
                 _billHandler.UpdateTypePayment(b);
-                _billHandler.PurchaseComplete();
+                flagComplete = _billHandler.PurchaseComplete();
             }
-            return RedirectToAction("Index");
+            if(flagComplete)
+            {
+
+                TempData["Success"] = "Se ha registrado la factura correctamente";
+                _billHandler.ClearData();
+                bill = _billHandler.GetBill();
+                return View("Index", bill);
+            }
+            else
+            {
+                return View("Index");
+            }
         }
 
 

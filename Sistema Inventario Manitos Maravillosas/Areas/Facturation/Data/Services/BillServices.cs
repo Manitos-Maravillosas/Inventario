@@ -15,7 +15,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
     {
         DataTable ConvertToDataTable(List<CartXProduct> products);
         DataTable ConverToTabaTableDelivery(Delivery delivery);
-        void SaveBill(Bill bill);
+        Boolean SaveBill(Bill bill);
 
     }
     public class BillService : IBillService
@@ -87,7 +87,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
             return table;
         }
 
-        public void SaveBill(Bill bill)
+        public Boolean SaveBill(Bill bill)
         {
             ProductFacturation product = new ProductFacturation();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
@@ -146,6 +146,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                 // Consider whether to throw a custom exception or handle it differently
                 throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
+            return true;
         }
 
         //------------------------------------------------------------------------------------

@@ -22,12 +22,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly ITypeDeliveryService _typeDeliveryService;
         private readonly IDeleveryService _deleveryService;
         private readonly IEmployeeService _employeeService;
+        private readonly IBusinessService _businessService;
         private readonly BillHandler _billHandler;
 
 
 
         public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService,
-            IDeleveryService deleveryService, IEmployeeService employeeService, BillHandler billHandler)
+            IDeleveryService deleveryService, IEmployeeService employeeService,  BillHandler billHandler, IBusinessService businessService)
 
         {
 
@@ -37,6 +38,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             _deleveryService = deleveryService;
             _employeeService = employeeService;
             _billHandler = billHandler;
+            _businessService = businessService;
         }
 
         // GET: FacturationController

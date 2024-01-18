@@ -92,7 +92,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
                     ViewData["ErrorMessage"] = result.Message;
                 }
                 ViewData["Success"] = "Se ha modificado los datos del tipo de pago!";
-            }   
+            }  
                
             LoadSelect();
             var typePayments = _TypePaymentService.GetAll();
