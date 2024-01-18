@@ -51,8 +51,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                         var parameters = new SqlParameter[]
                         {
                             new SqlParameter("@idTypePaymentxCoin", DBNull.Value),
-                            new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@idTypePayment", DBNull.Value),
+                            new SqlParameter("@idCoin", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -103,8 +103,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                         command.CommandType = CommandType.StoredProcedure;
 
                         command.Parameters.Add(new SqlParameter("@idTypePaymentxCoin", newTypePayment.Id != 0 ? newTypePayment.Id : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newTypePayment.Name) ? DBNull.Value : newTypePayment.Name));
-                        command.Parameters.Add(new SqlParameter("@coinDescription", string.IsNullOrEmpty(newTypePayment.CoinDescription) ? DBNull.Value : newTypePayment.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@idTypePayment", newTypePayment.idTypePayment));
+                        command.Parameters.Add(new SqlParameter("@idCoin", newTypePayment.idCoin));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
                         connection.Open();
@@ -152,8 +152,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                         var parameters = new SqlParameter[]
                         {
                             new SqlParameter("@idTypePaymentxCoin", id),
-                            new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@idTypePayment", DBNull.Value),
+                            new SqlParameter("@idCoin", DBNull.Value),
                             new SqlParameter("@operation", '4')
                         };
 
