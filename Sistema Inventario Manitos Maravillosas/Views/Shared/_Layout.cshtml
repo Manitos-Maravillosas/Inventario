@@ -106,27 +106,29 @@
                     </ul>
                 </li>
 
+                @if (admin)
+                {
+                    <!---Proveedores-->
+                    <li class="inline-nav-item">
+                        <a class="d-flex justify-content-between align-items-center aside-link " href="#">
+                            <div>
+                                <i class="bi bi-archive-fill"></i>
+                                Proveedores
+                            </div>
+                            <i class="bi bi-caret-down-fill arrowCollapse"></i>
+                        </a>
 
-                <!---Proveedores-->
-                <li class="inline-nav-item">
-                    <a class="d-flex justify-content-between align-items-center aside-link " href="#">
-                        <div>
-                            <i class="bi bi-archive-fill"></i>
-                            Proveedores
-                        </div>
-                        <i class="bi bi-caret-down-fill arrowCollapse"></i>
-                    </a>
-
-                    <!---SubMenu Items-->
-                    <ul class="subMenuCollapse" role="navigation">
-                        <li class="subMenuNavItem">
-                            <a class="aside-linkSubItem" asp-area="Supplier" asp-controller="Provider" asp-action="Index">Proveedor</a>
-                        </li>
-                        <li class="subMenuNavItem">
-                            <a class="aside-linkSubItem" asp-area="Supplier" asp-controller="PurchaseProvider" asp-action="Index">Compra de Inventario</a>
-                        </li>
-                    </ul>
-                </li>
+                        <!---SubMenu Items-->
+                        <ul class="subMenuCollapse" role="navigation">
+                            <li class="subMenuNavItem">
+                                <a class="aside-linkSubItem" asp-area="Supplier" asp-controller="Provider" asp-action="Index">Proveedor</a>
+                            </li>
+                            <li class="subMenuNavItem">
+                                <a class="aside-linkSubItem" asp-area="Supplier" asp-controller="PurchaseProvider" asp-action="Index">Compra de Inventario</a>
+                            </li>
+                        </ul>
+                    </li>
+                }
 
 
                 <!---Administración-->

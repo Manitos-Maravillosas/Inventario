@@ -85,10 +85,12 @@
                         <div class="col-md-6">
                             <label asp-for="StartDate" class="form-label">Fecha de inicio:</label>
                             <input type="date" class="form-control" asp-for="StartDate" placeholder="Fecha de inicio">
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
                             <label asp-for="EndDate" class="form-label">Fecha final:</label>
                             <input type="date" class="form-control" asp-for="EndDate" placeholder="Fecha final">
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
                         <input type="hidden" asp-for="ReportFormat">
                         <input type="hidden" asp-for="ReportType">
@@ -164,4 +166,19 @@
             document.getElementById('reportForm').submit();
         }
     </script>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Error',
+                    text: '@TempData["ErrorMessage"]',
+                    icon: 'error'
+                });
+            });
+        </script>
+
+        TempData["ErrorMessage"] = null;
+    }
 }

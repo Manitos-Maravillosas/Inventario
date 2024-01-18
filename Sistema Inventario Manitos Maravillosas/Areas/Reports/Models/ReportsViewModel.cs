@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Models
 {
     [Keyless]
-    public class ReportsViewModel
+    public class ReportsViewModel : IValidatableObject
     {
         //Start Date
         [Required]
@@ -18,5 +18,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Models
         //Report format
         [Required]
         public string ReportFormat { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (StartDate >= EndDate)
+            {
+                yield return new ValidationResult("Start date must be before the end date.", new[] { nameof(StartDate), nameof(EndDate) });
+            }
+        }
     }
 }

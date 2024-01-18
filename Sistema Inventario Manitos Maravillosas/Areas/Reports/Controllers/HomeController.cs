@@ -5,6 +5,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Models;
@@ -12,6 +13,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Models;
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
 {
     [Area("Reports")]
+    [Authorize(Roles = "Administrador")]
     public class HomeController : Controller
     {
         private readonly IReportsService _reportsService;
@@ -47,6 +49,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
                 return RedirectToAction("ExportReport", reportsView);
 
             }
+            TempData["ErrorMessage"] = "El formato o rango de fechas no es valido";
             return RedirectToAction("Index");
         }
 
@@ -114,33 +117,26 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
         {
             // Memory stream to store the PDF
             MemoryStream stream;
-            string fileName = "";
             // switch to check for type of report
             switch (reportsView.ReportType)
             {
                 case "totalSales":
                     stream = ExportTotalSalesPDF(reportsView);
-                    fileName = "ReporteVentasTotales.pdf";
                     break;
                 case "totalPurchases":
                     stream = ExportTotalPurchasesPDF(reportsView);
-                    fileName = "ReporteComprasTotales.pdf";
                     break;
                 case "byProduct":
                     stream = ExportTotalProductsPDF(reportsView);
-                    fileName = "ReportePorProductos.pdf";
                     break;
                 case "byCategory":
                     stream = ExportTotalCategoriesPDF(reportsView);
-                    fileName = "ReportePorCategorias.pdf";
                     break;
                 case "byClient":
                     stream = ExportTotalClientsPDF(reportsView);
-                    fileName = "ReportePorClientes.pdf";
                     break;
                 case "byBusiness":
                     stream = ExportTotalBusinessPDF(reportsView);
-                    fileName = "ReportePorNegocios.pdf";
                     break;
                 default:
                     stream = null;
@@ -181,9 +177,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             // Add the headers with style
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Id Factura").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Fecha").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Descuento").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Subtotal").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Descuento (%)").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Subtotal ($)").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total ($)").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Empleado").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Cliente").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Negocio").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
@@ -262,9 +258,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Id Producto").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Nombre").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Cantidad Vendida").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Costo Total").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total Vendido").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Ganancia Total").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Costo Total ($)").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total Vendido ($)").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Ganancia Total ($)").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
 
             table.AddStyle(tableDataStyle);
 
@@ -336,9 +332,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Id Categoria").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Nombre").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
             table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Cantidad Vendida").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Costo Total").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total Vendido").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
-            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Ganancia Total").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Costo Total ($)").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total Vendido ($)").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
+            table.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Ganancia Total ($)").AddStyle(headerStyle)).AddStyle(lightGrayStyle));
 
             table.AddStyle(tableDataStyle);
 
@@ -425,7 +421,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
                 // Add the client phone number and total purchased bold for tag
                 doc.Add(new Paragraph()
                     .Add(new Text("Teléfono: ").AddStyle(boldStyle)).Add($"{sale.PhoneNumber}")
-                    .Add(new Text("\nTotal comprado: $").AddStyle(boldStyle)).Add($"{sale.TotalPurchased}")
+                    .Add(new Text("\nTotal comprado:").AddStyle(boldStyle)).Add($"${sale.TotalPurchased}")
                 );
                 // Add the header for the table
                 doc.Add(new Paragraph("Facturas").AddStyle(header2Style));
@@ -437,9 +433,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
                 // Add the headers with style
                 tableBillsByClient.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Id Factura").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
                 tableBillsByClient.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Fecha").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
-                tableBillsByClient.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Descuento").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
-                tableBillsByClient.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Subtotal").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
-                tableBillsByClient.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByClient.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Descuento (%)").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByClient.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Subtotal ($)").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByClient.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total ($)").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
                 tableBillsByClient.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Negocio").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
 
                 tableBillsByClient.AddStyle(tableDataStyle);
@@ -546,9 +542,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
                 // Add the headers with style
                 tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Id Factura").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
                 tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Fecha").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
-                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Descuento").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
-                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Subtotal").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
-                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Descuento (%)").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Subtotal ($)").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
+                tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Total ($)").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
                 tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Cliente").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
                 tableBillsByBusiness.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Empleado").AddStyle(headerStyleTable)).AddStyle(lightGrayStyle));
 

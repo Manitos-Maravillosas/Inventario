@@ -2,7 +2,9 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using EmailService.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
@@ -11,8 +13,6 @@ using Sistema_Inventario_Manitos_Maravillosas.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Filters;
 using SistemaInventario.Data;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services;
-using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -131,6 +131,10 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
     name: "areas",
     pattern: "{area?}/{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 
 
