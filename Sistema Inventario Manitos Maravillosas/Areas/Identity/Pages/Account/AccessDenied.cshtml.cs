@@ -18,6 +18,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
         /// </summary>
         public void OnGet()
         {
+            // Check if the user role is Empleado
+            if (User.IsInRole("Empleado"))
+            {
+                Response.Redirect("/Facturation/Purchase");
+            }
         }
     }
 }

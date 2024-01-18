@@ -232,10 +232,33 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Controllers
                 {
                     ViewData["ErrorMessage"] = result.Message;
                 }
+                // Change role of user
+                var user = _userManager.FindByEmailAsync(employee.Email).Result;
+                var roles = _userManager.GetRolesAsync(user).Result;
+                var role = roles.FirstOrDefault();
+                if (role != employee.Role)
+                {
+                    var resultRole = _userManager.RemoveFromRoleAsync(user, role).Result;
+                    if (resultRole.Succeeded)
+                    {
+                        var resultRole2 = _userManager.AddToRoleAsync(user, employee.Role).Result;
+                        if (!resultRole2.Succeeded)
+                        {
+                            ViewData["ErrorMessage"] = "No se pudo cambiar el rol del usuario";
+                        }
+                    }
+                    else
+                    {
+                        ViewData["ErrorMessage"] = "No se pudo cambiar el rol del usuario";
+                    }
+                }
+
                 ViewData["Success"] = "Se ha modificado los datos del empleado!";
 
             }
-            return View();
+
+            var employees = _employeeService.GetAll();
+            return View("Index", employees);
         }
 
         // POST: EmployeeController/Delete/5

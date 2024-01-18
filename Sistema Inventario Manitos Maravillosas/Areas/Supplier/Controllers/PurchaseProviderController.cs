@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
@@ -12,6 +8,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Models;
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
 {
     [Area("Supplier")]
+    [Authorize(Roles = "Administrador")]
     public class PurchaseProviderController : Controller
     {
         private readonly IPurchaseProviderService _PurchaseProviderService;
@@ -30,7 +27,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
         public ActionResult Index()
         {
             var purchases = _PurchaseProviderService.GetAll();
-            
+
             return View(purchases);
         }
 
@@ -43,7 +40,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
         // GET: PurchaseProviderController/Create
         public ActionResult Create()
         {
-            PurchaseProvider purchaseProvider = new PurchaseProvider(); 
+            PurchaseProvider purchaseProvider = new PurchaseProvider();
             purchaseProvider.Products = _ProductService.GetAll();
 
             var businessNames = _businessService.GetBusinessNames();

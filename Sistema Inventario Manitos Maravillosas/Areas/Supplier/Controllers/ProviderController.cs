@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
@@ -8,6 +7,7 @@ using Sistema_Inventario_Manitos_Maravillosas.Models;
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
 {
     [Area("Supplier")]
+    [Authorize(Roles = "Administrador")]
     public class ProviderController : Controller
     {
         private readonly IProviderService _ProviderService;
