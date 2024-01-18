@@ -41,9 +41,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             _deliveryService = deliveryService;
             _employeeService = employeeService;
 
-            _deliveryService = deleveryService;
-            _typePaymentService = typePaymentService;
-
             _billHandler = billHandler;
             _businessService = businessService;
         }
@@ -177,8 +174,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                     if (product != null)
                     {
                         _billHandler.UpdateProductSubtotalPrice(cartXProduct, quantity);
-                        //return PartialView("_tableProducts", _billHandler.GetBill());
-                        return Json(new { success = true, message = _billHandler.GetBill() });
+                        return PartialView("_tableProducts", _billHandler.GetBill());
+                        //return Json(new { success = true, message = _billHandler.GetBill() });
                     }
                     else
                     {

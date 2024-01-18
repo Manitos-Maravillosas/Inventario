@@ -38,6 +38,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public int IdAddress { get; set; }
         public int IdTypeDelivery { get; set; }
 
+        public int IdBill { get; set; }
 
         //public
         public DeliveryxCompanyTrans deliveryxCompanyTrans { get; set;}         

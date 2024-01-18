@@ -15,7 +15,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
     {
         DataTable ConvertToDataTable(List<CartXProduct> products);
         DataTable ConverToTabaTableDelivery(Delivery delivery);
+        DataTable ConverToTabaBillxTypePayment(BillxTypePayment billxTypePayment);
         Boolean SaveBill(Bill bill);
+        List<Bill> GetAll();
 
     }
     public class BillService : IBillService
@@ -28,7 +30,59 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
         {
             _configuration = configuration;
         }
+        //------------------------------------------------------------------------------------
+        //                              GetAll                                             
+        //------------------------------------------------------------------------------------
+        public List<Bill> GetAll()
+        {
+            List<Bill> bills = new List<Bill>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spBillCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        var parameters = new SqlParameter[]
+                        {
+                            new SqlParameter("@idBill", DBNull.Value),
+                            new SqlParameter("@operation", '2')
+                        };
+
+                        command.Parameters.AddRange(parameters);
+
+                        connection.Open();
+
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+                            while (dataReader.Read())
+                            {
+                                Bill bill = new Bill
+                                {
+                                    IdBill = Convert.ToInt32(dataReader["idBill"]),
+                                    Date = Convert.ToDateTime(dataReader["date"]).Date,
+                                    PercentDiscount = Convert.ToSingle(dataReader["percentDiscount"]),
+                                    SubTotal = Convert.ToSingle(dataReader["subTotal"]),
+                                    TotalCost = Convert.ToSingle(dataReader["totalCost"]),
+                                    BusinessName = dataReader["businessName"].ToString(),
+                                };
+                                bills.Add(bill);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                bills.Clear();
+                throw new CustomDataException(ex.Message, ex);
+            }
+
+            return bills;
+        }
         public DataTable ConvertToDataTable(List<CartXProduct> products)
         {
             DataTable table = new DataTable();
@@ -149,71 +203,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
             return true;
         }
 
-        //------------------------------------------------------------------------------------
-        //                              GetAll                                             
-        //------------------------------------------------------------------------------------
-        public List<ProductFacturation> GetAll()
-        {
-            List<ProductFacturation> products = new List<ProductFacturation>();
-            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    using (SqlCommand command = new SqlCommand("spProductCRUD", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        var parameters = new SqlParameter[]
-                        {
-                            new SqlParameter("@idClient", DBNull.Value),
-                            new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@lastName1", DBNull.Value),
-                            new SqlParameter("@lastName2", DBNull.Value),
-                            new SqlParameter("@email", DBNull.Value),
-                            new SqlParameter("@phoneNumber", DBNull.Value),
-                            new SqlParameter("@operation", '2') // Operation for 'Read' is 2
-                        };
-
-                        command.Parameters.AddRange(parameters);
-
-                        connection.Open();
-
-                        using (SqlDataReader dataReader = command.ExecuteReader())
-                        {
-                            if (!dataReader.HasRows)
-                            {
-                                // Handle the case when no data is returned
-                                // You might want to log this or handle it according to your application's logic
-                                return null; // Return the empty list
-                            }
-
-                            while (dataReader.Read())
-                            {
-                                ProductFacturation product = new ProductFacturation();
-
-                                products.Add(product);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception here
-                // Handle the exception as per your application's policy
-                products.Clear(); // This will return an empty list in case of an error.
-                throw new CustomDataException("An error occurred: " + ex.Message, ex);
-            }
-
-            return products;
-        }
-
-        public ProductFacturation GetById(string id)
-        {
-            throw new NotImplementedException();
-        }
 
         public ProductFacturation GetStockById(string id, int quantity)
         {

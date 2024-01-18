@@ -45,13 +45,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public float TotalCost { get; set; }
 
-  
+        public string? IdEmployee { get; set; }
         public virtual Employee Employee { get; set; }
 
         public string IdClient { get; set; }
         public virtual Client Client { get; set; }
 
         public int IdBusiness { get; set; }
+
+        public string? BusinessName { get; set; }
 
         // Navigation property for CartXProduct
         public virtual List<CartXProduct> CartXProducts { get; set; }
