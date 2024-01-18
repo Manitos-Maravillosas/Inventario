@@ -332,18 +332,55 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 
         public IActionResult PurchaseComplete(Bill b)
         {
-
-            var typePaymentxCoinFlag  = _typePaymentService.GetIdTypePaymentxCoin(b.billxTypePayment.typePaymentxCoin.idTypePayment, b.billxTypePayment.typePaymentxCoin.idCoin);
-            if(typePaymentxCoinFlag != 0)
+            //validations
+            var typePaymentxCoinFlag = _typePaymentService.GetIdTypePaymentxCoin(b.billxTypePayment.typePaymentxCoin.idTypePayment, b.billxTypePayment.typePaymentxCoin.idCoin);
+            b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
+            if (b.billxTypePayment.typePaymentxCoin.idTypePayment == 1) //Efectivo
             {
-
+                if (b.billxTypePayment.bothCoins)
+                {
+                    if (b.billxTypePayment.amountPaidCordoba == 0 || b.billxTypePayment.amountPaidDolar == 0)
+                    {
+                        TempData["ErrorMessage"] = "Debe ingresar el monto pagado en ambas monedas";
+                    }
+                    else if ((b.billxTypePayment.amountPaidCordoba * 36.68) + b.billxTypePayment.amountPaidDolar < b.TotalCost)
+                    {
+                        TempData["ErrorMessage"] = "El monto pagado en ambas monedas es menor que el total de la factura";
+                    }
+                    else
+                    {
+                        b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
+                        _billHandler.UpdateTypePayment(b);
+                        _billHandler.PurchaseComplete();
+                    }
+                }
+            }
+            else if (b.billxTypePayment.typePaymentxCoin.idTypePayment == 2) //Transferencia
+            {
                 b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
                 _billHandler.UpdateTypePayment(b);
                 _billHandler.PurchaseComplete();
             }
+            else if (b.billxTypePayment.typePaymentxCoin.idTypePayment == 3) //tarjeta
+            {
+                b.billxTypePayment.typePaymentxCoin.Id = 3;
+                _billHandler.UpdateTypePayment(b);
+                _billHandler.PurchaseComplete();
+            }
+            else if(b.billxTypePayment.amountPaid == 0)
+            {
+                TempData["ErrorMessage"] = "Debe ingresar el monto pagado";
+            }
+            else if(b.billxTypePayment.amountPaid < b.TotalCost)
+            {
+                TempData["ErrorMessage"] = "El monto pagado es menor que el total de la factura";
+            }
+
             else
             {
-                TempData["ErrorMessage"] = "No existe un tipo pago relacionado a esta moneda";
+                b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
+                _billHandler.UpdateTypePayment(b);
+                _billHandler.PurchaseComplete();
             }
             return RedirectToAction("Index");
         }

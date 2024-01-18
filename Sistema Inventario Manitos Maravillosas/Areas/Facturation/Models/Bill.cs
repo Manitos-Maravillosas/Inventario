@@ -120,10 +120,18 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         {
             amountPaid = 0.0f;
             idTypePaymentxCoin = 0;
-            typePaymentxCoin = new TypePaymentxCoin();            
+            typePaymentxCoin = new TypePaymentxCoin();       
+            
+            bothCoins = false;
+            amountPaidDolar = 0.0f;
+            amountPaidCordoba = 0.0f;
 
         }
         [Key]
+        public bool bothCoins { get; set; }
+        public float amountPaidDolar { get; set; }
+        public float amountPaidCordoba { get; set; }
+
 
         // Foreign keys
         public float amountPaid { get; set; }

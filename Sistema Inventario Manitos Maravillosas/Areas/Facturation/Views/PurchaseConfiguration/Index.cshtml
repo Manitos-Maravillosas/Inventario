@@ -90,6 +90,7 @@
                             </label>
                         </div> *@
                         <!--this select should querry from the data base-->
+
                         <div class="mb-3">
                             <label asp-for="billxTypePayment.typePaymentxCoin.idTypePayment" class="control-label mb-2">Tipo de Pago</label>
                             <div class="select-wrapper">
@@ -101,8 +102,39 @@
                         </div>
 
                         <div id="allowMixPaymentDiv" class="form-check form-switch mb-3 d-none">
-                            <input asp-for="mixPayment" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar Pago Mixto</label>
+                            <input id="allowMixPaymentSwitch" asp-for="mixPayment" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar pago para ambas monedas</label>
+                        </div>
+                        <div id="divRadioCoin" class="mb-3">
+                            <label class="form-label">Moneda</label>
+                            <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
+                                @foreach (var gender in ViewBag.CoinSelect)
+                                {
+                                    <div class="form-check form-check-inline radio-item">
+                                        <input type="radio" asp-for="billxTypePayment.typePaymentxCoin.idCoin" name="radioCoin" value="@gender.Value" id="radio-@gender.Text" class="form-check-input" />
+                                        <label class="form-check-label" for="radio-@gender.Text">
+                                            @gender.Text
+                                        </label>
+                                    </div>
+
+                                }
+                            </div>
+                        </div>
+
+                        
+                        <div id="divCoinAmountPaid" class="d-none">
+                            <label class="form-label mb-1">Monto en dólares:</label>
+                            <div class="input-group mb-3 ">
+                                <span class="input-group-text" id="basic-addon1"><span class="">$</span></span>
+                                <input id="amountPaidDolar" asp-for="billxTypePayment.amountPaidDolar" type="number" class="form-control" placeholder="00.00">
+
+                            </div>
+
+                            <label class="form-label mb-1">Monto en córdobas:</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><span class="">C$</span></span>
+                                <input id="amountPaidCordoba" asp-for="billxTypePayment.amountPaidCordoba" type="number" class="form-control" placeholder="00.00">
+                            </div>
                         </div>
 
                         <div id="bankAccountId" class="mb-3 d-none">
@@ -114,22 +146,8 @@
                             </div>
                         </div>
 
-                        <div id="radioCoin" class="mb-3">
-                            <label class="form-label">Moneda</label>
-                            <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
-                                @foreach (var gender in ViewBag.CoinSelect)
-                                {
-                                    <div class="form-check form-check-inline radio-item">
-                                        <input type="radio" asp-for="billxTypePayment.typePaymentxCoin.idCoin" value="@gender.Value" id="radio-@gender.Text" class="form-check-input" />
-                                        <label class="form-check-label" for="radio-@gender.Text">
-                                            @gender.Text
-                                        </label>
-                                    </div>
 
-                                }
-                            </div>
-                        </div>
-                        
+                       <input id="totalToPay" type="hidden" asp-for="billxTypePayment.amountPaid" value="@Model.TotalCost" />
                         <button type="submit" class="btn btn-primary w-100">
                             Facturar <i class="bi bi-cash-stack"></i>
                         </button>
@@ -177,12 +195,12 @@
             document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     title: 'Error',
-                    text: '@ViewData["ErrorMessage"]',
+                    text: '@TempData["ErrorMessage"]',
                     icon: 'error'
                 });
             });
         </script>
 
-        ViewData["ErrorMessage"] = null;
+        TempData["ErrorMessage"] = null;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Humanizer;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models;
@@ -68,6 +69,23 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
 
             return table;
         }
+        public DataTable ConverToTabaBillxTypePayment(BillxTypePayment billxTypePayment)
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("idTypePaymentXCoin", typeof(int));
+            table.Columns.Add("amount", typeof(float));
+
+            if (billxTypePayment.bothCoins)
+            {
+                table.Rows.Add(billxTypePayment.idTypePaymentxCoin, billxTypePayment.amountPaidDolar);
+                table.Rows.Add(billxTypePayment.idTypePaymentxCoin, billxTypePayment.amountPaidCordoba);
+            }
+            else
+            {
+                table.Rows.Add(billxTypePayment.idTypePaymentxCoin, billxTypePayment.amountPaid);
+            }
+            return table;
+        }
 
         public void SaveBill(Bill bill)
         {
@@ -92,6 +110,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
                         command.Parameters.Add(new SqlParameter("@isDelivery", bill.deliveryFlag));
                         command.Parameters.Add(new SqlParameter("@productList", ConvertToDataTable(bill.CartXProducts)));
                         command.Parameters.Add(new SqlParameter("@deliveryInfo", ConverToTabaTableDelivery(bill.delivery)));
+                        command.Parameters.Add(new SqlParameter("@billxTypePaymentTypeInfo", ConverToTabaBillxTypePayment(bill.billxTypePayment)));
                        
                         connection.Open();
 

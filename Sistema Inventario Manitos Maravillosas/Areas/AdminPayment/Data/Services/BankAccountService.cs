@@ -16,6 +16,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
         BankAccount GetById(int id);
         OperationResult Update(BankAccount newBankAccount);
 
+        int GetIdBankAccountTypePaymentxCoin(int idTypePayment, int idCoin);
 
         List<Bank> GetAllBanks();
     }
@@ -386,6 +387,50 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                 }
             }
             return banks;
+        }
+
+        public int GetIdBankAccountTypePaymentxCoin(int idTypePayment, int idCoin)
+        {
+            int typePaymentxCoin = 0;
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+            SqlConnection connection = null;
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+
+                using (SqlCommand command = new SqlCommand("spGetIdTypePaymentxCoin", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+
+                    command.Parameters.Add(new SqlParameter("@idTypePayment", idTypePayment));
+                    command.Parameters.Add(new SqlParameter("@idCoin", idCoin));
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader typePaymentDataReader = command.ExecuteReader())
+                    {
+                        while (typePaymentDataReader.Read())
+                        {
+                            typePaymentxCoin = Convert.ToInt32(typePaymentDataReader["idTypePaymentxCoin"]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            return typePaymentxCoin;
         }
 
 
