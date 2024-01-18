@@ -206,6 +206,41 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             }
         }
 
+        //-------------------------------------------------------------------------------------//
+        //                                  Discount                                           //
+        //-------------------------------------------------------------------------------------//
+
+        // POST: Facturation/Purcharse/AddProductToCart
+        [HttpPost]
+        public IActionResult UpdateDiscount(int percent)
+        {
+            if (percent <= 0)
+            {
+                return Json(new { success = false, message = "La cantidad debe ser mayor a 0" });
+            }
+            try
+            {
+                _billHandler.UpdateDiscount(percent);
+                return PartialView("_tableProducts", _billHandler.GetBill());
+
+            }
+            catch (CustomDataException ex)
+            {
+                if (ex.Message == "Sql")
+                {
+                    return Json(new { success = false, message = ex.InnerException.Message });
+                }
+                else
+                {
+                    throw new CustomDataException("An error occurred: " + ex.Message, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomDataException("An error occurred: " + ex.Message, ex);
+            }
+        }
+
         // POST: Facturation/Purcharse/removeProductFromCart
         [HttpPost]
         public IActionResult removeProductFromCart(string id)

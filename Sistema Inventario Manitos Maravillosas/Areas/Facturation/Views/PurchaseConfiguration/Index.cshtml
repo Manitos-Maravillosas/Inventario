@@ -168,7 +168,8 @@
     <script>
         var pdfUrl = '@Url.Action("GeneratePdf", "PurchaseConfiguration", new { area = "Facturation" })';
     </script>
-    <script src="~/js/facturation/pdfscript.js"></script>
+
+    <script src="~/js/facturation/purchaseconfig.js"></script>
     <script src="~/js/facturation/moneyscriptconfig.js"></script>
 
     @if (TempData["Success"] != null)
@@ -189,8 +190,7 @@
     }
     else
     {
-
-        <script src="~/js/facturation/purchaseconfig.js"></script>
+        <script src="~/js/facturation/pdfscript.js"></script>
     }
 
     @if (TempData["ErrorMessage"] != null)

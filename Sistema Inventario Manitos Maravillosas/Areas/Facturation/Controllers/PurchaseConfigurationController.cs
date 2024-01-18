@@ -38,10 +38,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly ICoinService _coinService;
         private readonly ITypePaymentService _typePaymentService;
         private readonly IBankAccountService _bankAccountService;
-        private readonly IBusinessService _businessService; 
+        private readonly IBusinessService _businessService;
+        private readonly IEmployeeService _employeeService;
         private Bill bill;
         public PurchaseConfigurationController(IProductService productService, IClientService clientService, ITypePaymentService typePaymentService,
-            IBankAccountService bankAccountService,  BillHandler billHandler, ICoinService coinService, IBusinessService businessService)
+            IBankAccountService bankAccountService,  BillHandler billHandler, ICoinService coinService, IBusinessService businessService, IEmployeeService employeeService)
         {
 
             _productService = productService;
@@ -51,6 +52,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             _bankAccountService = bankAccountService;
             _coinService = coinService;
             _businessService = businessService;
+            _employeeService = employeeService;
         }
 
         public IActionResult Index()
@@ -68,12 +70,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             LoadSelect();
             
             
-            if (bill.CartXProducts.Count <= 0)
+            if (bill.CartXProducts.Count <= 0 || bill.Client == null)
             {
+                TempData["ErrorMessage"] = "Debe agregar productos al carrito y seleccionar un cliente";
                 return RedirectToAction("Index", "Purchase");
             }
             else
             {
+                string userEmail = User.Identity.Name;
+                Bill b = _billHandler.GetBill();
+                _billHandler.AssingEmployee(_employeeService.GetEmployeeByEmail(userEmail));
                 return View(bill);                
             }
 

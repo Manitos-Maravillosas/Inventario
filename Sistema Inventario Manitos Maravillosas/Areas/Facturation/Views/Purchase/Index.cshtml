@@ -451,4 +451,19 @@
     <script type="module" src="~/js/facturation/deleveryscript.js"></script>
     <script src="~/js/admin/client.js"></script>
     <script src="~/js/facturation/moneyscript.js"></script>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Error',
+                    text: '@TempData["ErrorMessage"]',
+                    icon: 'error'
+                });
+            });
+        </script>
+
+        TempData["ErrorMessage"] = null;
+    }
 }
