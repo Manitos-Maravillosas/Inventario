@@ -2,8 +2,8 @@
 @model Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models.PurchaseProvider
 
 <div id="productInfo" style="display:none;">
-    <div id="selectedProductId" data-product-id=""></div>
-    <div id="selectedProductName" data-product-name=""></div>
+    
+    <div id="selectedProductName" data-name=""></div>
 </div>
 
 <section>
@@ -112,7 +112,7 @@
                     {
                         @foreach (var product in Model.Products)
                         {
-                            <li class="list-group-item list-group-item-action" data-id="@product.IdProduct" data-name="@product.ProductName @product.Description">
+                            <li class="list-group-item list-group-item-action" data-id="@product.IdProduct" data-name="@product.ProductName">
                                 <div class="container">
                                     <div class="row align-items-center">
                                         <div class="col-auto">
@@ -121,9 +121,9 @@
                                             </div>
                                         </div>
                                         <div class="col">
-                                            <div class="fs-6 fw-bold">@product.IdProduct <span class="fw-normal"> - </span>@product.ProductName @product.Description</div>
-                                            <div class="text-black">Stock: @product.Stock</div>
-                                            <div class="text-black-50 fw-lighter">@product.ProductCategory</div>
+                                            <div class="fs-6 fw-bold">@product.IdProduct <span class="fw-normal"> - </span>@product.ProductName </div>
+                                            <div class="text-black">@product.Description </div>
+                                            <div class="text-black-50 fw-lighter">Stock: @product.Stock - @product.ProductCategory</div>
                                         </div>
                                     </div>
                                 </div>
@@ -180,6 +180,8 @@
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // Eliminar el valor de Local Storage
+                        localStorage.removeItem('selectedProductName');
                         window.location.href = '/Supplier/PurchaseProvider/Index';
                     }
                 });

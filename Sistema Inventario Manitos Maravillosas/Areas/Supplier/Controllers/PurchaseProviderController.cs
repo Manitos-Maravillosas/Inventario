@@ -70,6 +70,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Controllers
                 ViewData["Success"] = "Compra a Inventario agregada correctamente!";
 
             }
+            purchaseProvider.Products = _ProductService.GetAll();
             ViewBag.BusinessNames = new SelectList(_businessService.GetBusinessNames());
             ViewBag.ProviderNames = new SelectList(_ProviderService.GetProviderNames());
             return View(purchaseProvider);

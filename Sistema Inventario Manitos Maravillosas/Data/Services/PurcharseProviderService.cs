@@ -111,6 +111,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         command.Parameters.Add(new SqlParameter("@productName", string.IsNullOrEmpty(newPurchaseProvider.ProductName) ? DBNull.Value : newPurchaseProvider.ProductName));
                         command.Parameters.Add(new SqlParameter("@providerName", string.IsNullOrEmpty(newPurchaseProvider.ProviderName) ? DBNull.Value : newPurchaseProvider.ProviderName));
                         command.Parameters.Add(new SqlParameter("@businessName", string.IsNullOrEmpty(newPurchaseProvider.BusinessName) ? DBNull.Value : newPurchaseProvider.BusinessName));
+                        command.Parameters.Add(new SqlParameter("@newPrice", newPurchaseProvider.Price != null ? (object)newPurchaseProvider.Price : DBNull.Value));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
                         connection.Open();

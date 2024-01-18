@@ -1,5 +1,9 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-
+    var savedProductName = localStorage.getItem('selectedProductName');
+    if (savedProductName) {
+        document.getElementById('productNameInput').value = savedProductName;
+        document.getElementById('hiddenProductName').value = savedProductName;
+    }
     var assignProductBtn = document.getElementById('assignProduct');
     var modalProduct = new bootstrap.Modal(document.getElementById('modalProduct'));
     assignProductBtn.addEventListener('click', function () {
@@ -21,22 +25,22 @@
         });
     });
 
-    // Seleccionar producto utilizando delegación de eventos
+    // Seleccionar producto 
     var listProduct = document.getElementById('listProduct');
     listProduct.addEventListener('click', function (event) {
         var clickedElement = event.target.closest('li');
         if (clickedElement) {
             var productName = clickedElement.getAttribute('data-name');
+            // Guardar en Local Storage
+            localStorage.setItem('selectedProductName', productName);
 
-            // Actualiza el input visible y el campo oculto con el nombre del producto seleccionado
             document.getElementById('productNameInput').value = productName;
             document.getElementById('hiddenProductName').value = productName;
 
             modalProduct.hide();
+            
         }
     });
-
-    // No es necesario manejar el evento 'submit' si solo estamos actualizando el campo oculto
-    // en el evento de clic de la lista de productos. El valor correcto ya debería estar establecido
-    // en 'hiddenProductName' cuando el formulario se envía.
+    localStorage.removeItem('selectedProductName');
+       
 });
