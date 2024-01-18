@@ -68,6 +68,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
        //delivery
        public bool deliveryFlag { get; set; }
 
+        public int idDelivery { get; set; }
         public Delivery delivery { get; set; }
 
         public BankAccount bankAccount { get; set; }
@@ -95,6 +96,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
             Cost = 0.0f;
             Price = 0.0f;
             SubTotal = 0.0f;
+            Product = new ProductFacturation();  // IdProduct should be set explicitly as it is a foreign key
             // IdProduct and IdBill should be set explicitly as they are foreign keys
         }
         [Key]
@@ -114,6 +116,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public int IdBill { get; set; }
         public virtual Bill Bill { get; set; }
+
+
     }
 
     public class BillxTypePayment

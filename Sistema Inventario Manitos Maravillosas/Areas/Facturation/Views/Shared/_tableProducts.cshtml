@@ -42,13 +42,9 @@
                     <td>@item.Product.Category</td>
                     <td class="w-20">@item.Product.Description</td>
                     <td>
-                        <div class="editableCell" data-price="@item.Price">
-                            <span class="addonMoney">
-                                @((Model.optionMoney == 1) ? "$" : "C$")
-                            </span>
-                            @item.Price
-                        </div>
-                        <input class="editableInput" type="number">
+                        <span class="addonMoney">
+                            @((Model.optionMoney == 1) ? "$" : "C$") @item.Price
+                        </span>
                     </td>
                     <td class="w-15">
                         <div class="editableCell">@item.Quantity</div>
