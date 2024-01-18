@@ -106,7 +106,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Controllers
             ViewBag.ProductCategories = new SelectList(productCategories);
             ViewBag.BusinessNames = new SelectList(businessNames);
 
-            return View();
+            var products = _productService.GetAll();
+            return View("Index", products);
         }
 
 
