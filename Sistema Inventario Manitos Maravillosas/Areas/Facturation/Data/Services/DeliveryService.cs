@@ -6,9 +6,9 @@ using System.Data.SqlClient;
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Services
 {
 
-    public interface IDeleveryService
+    public interface IDeliveryService
     {
-        List<Delivery> GetAll();
+        List<Delivery> GetAllDeliveries();
         OperationResult UpdateStatus(string id);
         List<ProductFacturation> GetAll();
         ProductFacturation GetById(string id);
@@ -21,14 +21,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
 
 
     }
-    public class DeleveryService : IDeleveryService
+    public class DeliveryService : IDeliveryService
 
     {
         private readonly IConfiguration _configuration;
 
         private OperationResult result = new OperationResult(true, "");
 
-        public DeleveryService(IConfiguration configuration)
+        public DeliveryService(IConfiguration configuration)
 
         {
             _configuration = configuration;
@@ -214,7 +214,7 @@ public List<CompanyTrans> GetAllCompanies()
         //------------------------------------------------------------------------------------
         //                              GetAll                                             
         //------------------------------------------------------------------------------------
-        public List<Delivery> GetAll()
+        public List<Delivery> GetAllDeliveries()
         {
             List<Delivery> deliveries = new List<Delivery>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");

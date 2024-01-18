@@ -17,7 +17,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         // GET: DeliveryController
         public ActionResult Index()
         {
-            var deliveries = _DeliveryService.GetAll();
+            var deliveries = _DeliveryService.GetAllDeliveries();
 
             return View(deliveries);
         }

@@ -17,7 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 //-------------------------------------SERVICES------------------------------------------------//
 // Facturation Services
 builder.Services.AddScoped<IProductServiceFacturation, ProductServiceFacturation>();
-builder.Services.AddScoped<IDeleveryService, DeleveryService>();
 builder.Services.AddScoped<IBillService, BillService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 

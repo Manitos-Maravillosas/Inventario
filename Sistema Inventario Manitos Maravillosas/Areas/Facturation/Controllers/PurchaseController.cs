@@ -20,14 +20,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly IProductServiceFacturation _productService;
         private readonly IClientService _clientService;
         private readonly ITypeDeliveryService _typeDeliveryService;
-        private readonly IDeleveryService _deleveryService;
+        private readonly IDeliveryService _deliveryService;
         private readonly ITypePaymentService _typePaymentService;
         private readonly IBankAccountService _bankAccountService;
         private readonly BillHandler _billHandler;
 
 
 
-        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService, IDeleveryService deleveryService,
+        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService, IDeliveryService deleveryService,
             ITypePaymentService typePaymentService, BillHandler billHandler)
 
         {
@@ -35,7 +35,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             _productService = productService;
             _clientService = clientService;
             _typeDeliveryService = typeDeliveryService;
-            _deleveryService = deleveryService;
+            _deliveryService = deleveryService;
             _typePaymentService = typePaymentService;
             _billHandler = billHandler;
         }
@@ -65,7 +65,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             }
 
             //Compnies trans
-            List<CompanyTrans> companies = _deleveryService.GetAllCompanies();
+            List<CompanyTrans> companies = _deliveryService.GetAllCompanies();
             // Creating a list of SelectListItem
             var selectCompaniesList = new List<SelectListItem>();
             foreach (var item in companies)
@@ -260,7 +260,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         [HttpGet]
         public IActionResult GetCompanyTrans()
         {
-            List<CompanyTrans> companies = _deleveryService.GetAllCompanies();
+            List<CompanyTrans> companies = _deliveryService.GetAllCompanies();
             return Json(companies);
         }
 
