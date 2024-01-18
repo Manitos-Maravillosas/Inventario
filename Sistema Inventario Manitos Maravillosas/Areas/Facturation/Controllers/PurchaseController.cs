@@ -21,12 +21,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         private readonly IClientService _clientService;
         private readonly ITypeDeliveryService _typeDeliveryService;
         private readonly IDeleveryService _deleveryService;
+        private readonly IEmployeeService _employeeService;
         private readonly BillHandler _billHandler;
 
 
 
-        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService, IDeleveryService deleveryService,
-             BillHandler billHandler)
+        public PurchaseController(IProductServiceFacturation productService, IClientService clientService, ITypeDeliveryService typeDeliveryService,
+            IDeleveryService deleveryService, IEmployeeService employeeService, BillHandler billHandler)
 
         {
 
@@ -34,13 +35,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             _clientService = clientService;
             _typeDeliveryService = typeDeliveryService;
             _deleveryService = deleveryService;
+            _employeeService = employeeService;
             _billHandler = billHandler;
         }
 
         // GET: FacturationController
         public ActionResult Index()
         {
+            string userEmail = User.Identity.Name;
             Bill b = _billHandler.GetBill();
+            _billHandler.AssingEmployee(_employeeService.GetEmployeeByEmail(userEmail));
             b.listClients = _clientService.GetAll();
             var sessionData = HttpContext.Session.GetString("Bill");
             ViewData["isBill"] = true;
@@ -164,7 +168,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                     if (product != null)
                     {
                         _billHandler.UpdateProductSubtotalPrice(cartXProduct, quantity);
-                        return PartialView("_tableProducts", _billHandler.GetBill());
+                        //return PartialView("_tableProducts", _billHandler.GetBill());
+                        return Json(new { success = true, message = _billHandler.GetBill() });
                     }
                     else
                     {

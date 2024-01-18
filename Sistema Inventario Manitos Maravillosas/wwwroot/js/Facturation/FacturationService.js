@@ -235,6 +235,8 @@ function UpdateQuanty(idProduct, quanty) {
                             text: data.message,
                             icon: 'error'
                         })
+                    } else {
+                        console.log(data.message);
                     }
                 });
             } else if (contentType && contentType.indexOf("text/html") !== -1) {

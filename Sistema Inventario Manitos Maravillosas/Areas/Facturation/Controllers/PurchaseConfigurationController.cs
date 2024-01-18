@@ -53,12 +53,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
         {
             bill = _billHandler.GetBill();
             // The JSON string
-            string json = "{\"idBill\":0,\"date\":\"2024-01-16T21:42:57.6021551-06:00\",\"percentDiscount\":0,\"amountDiscount\":0,\"subTotal\":1020,\"totalCost\":1023,\"idEmployee\":\"defaultEmployeeId\",\"employee\":null,\"idClient\":\"109710812\",\"client\":{\"id\":\"109710812\",\"name\":\"Ingrid\",\"lastName1\":\"Mena\",\"lastName2\":\"Barboza\",\"phoneNumber\":\"84252989\",\"idAddress\":14,\"departmentName\":\"Chinandega\",\"cityName\":\"El Realejo\",\"signs\":\"que le importa\"},\"idBusiness\":1,\"business\":null,\"cartXProducts\":[{\"idCartXProduct\":0,\"quantity\":4,\"cost\":50,\"price\":55,\"subTotal\":220,\"idProduct\":\"321\",\"product\":{\"idProduct\":\"321\",\"productName\":\"Headphones\",\"stock\":50,\"cost\":50,\"price\":55,\"description\":\"Wireless headphones with noise cancellation.\",\"status\":true,\"idBusiness\":1,\"business\":null,\"idProductCategory\":1,\"category\":\"Electronics\"},\"idBill\":0,\"bill\":null},{\"idCartXProduct\":0,\"quantity\":8,\"cost\":50,\"price\":60,\"subTotal\":480,\"idProduct\":\"987987\",\"product\":{\"idProduct\":\"987987\",\"productName\":\"Naranja\",\"stock\":80,\"cost\":50,\"price\":60,\"description\":\"Producto citrico de calidad\",\"status\":true,\"idBusiness\":1,\"business\":null,\"idProductCategory\":7,\"category\":\"Frutas y verduras\"},\"idBill\":0,\"bill\":null},{\"idCartXProduct\":0,\"quantity\":8,\"cost\":35,\"price\":40,\"subTotal\":320,\"idProduct\":\"456\",\"product\":{\"idProduct\":\"456\",\"productName\":\"Garden Hose\",\"stock\":40,\"cost\":35,\"price\":40,\"description\":\"Flexible 50ft garden hose with adjustable nozzle.\",\"status\":true,\"idBusiness\":2,\"business\":null,\"idProductCategory\":2,\"category\":\"Gardening Tools\"},\"idBill\":0,\"bill\":null}],\"products\":[],\"optionMoney\":1,\"listClients\":null,\"deliveryFlag\":true,\"delivery\":{\"id\":0,\"total\":3,\"internalCost\":3,\"notes\":null,\"dateAprox\":\"2024-01-20T00:00:00\",\"signs\":null,\"nameTypeDelivery\":null,\"idAddress\":0,\"idTypeDelivery\":1,\"idBill\":0,\"address\":null,\"typeDelivery\":null,\"bill\":null,\"deliveryxCompanyTrans\":{\"aditionalCompanyCost\":0,\"idCompanyTrans\":0,\"inChargePaymentDelivery\":\"2\"}}}";
+            if(bill.CartXProducts.Count <= 0)
+            {
+                string json = "{\r\n  \"idBill\": 0,\r\n  \"date\": \"2024-01-16T21:42:57.6021551-06:00\",\r\n  \"percentDiscount\": 0,\r\n  \"amountDiscount\": 0,\r\n  \"subTotal\": 1020,\r\n  \"totalCost\": 1024,\r\n  \"idEmployee\": \"defaultEmployeeId\",\r\n  \"employee\": {\r\n    \"idEmployee\": \"123456789\",\r\n    \"name\": \"Maynor\",\r\n    \"lastName1\": \"Martínez\",\r\n    \"lastName2\": \"Hernández\",\r\n    \"position\": \"Lavaplatos\",\r\n    \"phoneNumber\": \"60127974\",\r\n    \"idBusiness\": 1,\r\n    \"email\": \"erksmartinez2014@gmail.com\",\r\n    \"businessName\": null,\r\n    \"role\": null\r\n  },\r\n  \"idClient\": \"109710812\",\r\n  \"client\": {\r\n    \"id\": \"109710812\",\r\n    \"name\": \"Ingrid\",\r\n    \"lastName1\": \"Mena\",\r\n    \"lastName2\": \"Barboza\",\r\n    \"phoneNumber\": \"84252989\",\r\n    \"idAddress\": 14,\r\n    \"departmentName\": \"Chinandega\",\r\n    \"cityName\": \"El Realejo\",\r\n    \"signs\": \"que le importa\"\r\n  },\r\n  \"idBusiness\": 1,\r\n  \"business\": null,\r\n  \"cartXProducts\": [\r\n    {\r\n      \"idCartXProduct\": 0,\r\n      \"quantity\": 4,\r\n      \"cost\": 50,\r\n      \"price\": 55,\r\n      \"subTotal\": 220,\r\n      \"idProduct\": \"321\",\r\n      \"product\": {\r\n        \"idProduct\": \"321\",\r\n        \"productName\": \"Headphones\",\r\n        \"stock\": 50,\r\n        \"cost\": 50,\r\n        \"price\": 55,\r\n        \"description\": \"Wireless headphones with noise cancellation.\",\r\n        \"status\": true,\r\n        \"idBusiness\": 1,\r\n        \"business\": null,\r\n        \"idProductCategory\": 1,\r\n        \"category\": \"Electronics\"\r\n      },\r\n      \"idBill\": 0,\r\n      \"bill\": null\r\n    },\r\n    {\r\n      \"idCartXProduct\": 0,\r\n      \"quantity\": 8,\r\n      \"cost\": 50,\r\n      \"price\": 60,\r\n      \"subTotal\": 480,\r\n      \"idProduct\": \"987987\",\r\n      \"product\": {\r\n        \"idProduct\": \"987987\",\r\n        \"productName\": \"Naranja\",\r\n        \"stock\": 80,\r\n        \"cost\": 50,\r\n        \"price\": 60,\r\n        \"description\": \"Producto citrico de calidad\",\r\n        \"status\": true,\r\n        \"idBusiness\": 1,\r\n        \"business\": null,\r\n        \"idProductCategory\": 7,\r\n        \"category\": \"Frutas y verduras\"\r\n      },\r\n      \"idBill\": 0,\r\n      \"bill\": null\r\n    },\r\n    {\r\n      \"idCartXProduct\": 0,\r\n      \"quantity\": 8,\r\n      \"cost\": 35,\r\n      \"price\": 40,\r\n      \"subTotal\": 320,\r\n      \"idProduct\": \"456\",\r\n      \"product\": {\r\n        \"idProduct\": \"456\",\r\n        \"productName\": \"Garden Hose\",\r\n        \"stock\": 40,\r\n        \"cost\": 35,\r\n        \"price\": 40,\r\n        \"description\": \"Flexible 50ft garden hose with adjustable nozzle.\",\r\n        \"status\": true,\r\n        \"idBusiness\": 2,\r\n        \"business\": null,\r\n        \"idProductCategory\": 2,\r\n        \"category\": \"Gardening Tools\"\r\n      },\r\n      \"idBill\": 0,\r\n      \"bill\": null\r\n    }\r\n  ],\r\n  \"products\": [],\r\n  \"optionMoney\": 1,\r\n  \"listClients\": null,\r\n  \"deliveryFlag\": true,\r\n  \"delivery\": {\r\n    \"id\": 0,\r\n    \"total\": 4,\r\n    \"internalCost\": 4,\r\n    \"notes\": null,\r\n    \"dateAprox\": \"2024-01-20T00:00:00\",\r\n    \"signs\": null,\r\n    \"nameTypeDelivery\": null,\r\n    \"idAddress\": 14,\r\n    \"idTypeDelivery\": 1,\r\n    \"idBill\": 0,\r\n    \"address\": null,\r\n    \"typeDelivery\": null,\r\n    \"bill\": null,\r\n    \"deliveryxCompanyTrans\": {\r\n      \"aditionalCompanyCost\": 0,\r\n      \"idCompanyTrans\": 0,\r\n      \"inChargePaymentDelivery\": \"2\"\r\n    }\r\n  },\r\n  \"bankAccount\": {\r\n    \"id\": 0,\r\n    \"accountNumber\": null,\r\n    \"idCoin\": 0,\r\n    \"idBank\": 0,\r\n    \"idTypePayment\": 0,\r\n    \"coinName\": null,\r\n    \"idTypePaymentxCoin\": 0,\r\n    \"typePaymentName\": null,\r\n    \"coinDescription\": null,\r\n    \"bankName\": null\r\n  },\r\n  \"billxTypePayment\": {\r\n    \"amountPaid\": 0,\r\n    \"idTypePaymentxCoin\": 0,\r\n    \"typePaymentxCoin\": {\r\n      \"id\": 0,\r\n      \"name\": \"\",\r\n      \"coinDescription\": \"\",\r\n      \"coinName\": \"\",\r\n      \"idCoin\": 1,\r\n      \"idTypePayment\": 3\r\n    }\r\n  },\r\n  \"billxTypePaymentxBankAccout\": {\r\n    \"idBillxTypePaymentxBankAccout\": 0,\r\n    \"idBillxIdTypePayment\": 0,\r\n    \"idBankAccount\": 0\r\n  },\r\n  \"mixPayment\": false\r\n}";
+                // Deserialize the JSON string to a Bill object
+                bill = JsonConvert.DeserializeObject<Bill>(json);
+                _billHandler.SaveBill(bill);
+            }
 
             LoadSelect();
-            // Deserialize the JSON string to a Bill object
-            bill = JsonConvert.DeserializeObject<Bill>(json);
-            _billHandler.SaveBill(bill);
+            
+            
             if (bill.CartXProducts.Count <= 0)
             {
                 return RedirectToAction("Index", "Purchase");
@@ -135,7 +140,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             document.Add(new Paragraph("Cliente: "+bill.Client.Name + " "+ bill.Client.LastName1));
             document.Add(new Paragraph("Fecha: "+ bill.Date.ToString("dd/MM/yyyy")));
             document.Add(new Paragraph("Tipo de Factura: En Tienda"));
-            document.Add(new Paragraph("Atendido: Ericka Arévalo"));
+            document.Add(new Paragraph("Atendido: "+ bill.Employee.Name+" "+ bill.Employee.LastName1));
 
 
             ////--------------------------------------------------------------------- tableHeader
@@ -323,6 +328,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             {
                 throw new CustomDataException("An error occurred: " + ex.Message, ex);
             }
+        }
+
+        public IActionResult PurchaseComplete(Bill b)
+        {
+            Bill secondBill = _billHandler.GetBill();
+            secondBill.billxTypePaymentxBankAccout = b.billxTypePaymentxBankAccout;
+            secondBill.billxTypePayment = b.billxTypePayment;
+            _billHandler.SaveBill(secondBill);
+            _billHandler.PurchaseComplete();
+            return RedirectToAction("Index");
         }
 
 

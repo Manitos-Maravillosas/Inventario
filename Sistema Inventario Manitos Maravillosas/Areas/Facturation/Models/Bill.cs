@@ -57,7 +57,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public virtual Business Business { get; set; }
 
         // Navigation property for CartXProduct
-        public virtual ICollection<CartXProduct> CartXProducts { get; set; }
+        public virtual List<CartXProduct> CartXProducts { get; set; }
 
         public List<ProductFacturation> Products { get; set; }
 
