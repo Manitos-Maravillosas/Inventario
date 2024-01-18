@@ -1,4 +1,5 @@
-﻿using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Models.Admin;
 using System.ComponentModel.DataAnnotations;
 
@@ -18,7 +19,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
             IdBusiness = 1;                   // Set a default business ID
             CartXProducts = new List<CartXProduct>();
             Products = new List<ProductFacturation>();
+            optionMoney = 1;
+            deliveryFlag = false;
+            delivery = new Delivery();
         }
+
+    
 
         [Key]
         public int IdBill { get; set; }
@@ -27,6 +33,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public DateTime Date { get; set; }
 
         public float PercentDiscount { get; set; }
+
+        public float amountDiscount { get; set;} 
 
         public float SubTotal { get; set; }
 
@@ -47,6 +55,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
         public virtual ICollection<CartXProduct> CartXProducts { get; set; }
 
         public List<ProductFacturation> Products { get; set; }
+
+
+        public int optionMoney { get; set; }
+
+        public List<Client> listClients { get; set; }
+
+       //delivery
+       public bool deliveryFlag { get; set; }
+
+        public Delivery delivery { get; set; }
+
 
     }
 

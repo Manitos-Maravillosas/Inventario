@@ -8,23 +8,19 @@ using System.Net;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
 {
-    public interface IProviderService
+    public interface IPurchaseProviderService
     {
-        List<Provider> GetAll();
-        OperationResult Add(Provider newProvider);
-        OperationResult Delete(string id);
-        Provider GetById(int id);       
-        OperationResult Update(Provider newProvider);
-        List<string> GetProviderNames();
+        List<PurchaseProvider> GetAll();
+        OperationResult Add(PurchaseProvider newPurchaseProvider);        
     }
 
-    public class ProviderService : IProviderService
+    public class PurchaseProviderService : IPurchaseProviderService
     {
         private readonly IConfiguration _configuration;
 
         private OperationResult result = new OperationResult(true, "");
 
-        public ProviderService(IConfiguration configuration)
+        public PurchaseProviderService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -32,25 +28,29 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
         //------------------------------------------------------------------------------------
         //                              GetAll                                             
         //------------------------------------------------------------------------------------
-        public List<Provider> GetAll()
+        public List<PurchaseProvider> GetAll()
         {
-            List<Provider> providers = new List<Provider>();
+            List<PurchaseProvider> purchases = new List<PurchaseProvider>();
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("spProviderCRUD", connection))
+                    using (SqlCommand command = new SqlCommand("spPurchaseInventoryCRUD ", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
                         var parameters = new SqlParameter[]
                         {
-                            new SqlParameter("@idProvider", DBNull.Value),
-                            new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@phoneNumber", DBNull.Value),
-                            new SqlParameter("@description", DBNull.Value),
+                            new SqlParameter("@idPurchaseInventory", DBNull.Value),
+                            new SqlParameter("@date", DBNull.Value),
+                            new SqlParameter("@cant", DBNull.Value),
+                            new SqlParameter("@cost", DBNull.Value),
+                            new SqlParameter("@total", DBNull.Value),
+                            new SqlParameter("@productName", DBNull.Value),
+                            new SqlParameter("@providerName", DBNull.Value),
+                            new SqlParameter("@businessName", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -62,14 +62,18 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
                         {
                             while (dataReader.Read())
                             {
-                                Provider provider = new Provider
+                                PurchaseProvider purchase = new PurchaseProvider
                                 {
-                                    Id = Convert.ToInt32(dataReader["idProvider"]),
-                                    Name = dataReader["name"].ToString(),
-                                    PhoneNumber = dataReader["phoneNumber"].ToString(),
-                                    Description = dataReader["description"].ToString(),
+                                    Id = Convert.ToInt32(dataReader["idPurchaseInventory"]),
+                                    Date = Convert.ToDateTime(dataReader["date"]).Date,
+                                    ProductName = dataReader["productName"].ToString(),
+                                    Cant = Convert.ToInt32(dataReader["cant"]),
+                                    Cost = Convert.ToSingle(dataReader["cost"]),
+                                    Total = Convert.ToSingle(dataReader["total"]),
+                                    ProviderName = dataReader["providerName"].ToString(),
+                                    BusinessName = dataReader["businessName"].ToString(),
                                 };
-                                providers.Add(provider);
+                                purchases.Add(purchase);
                             }
                         }
                     }
@@ -77,17 +81,17 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             }
             catch (Exception ex)
             {
-                providers.Clear();
+                purchases.Clear();
                 throw new CustomDataException(ex.Message, ex);
             }
 
-            return providers;
+            return purchases;
         }
 
         //------------------------------------------------------------------------------------
         //                              Add                                             
         //------------------------------------------------------------------------------------
-        public OperationResult Add(Provider newProvider)
+        public OperationResult Add(PurchaseProvider newPurchaseProvider)
         {
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
@@ -95,20 +99,26 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("spProviderCRUD", connection))
+                    using (SqlCommand command = new SqlCommand("spPurchaseInventoryCRUD", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.Add(new SqlParameter("@idProvider", newProvider.Id != 0 ? (object)newProvider.Id : DBNull.Value));
-                        command.Parameters.Add(new SqlParameter("@name", string.IsNullOrEmpty(newProvider.Name) ? DBNull.Value : newProvider.Name));
-                        command.Parameters.Add(new SqlParameter("@phoneNumber", string.IsNullOrEmpty(newProvider.PhoneNumber) ? DBNull.Value : newProvider.PhoneNumber));
-                        command.Parameters.Add(new SqlParameter("@description", string.IsNullOrEmpty(newProvider.Description) ? DBNull.Value : newProvider.Description));
+                        command.Parameters.Add(new SqlParameter("@idPurchaseInventory", newPurchaseProvider.Id != 0 ? (object)newPurchaseProvider.Id : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@date", newPurchaseProvider.Date != null ? (object)newPurchaseProvider.Date : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@cant", newPurchaseProvider.Cant != null ? (object)newPurchaseProvider.Cant : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@cost", newPurchaseProvider.Cost != null ? (object)newPurchaseProvider.Cost : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@total", newPurchaseProvider.Total != null ? (object)newPurchaseProvider.Total : DBNull.Value));
+                        command.Parameters.Add(new SqlParameter("@productName", string.IsNullOrEmpty(newPurchaseProvider.ProductName) ? DBNull.Value : newPurchaseProvider.ProductName));
+                        command.Parameters.Add(new SqlParameter("@providerName", string.IsNullOrEmpty(newPurchaseProvider.ProviderName) ? DBNull.Value : newPurchaseProvider.ProviderName));
+                        command.Parameters.Add(new SqlParameter("@businessName", string.IsNullOrEmpty(newPurchaseProvider.BusinessName) ? DBNull.Value : newPurchaseProvider.BusinessName));
+                        command.Parameters.Add(new SqlParameter("@newPrice", newPurchaseProvider.Price != null ? (object)newPurchaseProvider.Price : DBNull.Value));
                         command.Parameters.Add(new SqlParameter("@operation", 1));
 
                         connection.Open();
                         command.ExecuteNonQuery();
                         connection.Close();
                     }
+
                 }
             }
             catch (SqlException sqlEx)
@@ -290,46 +300,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data.Services
             return result;
         }
 
-        //------------------------------------------------------------------------------------
-        //                              GetProviderNames                                             
-        //------------------------------------------------------------------------------------
-        public List<string> GetProviderNames()
-        {
-            List<string> providerNames = new List<string>();
-            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
-            SqlConnection connection = null;
 
-            try
-            {
-                connection = new SqlConnection(connectionString);
-
-                using (SqlCommand getProviderNamesCommand = new SqlCommand("spProviderNames", connection))
-                {
-                    getProviderNamesCommand.CommandType = CommandType.StoredProcedure;
-                    connection.Open();
-
-                    using (SqlDataReader businessDataReader = getProviderNamesCommand.ExecuteReader())
-                    {
-                        while (businessDataReader.Read())
-                        {
-                            string providerName = businessDataReader["name"].ToString();
-                            providerNames.Add(providerName);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new CustomDataException("An error occurred: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (connection != null && connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
-            }
-            return providerNames;
-        }
     }
 }

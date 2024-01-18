@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Rendering
 @using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models
 @using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
-@model IEnumerable<Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models.Client>
+@model Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Bill
 @{
     ViewData["Title"] = "Index";
     bool isBill = ViewData["isBill"] as bool? ?? false;
@@ -9,12 +9,45 @@
     Bill bill = new Bill();
     if (isBill)
     {
-        bill = ViewData["bill"] as Bill;
+        bill = Model;
     }
 
 }
 
-<h3>Venta de Productos</h3>
+<section class="secctionFixed">
+    <div class="divMoney-container">
+        <div id="optionsMoney" class="card divMoney">
+            <div class="card-body p-2">
+                <label class="form-label mb-1">Ver sistema en:</label>
+                <div class="checkbox-container w-15 mb-2" role="radiogroup" aria-labelledby="CobrarPorLabel">
+                    <div class="form-check form-check-inline radio-item  mt-0">
+                        <input id="usdRadio" type="radio" name="radioMoney" value="1" role="radio" aria-label="Opción Cliente" @(bill.optionMoney == 1 ? "checked" : "")>
+                        <label for="usdRadio">Dólar ($ USD) </label>
+                    </div>
+                    <div class="form-check form-check-inline radio-item mt-0">
+                        <input id="nicRadio" type="radio" name="radioMoney" value="2" role="radio" aria-label="Opción Manitos Maravillosas" @(bill.optionMoney == 2 ? "checked" : "")>
+                        <label for="nicRadio">Córdoba (C$ NIC)  </label>
+                    </div>
+
+                </div>
+                <label class="form-label mb-1">Cambio del dólar:</label>
+                <div class="input-group mb-3 d-flex align-items-center">
+                    <span class="input-group-text" id="basic-addon1"><span class="">$</span></span>
+                    <input disabled type="number" class="form-control" placeholder="1.00">
+                    <span class="px-2"> <i class="bi bi-chevron-double-right"></i></span>
+                    <span class="input-group-text" id="basic-addon1"><span class="">C$</span></span>
+                    <input id="exchangeMoney" type="number" class="form-control" placeholder="36.68" value="36.68">
+                </div>
+
+                <div class="divButtonMoney-container">
+                    <button id="divMoneyButton" type="button"><i class="bi bi-chevron-double-down"></i> Moneda</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<h3 class="pt-4">Venta de Productos</h3>
 
 <section class="mb-3">
 
@@ -28,7 +61,7 @@
                                 <input id="idProductField" type="text" class="form-control" placeholder="Código del Producto" aria-label="Código del Producto" aria-describedby="addon-wrapping">
 
                                 <span class="input-group-text" id="addon-wrapping"><i class="pbi bi-search"></i></span>
-                                
+
                             </div>
                             <span id="prductValidadtion" class="field-validation-error text d-none">Manito matinez</span>
 
@@ -67,49 +100,11 @@
         <div class="card-body">
 
 
-            <table id="productsTable" class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Categoría</th>
-                        <th scope="col">Descripción</th>
-                        <th scope="col">Precio $</th>
-                        <th scope="col">Cantidad</th>
-                        <th scope="col">Sub Total $</th>
-                        <th scope="col">Acciones</th>
-                    </tr>
-                </thead>
-
-                @if (isBill) @* This else is beacuse the user can create the bill when assing a client *@
-                {
-                    @if(bill.CartXProducts.Count > 0)
-                    {
-                        <partial name="_tableProducts" model="@ViewData["bill"]" view-data="ViewData">
-                        </partial>
-                    }
-                    else
-                    {
-                        <tbody id="noProducts">
-                            <tr>
-                                <td colspan="7" class="text-center">Empiece el escaneo de productos</td>
-                            </tr>
-                        </tbody>
-                    }
-                }                
-                else
-                {
-                    <tbody id="noProducts">
-                        <tr>
-                            <td colspan="7" class="text-center">Empiece el escaneo de productos</td>
-                        </tr>
-                    </tbody>
-                }
+            <div id="tableContainer">
+                <partial name="_tableProducts" model="@bill" view-data="ViewData">
+            </div>
 
 
-            </table>
-
-           
         </div>
     </div>
 </section>
@@ -124,40 +119,34 @@
                         Información del Cliente
                     </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <!--Acordion body of the delevery-->
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="circle d-flex justify-content-center align-items-center">
-                                        DB
+               
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                        @if (bill.Client != null)
+                        {
+                            <!--Acordion body of the delevery-->
+                            <div class="container">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <div class="circle d-flex justify-content-center align-items-center">
+                                            @bill.Client.Name[0]@bill.Client.LastName1[0]
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="fs-6 fw-bold">@bill.Client.Id <span class="fw-normal"> - </span>@bill.Client.Name @bill.Client.LastName1</div>
+                                        <div class="text-black">@bill.Client.DepartmentName, @bill.Client.CityName, @bill.Client.Signs </div>
+                                        <div class="text-black-50 fw-lighter">@bill.Client.PhoneNumber</div>
+
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="fs-6">1546 - Daniela Baltonado</div>
-                                    <div class="text-black-50 fw-light">CargoTrans</div>
-                                </div>
                             </div>
+                        }
                         </div>
-
-                        <form>
-                            <div class="mb-3">
-                                <label class="form-label" >Dirección</label>
-                                <textarea class="form-control" style="height: 100px;" aria-label="Dirección"></textarea>
-                                
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" >Número de Contacto</label>
-                                <input type="text" class="form-control" aria-label="Número de Contacto">
-                            </div>
-
-                        </form>
                     </div>
-                </div>
+               
             </div>
 
-            <div class="accordion-item">
+   @*          <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                         Resumen de Envío
@@ -165,22 +154,28 @@
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
+                        @if (bill.deliveryFlag == true && bill.delivery != null)
+                        {
+                            <!--Acordion body of the delevery-->
+                            <div class="container">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
                                     <div class="circle d-flex justify-content-center align-items-center">
                                         <i class="bi bi-truck"></i> <!-- Initials -->
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="fs-6">Envío Departamenta</div>
-                                    <div class="text-black-50 fw-light">CargoTrans</div>
+                                    <div class="col">
+                                        <div class="fs-6 fw-bold">@bill.delivery.NameTypeDelivery <span class="fw-normal"> - </span>@bill.Client.Name @bill.Client.LastName1</div>
+                                        <div class="text-black">@bill.Client.DepartmentName, @bill.Client.CityName, @bill.Client.Signs </div>
+                                        <div class="text-black-50 fw-lighter">@bill.Client.PhoneNumber</div>
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
-            </div>
+            </div> *@
 
         </div>
     </div>
@@ -192,11 +187,14 @@
             <h4>Gestión de Cobro</h4>
             <div class="d-flex justify-content-between">
                 <div>
-                    <button type="button" class="btn btn-warning">Limpiar Datos   <i class="bi bi-stars"></i></button>
-                    <button type="button" class="btn btn-outline-secondary">Dejar Pendiente  <i class="bi bi-file-earmark-bar-graph-fill"></i></button>
+                    <form asp-controller="Purchase" asp-action="ClearData" method="post">
+                        <button type="submit" class="btn btn-warning">Limpiar Datos   <i class="bi bi-stars"></i></button>
+</form>
+                    
+                    @* <button type="button" class="btn btn-outline-secondary">Dejar Pendiente  <i class="bi bi-file-earmark-bar-graph-fill"></i></button> *@
                 </div>
-                <div  class="fw-bold fs-4">
-                    @* Total a Cobrar:  <span id="totalCostBill">@(isBill ? bill.TotalCost : "0")</span> $ *@
+                <div class="fw-bold fs-4">
+                    @* Total a Cobrar:  <span id="totalCostBill">@(isBill ? bill.TotalCost : "0")</span> <span class="addonMoney">$</span> *@
                     <a asp-area="Facturation" asp-controller="PurchaseConfiguration" asp-action="Index" class="btn btn-success btn-lg"><i class="bi bi-cash-stack"></i>  Cobrar</a>
                 </div>
             </div>
@@ -204,7 +202,6 @@
     </div>
 </section>
 <!-- get the clients returned from the controller  -->
-
 <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 <!-----------------                                                                      MODALL                                                                                            ---------->
 <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
@@ -212,19 +209,19 @@
 <div class="modal fade" tabindex="-1" id="modalClient">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Buscar Cliente</h5>                
+            <div class="modal-header">
+                <h5 class="modal-title">Buscar Cliente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
+            </div>
+            <div class="modal-body">
                 <div class="input-group flex-nowrap mb-3">
                     <input id="identificationClientFilter" type="text" class="form-control" placeholder="Identificacion" aria-label="Identificacion del cliente" aria-describedby="addon-wrapping">
                     <span class="input-group-text" id="addon-wrapping"><i class="pbi bi-search"></i></span>
                 </div>
                 <ul id="listClient" class="list-group scrollable-list mb-2">
-                    @if (Model != null && Model.Any())
+                    @if (Model != null)
                     {
-                        foreach (var client in Model)
+                        foreach (var client in Model.listClients)
                         {
 
                             <li class="list-group-item list-group-item-action" data-id="@client.Id" data-name="@client.Name @client.LastName1" data-idaddress="@client.IdAddress">
@@ -239,25 +236,25 @@
                                             <div class="fs-6 fw-bold">@client.Id <span class="fw-normal"> - </span>@client.Name @client.LastName1</div>
                                             <div class="text-black">@client.DepartmentName, @client.CityName, @client.Signs </div>
                                             <div class="text-black-50 fw-lighter">@client.PhoneNumber</div>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
                             </li>
-                           
+
                         }
                     }
-                    
+
                 </ul>
                 <button id="openNewClient" type="button" class="btn btn-primary btn-sm">Agregar Nuevo <i class="bi bi-plus-square"></i></button>
-          </div>
-            
-        @*   <div class="modal-footer">
-            <button id="openNewClient" type="button" class="btn btn-primary">Aceptar</button> 
-               <a asp-area="Admin" asp-controller="Client" asp-action="Create"  type="button" class="btn btn-primary">Aceptar</a> 
-          </div> *@
+            </div>
+
+            @*   <div class="modal-footer">
+            <button id="openNewClient" type="button" class="btn btn-primary">Aceptar</button>
+            <a asp-area="Admin" asp-controller="Client" asp-action="Create"  type="button" class="btn btn-primary">Aceptar</a>
+            </div> *@
         </div>
-  </div>
+    </div>
 </div>
 <div class="modal fade" tabindex="-1" id="addClient">
     <div class="modal-dialog modal-dialog-centered">
@@ -277,8 +274,8 @@
 
             </div>
 
-@*             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Aceptar</button>
+            @*             <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Aceptar</button>
             </div> *@
         </div>
     </div>
@@ -292,68 +289,156 @@
                 <h5 class="modal-title">Configurar Envío</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form>
+
+            <form asp-controller="Purchase" asp-action="AssingDeliveryToBill" method="post">
+                <div class="modal-body">
                     <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <input asp-for="deliveryFlag" class="form-check-input" type="checkbox" id="allowDeleverySwitch">
                         <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar Envío</label>
                     </div>
                     <!--this select should querry from the data base-->
                     <div class="mb-3">
                         <label class="form-label">Método de envío</label>
-                        <select class="form-select " aria-label="Seleccione un tipo de Envío">
-                            <option disabled>Seleccione un método de Envío</option>
-                            <option value="1">One</option>
+                        <select asp-for="delivery.IdTypeDelivery" id="typeDeliverySelect" class="form-select " aria-label="Seleccione un tipo de Envío" disabled asp-items="ViewBag.TypeDelivery">
+                            <option disabled selected>Seleccione un método de Envío</option>
+                            @*                             <option value="1">One</option>
                             <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option value="3">Three</option> *@
                         </select>
                     </div>
 
-                    <!--this select should querry from the data base-->
-                    <div class="mb-3">
-                        <label class="form-label">Empresa responsable de enviar</label>
-                        <select class="form-select mb-3" aria-label="Seleccione una Empresa">
-                            <option selected>Seleccione una Empresa</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Costo Cubierto por Manitos Maravilloas</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">$</span>
-                            <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Cubierto" aria-describedby="basic-addon1">
+                    <div id="divForDepartamental" class="d-none">
+                        <!--this select should querry from the data base-->
+                        <div class="mb-3">
+                            <label class="form-label">Empresa responsable de enviar</label>
+                            <select asp-for="delivery.deliveryxCompanyTrans.IdCompanyTrans" id="companyTransSelect" class="form-select mb-3" asp-items="ViewBag.CompanyTrans">
+                                <option disabled selected>Seleccione una Empresa</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Cobrar A:</label>
-                        <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
-                            <div class="form-check form-check-inline radio-item">
-                                <input type="radio" name="radioPub" id="public" value="1" role="radio" aria-label="Opción público">
-                                <label for="public">Público</label>
+
+                        <div id="dvInChargeAditionalCost" class="mb-3 d-none">
+                            <label class="form-label">La empresa realiza el cobro A:</label>
+                            <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
+                                @foreach (var gender in Model.delivery.deliveryxCompanyTrans.InChargePaymentDeliveries)
+                                {
+                                    <div class="form-check form-check-inline radio-item">
+                                        <input type="radio" asp-for="delivery.deliveryxCompanyTrans.InChargePaymentDelivery" value="@gender" id="radio-@gender" class="form-check-input" />
+                                        <label class="form-check-label" for="radio-@gender">
+                                            @if (gender == "1")
+                                            {
+                                                @:Manitos
+                                            }
+                                            else if (gender == "2")
+                                            {
+                                                @:Cliente
+                                            }
+                                        </label>
+                                    </div>
+
+                                }
                             </div>
-                            <div class="form-check form-check-inline radio-item">
-                                <input type="radio" name="radioPub" id="private" value="0" role="radio" aria-label="Opción privado">
-                                <label for="private">Privado</label>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Costo Adicional: (Empresa externa)</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <span class="addonMoney">
+                                        @((bill.optionMoney == 1) ? "$" : "C$")
+                                    </span>
+                                </span>
+                                <input asp-for="delivery.deliveryxCompanyTrans.AditionalCompanyCost" type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Costo Adicional</label>
+                        <label class="form-label">Fecha aprox de llegada:</label>
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">$</span>
-                            <input type="number" class="form-control" placeholder="00.00" aria-label="Costo Adicional" aria-describedby="basic-addon1">
+
+                            <input id="inputDateAprox" disabled asp-for="delivery.DateAprox" type="date" class="form-control">
                         </div>
                     </div>
-                </form>
-            </div>
 
-           @*  <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Aceptar</button>
-            </div> *@
+
+
+
+                    <div class="mb-3">
+                        <label class="form-label">Costo de envío: (Motorizado Interno)</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">
+                                <span class="addonMoney">
+                                    @((bill.optionMoney == 1) ? "$" : "C$")
+                                </span>
+                            </span>
+                            <input id="inputInternalCost" disabled asp-for="delivery.InternalCost" type="number" class="form-control" placeholder="00.00" aria-label="Costo Cubierto" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    @if (bill.Client != null)
+                    {
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div>
+                                    <label class="fw-bold">Departamento:</label>
+                                </div>
+                                <div>
+                                    <span id="displayDepartment">@bill.Client.DepartmentName </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div>
+                                    <label class="fw-bold">Municipio:</label>
+                                </div>
+                                <div>
+                                    <span id="displayCity">@bill.Client.CityName</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div>
+                                    <label class="fw-bold">Dirección:</label>
+                                </div>
+                                <div>
+                                    <span id="displayAddress">@bill.Client.Signs</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @*
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div>
+                                <label class="fw-bold">Departamento:</label>
+                            </div>
+                            <div>
+                                <span id="displayDepartment">.DepartmentName </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <label class="fw-bold">Municipio:</label>
+                            </div>
+                            <div>
+                                <span id="displayCity">.CityName</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <label class="fw-bold">Dirección:</label>
+                            </div>
+                            <div>
+                                <span id="displayAddress">.Signs</span>
+                            </div>
+                        </div>
+                    </div>
+                    *@
+
+                </div> 
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>
@@ -362,6 +447,8 @@
     @* <script src="~/js/facturation/facturation.js"></script> *@
     <script type="module" src="~/js/facturation/clientScript.js"></script>
     <script type="module" src="~/js/facturation/producttablescript.js"></script>
-    <script type="module"  src="~/js/facturation/facturationservice.js"></script>
+    <script type="module" src="~/js/facturation/facturationservice.js"></script>
+    <script type="module" src="~/js/facturation/deleveryscript.js"></script>
     <script src="~/js/admin/client.js"></script>
+    <script src="~/js/facturation/moneyscript.js"></script>
 }

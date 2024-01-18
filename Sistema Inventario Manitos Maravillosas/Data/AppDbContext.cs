@@ -2,6 +2,7 @@
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Inventory.Models;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Admin.Models;
+using Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models;
 namespace Sistema_Inventario_Manitos_Maravillosas.Data
 {
     public class AppDbContext : DbContext
@@ -190,6 +191,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data
         //Inventory
 
         //Admin
+
         public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Delivery>? Delivery { get; set; }
         //login
 
@@ -211,6 +213,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Data
 
         //Admin
         public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models.Bill>? Bill { get; set; }
+
+        public DbSet<Sistema_Inventario_Manitos_Maravillosas.Areas.Supplier.Models.PurchaseProvider>? PurchaseProvider { get; set; }
+
 
 
     }
