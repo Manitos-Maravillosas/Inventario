@@ -77,12 +77,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
 
             if (billxTypePayment.bothCoins)
             {
-                table.Rows.Add(billxTypePayment.idTypePaymentxCoin, billxTypePayment.amountPaidDolar);
-                table.Rows.Add(billxTypePayment.idTypePaymentxCoin, billxTypePayment.amountPaidCordoba);
+                table.Rows.Add(5, billxTypePayment.amountPaidDolar);
+                table.Rows.Add(1, billxTypePayment.amountPaidCordoba);
             }
             else
             {
-                table.Rows.Add(billxTypePayment.idTypePaymentxCoin, billxTypePayment.amountPaid);
+                table.Rows.Add(billxTypePayment.typePaymentxCoin.Id, billxTypePayment.amountPaid);
             }
             return table;
         }

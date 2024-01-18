@@ -102,22 +102,15 @@
                         </div>
 
                         <div id="allowMixPaymentDiv" class="form-check form-switch mb-3 d-none">
-                            <input id="allowMixPaymentSwitch" asp-for="mixPayment" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            <input id="allowMixPaymentSwitch" asp-for="billxTypePayment.bothCoins" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                             <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar pago para ambas monedas</label>
                         </div>
                         <div id="divRadioCoin" class="mb-3">
-                            <label class="form-label">Moneda</label>
-                            <div class="checkbox-container full-width" role="radiogroup" aria-labelledby="CobrarPorLabel">
-                                @foreach (var gender in ViewBag.CoinSelect)
-                                {
-                                    <div class="form-check form-check-inline radio-item">
-                                        <input type="radio" asp-for="billxTypePayment.typePaymentxCoin.idCoin" name="radioCoin" value="@gender.Value" id="radio-@gender.Text" class="form-check-input" />
-                                        <label class="form-check-label" for="radio-@gender.Text">
-                                            @gender.Text
-                                        </label>
-                                    </div>
-
-                                }
+                            <label class="form-label">Moneda:</label>
+                            <div class="select-wrapper">
+                                <select id="typePaymentSelect" asp-for="billxTypePayment.typePaymentxCoin.idCoin" class="form-control" asp-items="ViewBag.CoinSelect">
+                                    <option disabled selected>Seleccione una Moneda</option>
+                                </select>
                             </div>
                         </div>
 
@@ -126,14 +119,14 @@
                             <label class="form-label mb-1">Monto en dólares:</label>
                             <div class="input-group mb-3 ">
                                 <span class="input-group-text" id="basic-addon1"><span class="">$</span></span>
-                                <input id="amountPaidDolar" asp-for="billxTypePayment.amountPaidDolar" type="number" class="form-control" placeholder="00.00">
+                                <input id="amountPaidDolar" step="0.1" asp-for="billxTypePayment.amountPaidDolar" type="number" class="form-control" placeholder="00.00">
 
                             </div>
 
                             <label class="form-label mb-1">Monto en córdobas:</label>
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1"><span class="">C$</span></span>
-                                <input id="amountPaidCordoba" asp-for="billxTypePayment.amountPaidCordoba" type="number" class="form-control" placeholder="00.00">
+                                <input id="amountPaidCordoba" step="0.1" asp-for="billxTypePayment.amountPaidCordoba" type="number" class="form-control" placeholder="00.00">
                             </div>
                         </div>
 

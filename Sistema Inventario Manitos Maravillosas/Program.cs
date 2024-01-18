@@ -11,6 +11,8 @@ using Sistema_Inventario_Manitos_Maravillosas.Data.Services;
 using Sistema_Inventario_Manitos_Maravillosas.Filters;
 using SistemaInventario.Data;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Services;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,6 +94,18 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+var cultures = new[]
+{
+ new CultureInfo("en-US"),
+ new CultureInfo("de"),
+};
+
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en-US"),
+    SupportedCultures = cultures,
+    SupportedUICultures = cultures
+});
 app.UseStatusCodePagesWithReExecute("/Error/Index/{0}");
 
 app.UseHttpsRedirection();

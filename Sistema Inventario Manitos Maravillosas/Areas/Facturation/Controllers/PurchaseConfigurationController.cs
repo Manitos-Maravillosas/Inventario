@@ -115,12 +115,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             // Define the regular style with 12pt font size
             Style regularStyle = new Style()
                 .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
-                .SetFontSize(10);
+                .SetFontSize(8);
 
             // Define the bold style with 12pt font size
             Style boldStyle = new Style()
                 .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD))
-                .SetFontSize(10);
+                .SetFontSize(8);
 
             //--------------------------------------------------------------------- Header
             document.Add(new Paragraph("MANITOS MARAVILLOSAS")
@@ -339,13 +339,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             {
                 if (b.billxTypePayment.bothCoins)
                 {
+                    b.billxTypePayment.amountPaidCordoba =(float)b.billxTypePayment.amountPaidCordoba / 36.68f;
                     if (b.billxTypePayment.amountPaidCordoba == 0 || b.billxTypePayment.amountPaidDolar == 0)
                     {
                         TempData["ErrorMessage"] = "Debe ingresar el monto pagado en ambas monedas";
                     }
-                    else if ((b.billxTypePayment.amountPaidCordoba * 36.68) + b.billxTypePayment.amountPaidDolar < b.TotalCost)
+                    else if (b.billxTypePayment.amountPaidCordoba + b.billxTypePayment.amountPaidDolar < b.billxTypePayment.amountPaid)
                     {
-                        TempData["ErrorMessage"] = "El monto pagado en ambas monedas es menor que el total de la factura";
+                        TempData["ErrorMessage"] = "El monto pagado es: "+ b.billxTypePayment.amountPaidCordoba + b.billxTypePayment.amountPaidDolar + " dólares y es menor que el total de la factura TOTAL: "+ b.billxTypePayment.amountPaid;
                     }
                     else
                     {
@@ -353,6 +354,12 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                         _billHandler.UpdateTypePayment(b);
                         _billHandler.PurchaseComplete();
                     }
+                }
+                else
+                {
+                    b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
+                    _billHandler.UpdateTypePayment(b);
+                    _billHandler.PurchaseComplete();
                 }
             }
             else if (b.billxTypePayment.typePaymentxCoin.idTypePayment == 2) //Transferencia

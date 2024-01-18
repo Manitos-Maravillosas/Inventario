@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models
 {
@@ -24,6 +25,9 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Models
 
         public string CoinName { get; set; }
 
+        [BindProperty]
+        public string idCoinString { get; set; }
+        [BindProperty]
         public int idCoin { get; set; }
         public int idTypePayment { get; set; }
 
