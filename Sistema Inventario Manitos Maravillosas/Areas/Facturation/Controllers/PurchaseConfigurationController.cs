@@ -332,11 +332,19 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
 
         public IActionResult PurchaseComplete(Bill b)
         {
-            Bill secondBill = _billHandler.GetBill();
-            secondBill.billxTypePaymentxBankAccout = b.billxTypePaymentxBankAccout;
-            secondBill.billxTypePayment = b.billxTypePayment;
-            _billHandler.SaveBill(secondBill);
-            _billHandler.PurchaseComplete();
+
+            var typePaymentxCoinFlag  = _typePaymentService.GetIdTypePaymentxCoin(b.billxTypePayment.typePaymentxCoin.idTypePayment, b.billxTypePayment.typePaymentxCoin.idCoin);
+            if(typePaymentxCoinFlag != 0)
+            {
+
+                b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
+                _billHandler.UpdateTypePayment(b);
+                _billHandler.PurchaseComplete();
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "No existe un tipo pago relacionado a esta moneda";
+            }
             return RedirectToAction("Index");
         }
 

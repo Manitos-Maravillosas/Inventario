@@ -16,7 +16,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
             PercentDiscount = 0.0f;
             SubTotal = 0.0f;
             TotalCost = 0.0f;
-            IdEmployee = "defaultEmployeeId"; // Set a default or fetch from user context
             IdClient = "defaultClientId";     // Set a default or fetch from user context
             IdBusiness = 1;                   // Set a default business ID
             CartXProducts = new List<CartXProduct>();
@@ -46,15 +45,13 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Models
 
         public float TotalCost { get; set; }
 
-        // Foreign keys
-        public string IdEmployee { get; set; }
+  
         public virtual Employee Employee { get; set; }
 
         public string IdClient { get; set; }
         public virtual Client Client { get; set; }
 
         public int IdBusiness { get; set; }
-        public virtual Business Business { get; set; }
 
         // Navigation property for CartXProduct
         public virtual List<CartXProduct> CartXProducts { get; set; }

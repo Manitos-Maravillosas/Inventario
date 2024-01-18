@@ -13,6 +13,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IClientService _clientService;
         private readonly IBillService _billService;
+
         private Bill bill;
         private float moneyValue;
         public BillHandler(IHttpContextAccessor httpContextAccessor, IClientService clientService, IBillService billService)
@@ -224,6 +225,16 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
                 bill.TotalCost = bill.SubTotal - (bill.SubTotal * (bill.PercentDiscount / 100));
                 bill.optionMoney = 2;
             }
+            SaveBill();
+        }
+
+        public void UpdateTypePayment(Bill b)
+        {
+            if (bill == null)
+                bill = GetBill();
+            bill.bankAccount = b.bankAccount;
+            bill.billxTypePaymentxBankAccout = b.billxTypePaymentxBankAccout;
+            bill.billxTypePayment = b.billxTypePayment;
             SaveBill();
         }
 
