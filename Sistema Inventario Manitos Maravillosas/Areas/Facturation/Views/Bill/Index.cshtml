@@ -26,10 +26,10 @@
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-auto">
-                            <label class="form-label m-0 p-0" for="rowsPerPage">Mostrar:</label>
+                            <label class="form-label m-0 p-0" for="showCantRow">Mostrar:</label>
                         </div>
                         <div class="col-auto">
-                            <select id="showCantRow" class="form-select form-select-sm showCantRow" aria-label="Default select example" id="rowsPerPage">
+                            <select id="showCantRow" class="form-select form-select-sm showCantRow" aria-label="Default select example">
                                 <option value="10" selected>10</option>
                                 <option value="20">20</option>
                                 <option value="30">30</option>
@@ -65,7 +65,7 @@
                                     <td>@bill.TotalCost $</td>
                                     <td>@bill.BusinessName</td>
                                     <td>
-                                        <form asp-action="Edit" method="get" style="display: inline-block;">
+                                        <form asp-action="Details" method="get" style="display: inline-block;">
                                             <input type="hidden" name="id" value="@bill.IdBill" />
                                             <button type="submit" class="icon-button bi bi-eye-fill" aria-label="Modificar" style="cursor: pointer;"></button>
                                         </form>                                        

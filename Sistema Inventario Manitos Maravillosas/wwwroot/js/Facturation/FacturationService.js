@@ -144,8 +144,11 @@ function applyEventListenersToRow() {
             if (input.value === '') {
                 input.value = 0;
             }
-            if (div.hasAttribute('data-price')) {
-                div.textContent = '$ ' +input.value ; // Use textContent instead of innerHTML
+            if (this.hasAttribute('data-bill')) {
+                var inputValue = this.value;
+                if (checkGreterThanZero(inputValue)) {
+                    UpdateDiscount(inputValue);
+                }
             } else {               
                 div.textContent = input.value; // Use textContent instead of innerHTML
 
@@ -221,6 +224,51 @@ function UpdateQuanty(idProduct, quanty) {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: `id=${encodeURIComponent(idProduct)}&quantity=${encodeURIComponent(quanty)}`
+    })
+        .then(response => {
+            // Check the response header to determine the content type
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                return response.json().then(data => {
+                    // Process JSON data
+                    if (!data.success) {
+                        // Handle failure. Display the error message from the server.
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.message,
+                            icon: 'error'
+                        })
+                    } else {
+                        console.log(data.message);
+                    }
+                });
+            } else if (contentType && contentType.indexOf("text/html") !== -1) {
+                return response.text().then(html => {
+                    // Process HTML data
+                    addRow(html);
+                    applyEventListenersToRow();
+                });
+            } else {
+                throw new TypeError('Received response is neither JSON nor HTML');
+            }
+        })
+        .catch(error => {
+            // Handle network errors or other exceptions
+            console.error('Fetch Error:', error);
+        });
+}
+
+
+//-------------------------------------------------------------------------------------//
+//                                  Discount                                           //
+//-------------------------------------------------------------------------------------//
+function UpdateDiscount(percent) {
+    fetch('/Facturation/Purchase/UpdateDiscount', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `&percent=${encodeURIComponent(percent)}`
     })
         .then(response => {
             // Check the response header to determine the content type

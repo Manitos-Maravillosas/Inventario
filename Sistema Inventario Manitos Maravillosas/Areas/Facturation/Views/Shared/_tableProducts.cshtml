@@ -42,13 +42,9 @@
                     <td>@item.Product.Category</td>
                     <td class="w-20">@item.Product.Description</td>
                     <td>
-                        <div class="editableCell" data-price="@item.Price">
-                            <span class="addonMoney">
-                                @((Model.optionMoney == 1) ? "$" : "C$")
-                            </span>
-                            @item.Price
-                        </div>
-                        <input class="editableInput" type="number">
+                        <span class="addonMoney">
+                            @((Model.optionMoney == 1) ? "$" : "C$") @item.Price
+                        </span>
                     </td>
                     <td class="w-15">
                         <div class="editableCell">@item.Quantity</div>
@@ -114,14 +110,19 @@
                     Descuento
                     <div class=" w-50 d-flex justify-content-end">
                         <div class="fw-normal  w-50 text-end">
-                            <div class="editableCell">21</div>
-                            <input class="editableInput" type="number">
+                            <div data-bill="0" class="editableCell"> @Model.PercentDiscount</div>
+                            <input class="editableInput" type="number" data-bill="0">
                         </div>
                         %
                     </div>
 
                 </td>
-                <td colspan="2"> 3015 $</td>
+                <td colspan="2">
+                    <span class="addonMoney">
+                        @((Model.optionMoney == 1) ? "$" : "C$")
+                    </span>
+                    @Model.amountDiscount asd
+                </td>
             </tr>
             @* Total *@
             <tr class="fw-bold no-border fs-4">

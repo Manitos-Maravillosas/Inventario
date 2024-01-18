@@ -132,12 +132,25 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
             updatePriceBill();
             SaveBill();
         }
+
+        public void UpdateDiscount(int percent)
+        {
+            if (bill == null)
+                bill = GetBill();
+            float percentFloat = (float)percent; // Conversión explícita a flotante
+
+            // Ahora puedes realizar la operación usando percentFloat
+            
+            bill.PercentDiscount = percent;
+            bill.amountDiscount = bill.SubTotal * (percentFloat / 100f);
+            updatePriceBill();
+            SaveBill();
+        }
         public void updatePriceBill()
         {
             //Update bill
             bill.SubTotal = bill.CartXProducts.Sum(x => x.SubTotal);
-            bill.amountDiscount = 0;
-            bill.TotalCost = bill.SubTotal + (bill.delivery.Total) - (bill.SubTotal * (bill.PercentDiscount / 100));
+            bill.TotalCost = bill.SubTotal + bill.delivery.Total - (bill.SubTotal * (bill.PercentDiscount / 100));
             SaveBill();
         }
         //-------------------------------------------------------------------------------------//
@@ -155,7 +168,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Helper
         }
 
         //-------------------------------------------------------------------------------------//
-        //                           Client Handler                                               //
+        //                           Employee Handler                                               //
         //-------------------------------------------------------------------------------------//
 
         public void AssingEmployee(Employee employee)

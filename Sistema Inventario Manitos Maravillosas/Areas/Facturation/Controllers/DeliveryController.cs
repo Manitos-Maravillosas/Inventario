@@ -69,7 +69,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             {
                 ViewData["Success"] = "Se ha completado el envio!";
             }
-            var deliveries = _DeliveryService.GetAll();
+            var deliveries = _DeliveryService.GetAllDeliveries();
             return View("Index", deliveries);
         }
 

@@ -19,6 +19,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
         Boolean SaveBill(Bill bill);
         List<Bill> GetAll();
 
+        Bill GetBillById(int id);
+
     }
     public class BillService : IBillService
     {
@@ -82,6 +84,88 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Data.Service
             }
 
             return bills;
+        }
+        public Bill GetBillById(int id)
+        {
+            Bill bill = new Bill();
+            List<CartXProduct> cartXProducts = new List<CartXProduct>();
+            string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spBillCRUD", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        var parameters = new SqlParameter[]
+                        {
+                            new SqlParameter("@idBill", id),
+                            new SqlParameter("@operation", '2')
+                        };
+
+                        command.Parameters.AddRange(parameters);
+                        connection.Open();
+
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+                            while (dataReader.Read())
+                            {
+                                Bill b = new Bill
+                                {
+                                    IdBill = Convert.ToInt32(dataReader["idBill"]),
+                                    Date = Convert.ToDateTime(dataReader["date"]).Date,
+                                    PercentDiscount = Convert.ToSingle(dataReader["percentDiscount"]),
+                                    SubTotal = Convert.ToSingle(dataReader["subTotal"]),
+                                    TotalCost = Convert.ToSingle(dataReader["totalCost"]),
+                                    BusinessName = dataReader["businessName"].ToString(),
+                                    IdBusiness = Convert.ToInt32(dataReader["idBusiness"]),
+                                    IdClient = dataReader["idClient"].ToString(),
+                                    IdEmployee = dataReader["idEmployee"].ToString(),
+                                    deliveryFlag = Convert.ToBoolean(dataReader["isDelivery"]),
+                                    idDelivery = Convert.ToInt32(dataReader["idDelivery"]),
+                                };
+                                bill = b;
+                            }
+                        }
+                        command.CommandText = "spGetProductsOfBill";
+                        command.Parameters.Clear();
+                        command.Parameters.Add(new SqlParameter("@idBill", id));
+
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+                            while (dataReader.Read())
+                            {
+                                CartXProduct cart = new CartXProduct
+                                {
+                                    Quantity = Convert.ToInt32(dataReader["cant"]),
+                                    Cost = Convert.ToSingle(dataReader["cost"]),
+                                    Price = Convert.ToSingle(dataReader["price"]),
+                                    SubTotal = Convert.ToSingle(dataReader["subTotal"]),
+                                    IdProduct = dataReader["idProduct"].ToString(),
+                                    //products
+                                };
+                                cart.Product = new ProductFacturation
+                                {
+                                    IdProduct = dataReader["idProduct"].ToString(),
+                                    ProductName = dataReader["name"].ToString(),
+                                    Category = dataReader["category"].ToString(),
+                                    Description = dataReader["description"].ToString(),
+                                };
+
+                                cartXProducts.Add(cart);
+                            }
+                            bill.CartXProducts = cartXProducts;
+                        }
+                    }
+                }
+            }      
+            catch (Exception ex)
+            {
+                throw new CustomDataException(ex.Message, ex);
+            }
+
+            return bill;
         }
         public DataTable ConvertToDataTable(List<CartXProduct> products)
         {
