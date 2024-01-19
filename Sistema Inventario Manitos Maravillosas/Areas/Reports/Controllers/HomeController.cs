@@ -61,11 +61,11 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             }
 
             // Get the profit of Manitos Maravillosas
-            var profitManitosMaravillosas = salesByBusiness.Where(s => s.IdBusiness == 1).FirstOrDefault().TotalProfit;
+            var profitManitosMaravillosas = salesByBusiness.Where(s => s.IdBusiness == 1).FirstOrDefault() == null ? 0 : salesByBusiness.Where(s => s.IdBusiness == 1).FirstOrDefault().TotalProfit;
 
 
             // Get the profit of Don Mae
-            var profitDonMae = salesByBusiness.Where(s => s.IdBusiness == 2).FirstOrDefault().TotalProfit;
+            var profitDonMae = salesByBusiness.Where(s => s.IdBusiness == 2).FirstOrDefault() == null ? 0 : salesByBusiness.Where(s => s.IdBusiness == 2).FirstOrDefault().TotalProfit;
 
             return new
             {
