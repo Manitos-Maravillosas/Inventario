@@ -366,6 +366,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
             //validations
             var typePaymentxCoinFlag = _typePaymentService.GetIdTypePaymentxCoin(b.billxTypePayment.typePaymentxCoin.idTypePayment, b.billxTypePayment.typePaymentxCoin.idCoin);
             b.billxTypePayment.typePaymentxCoin.Id = typePaymentxCoinFlag;
+
+            if (typePaymentxCoinFlag == 0 && b.billxTypePayment.typePaymentxCoin.idTypePayment != 3)
+            {
+                TempData["ErrorMessage"] = "El método de pago no tiene una modena relacionada";
+
+                bill = _billHandler.GetBill();
+                LoadSelect();
+                return View("Index", bill);
+            }
             
             var flagComplete = false;
             if (b.billxTypePayment.typePaymentxCoin.idTypePayment == 1) //Efectivo
@@ -428,11 +437,14 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Facturation.Controllers
                 TempData["Success"] = "Se ha registrado la factura correctamente";
                 _billHandler.ClearData();
                 bill = _billHandler.GetBill();
+                LoadSelect();
                 return View("Index", bill);
             }
             else
             {
-                return View("Index");
+                LoadSelect();
+                bill = _billHandler.GetBill();
+                return View("Index", bill);
             }
         }
 
