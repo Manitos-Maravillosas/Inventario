@@ -5,8 +5,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
 {
@@ -71,19 +73,19 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
 
         public IActionResult OnGet(string code = null)
         {
-            /*
+
             if (code == null)
             {
                 return BadRequest("A code must be supplied for password reset.");
             }
             else
             {
-            Input = new InputModel
-            {
-                Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
-            };*/
-            return Page();
-            //}
+                Input = new InputModel
+                {
+                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+                };
+                return Page();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()
