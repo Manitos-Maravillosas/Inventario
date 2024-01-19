@@ -256,8 +256,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
 
                         command.Parameters.Add(new SqlParameter("@idTypePaymentxCoin", newTypePayment.Id));
                         command.Parameters.Add(new SqlParameter("@idTypePayment", newTypePayment.idTypePayment));
-                        command.Parameters.Add(new SqlParameter("@name", newTypePayment.Name));
-                        command.Parameters.Add(new SqlParameter("@coinDescription", newTypePayment.CoinDescription));
+                        command.Parameters.Add(new SqlParameter("@idCoin", newTypePayment.idCoin));
                         command.Parameters.Add(new SqlParameter("@operation", 3));
 
                         connection.Open();

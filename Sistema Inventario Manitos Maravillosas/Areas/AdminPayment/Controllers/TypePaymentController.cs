@@ -84,16 +84,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
         public ActionResult Edit(TypePaymentxCoin typePayment)
         {
             typePayment.CoinName = _CoinService.GetNameFromDescription(typePayment.CoinDescription);
-            if (ModelState.IsValid)
+       
+            OperationResult result = _TypePaymentService.Update(typePayment);
+            if (!result.Success)
             {
-                OperationResult result = _TypePaymentService.Update(typePayment);
-                if (!result.Success)
-                {
-                    ViewData["ErrorMessage"] = result.Message;
-                }
-                ViewData["Success"] = "Se ha modificado los datos del tipo de pago!";
-            }  
-               
+                ViewData["ErrorMessage"] = result.Message;
+            }
+            ViewData["Success"] = "Se ha modificado los datos del tipo de pago!";
+           
+
             LoadSelect();
             var typePayments = _TypePaymentService.GetAll();
             return View("Index", typePayments);
