@@ -5,7 +5,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 using Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Data;
+using System.Text;
 
 namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
 {
@@ -26,20 +28,20 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Identity.Pages.Account
         public string StatusMessage { get; set; }
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
-            //if (userId == null || code == null)
-            //{
-            //    return RedirectToPage("/Index");
-            //}
+            if (userId == null || code == null)
+            {
+                return RedirectToPage("/Index");
+            }
 
-            //var user = await _userManager.FindByIdAsync(userId);
-            //if (user == null)
-            //{
-            //    return NotFound($"Unable to load user with ID '{userId}'.");
-            //}
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{userId}'.");
+            }
 
-            //code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            //var result = await _userManager.ConfirmEmailAsync(user, code);
-            //StatusMessage = result.Succeeded ? "Gracias por confirmar tu correo electrónico" : "Ocurrió un error al confirmar tu correo";
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            StatusMessage = result.Succeeded ? "Gracias por confirmar tu correo electrónico" : "Ocurrió un error al confirmar tu correo";
             StatusMessage = "Gracias por confirmar tu correo electrónico";
             return Page();
         }
