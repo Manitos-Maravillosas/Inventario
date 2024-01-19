@@ -27,9 +27,9 @@
     <div class="card-body">       
 
         <form id="clientForm" asp-controller="@(controllerCall)" asp-action="@action" method="post">
-            <input type="hidden" id="hiddenCityField" vale="CityName" name="CityName">
+            <input type="hidden" id="hiddenCityField" asp-for="CityName" name="CityName">
             <input type="hidden" id="hiddenAddressField" asp-for="Signs" name="Signs">
-            <input type="hidden" id="hiddenDepartmentField" asp-for="DepartmentName" vale="@department" name="DepartmentName">
+            <input type="hidden" id="hiddenDepartmentField" asp-for="DepartmentName" name="DepartmentName">
 
             <!-- Fila 1: Identificación, Nombre -->
             <div class="row mb-3">
