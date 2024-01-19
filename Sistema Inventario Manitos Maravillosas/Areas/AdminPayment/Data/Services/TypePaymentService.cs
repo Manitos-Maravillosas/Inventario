@@ -66,8 +66,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                             {
                                 TypePaymentxCoin typePayment = new TypePaymentxCoin
                                 {
-                                    Id = Convert.ToInt32(dataReader["idTypePaymentxCoin"]),
-                                    
+                                    Id = Convert.ToInt32(dataReader["idTypePaymentxCoin"]),                                    
                                     Name = dataReader["name"].ToString(),
                                     CoinDescription = dataReader["coinDescription"].ToString(),
                                     CoinName = dataReader["coinName"].ToString(),
@@ -204,8 +203,8 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                         var parameters = new SqlParameter[]
                         {
                             new SqlParameter("@idTypePaymentxCoin", id),
-                            new SqlParameter("@name", DBNull.Value),
-                            new SqlParameter("@coinDescription", DBNull.Value),
+                            new SqlParameter("@idTypePayment", DBNull.Value),
+                            new SqlParameter("@idCoin", DBNull.Value),
                             new SqlParameter("@operation", '2')
                         };
 
@@ -223,8 +222,6 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                                     Name = dataReader["name"].ToString(),
                                     CoinDescription = dataReader["coinDescription"].ToString(),
                                     CoinName = dataReader["coinName"].ToString(),
-                                    idTypePayment = Convert.ToInt32(dataReader["idTypePayment"]),
-
                                 };
                             }
                         }
