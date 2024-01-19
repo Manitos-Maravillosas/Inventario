@@ -452,9 +452,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Data.Services
                     {
                         while (dataReader.Read())
                         {
-                            summary.TotalExpenses = Convert.ToSingle(dataReader["totalExpenses"]);
-                            summary.TotalSales = Convert.ToSingle(dataReader["totalSales"]);
-                            summary.TotalProfit = Convert.ToSingle(dataReader["totalProfit"]);
+                            // Check for null values in data reader
+                            summary.TotalExpenses = dataReader["totalExpenses"] == DBNull.Value ? 0 : Convert.ToSingle(dataReader["totalExpenses"]);
+                            summary.TotalSales = dataReader["totalSales"] == DBNull.Value ? 0 : Convert.ToSingle(dataReader["totalSales"]);
+                            summary.TotalProfit = dataReader["totalProfit"] == DBNull.Value ? 0 : Convert.ToSingle(dataReader["totalProfit"]);
                         }
                     }
                 }

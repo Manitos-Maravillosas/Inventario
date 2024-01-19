@@ -146,9 +146,7 @@ function applyEventListenersToRow() {
             }
             if (this.hasAttribute('data-bill')) {
                 var inputValue = this.value;
-                if (checkGreterThanZero(inputValue)) {
                     UpdateDiscount(inputValue);
-                }
             } else {               
                 div.textContent = input.value; // Use textContent instead of innerHTML
 

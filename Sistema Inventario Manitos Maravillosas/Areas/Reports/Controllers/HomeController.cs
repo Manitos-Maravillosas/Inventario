@@ -50,12 +50,22 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             // Get the sales by business
             var salesByBusiness = _reportsService.GetSalesByBusiness(startDate, endDate);
 
+            //Check if salesByBusiness count is 0
+            if (salesByBusiness.Count == 0)
+            {
+                return new
+                {
+                    ManitosMaravillosas = 0,
+                    DonMae = 0
+                };
+            }
+
             // Get the profit of Manitos Maravillosas
             var profitManitosMaravillosas = salesByBusiness.Where(s => s.IdBusiness == 1).FirstOrDefault().TotalProfit;
 
-            // Get the profi of Don Mae
-            var profitDonMae = salesByBusiness.Where(s => s.IdBusiness == 2).FirstOrDefault().TotalProfit;
 
+            // Get the profit of Don Mae
+            var profitDonMae = salesByBusiness.Where(s => s.IdBusiness == 2).FirstOrDefault().TotalProfit;
 
             return new
             {
@@ -142,26 +152,34 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
         {
             // Memory stream to store the PDF
             MemoryStream stream;
+            // Filename
+            string fileName = "";
             // switch to check for type of report
             switch (reportsView.ReportType)
             {
                 case "totalSales":
                     stream = ExportTotalSalesPDF(reportsView);
+                    fileName = "Reporte de ventas totales.pdf";
                     break;
                 case "totalPurchases":
                     stream = ExportTotalPurchasesPDF(reportsView);
+                    fileName = "Reporte de compras totales.pdf";
                     break;
                 case "byProduct":
                     stream = ExportTotalProductsPDF(reportsView);
+                    fileName = "Reporte de ventas por producto.pdf";
                     break;
                 case "byCategory":
                     stream = ExportTotalCategoriesPDF(reportsView);
+                    fileName = "Reporte de ventas por categoria.pdf";
                     break;
                 case "byClient":
                     stream = ExportTotalClientsPDF(reportsView);
+                    fileName = "Reporte de ventas por cliente.pdf";
                     break;
                 case "byBusiness":
                     stream = ExportTotalBusinessPDF(reportsView);
+                    fileName = "Reporte de ventas por negocio.pdf";
                     break;
                 default:
                     stream = null;
@@ -170,7 +188,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
 
             // Return the file
             var content = stream.ToArray();
-            return File(content, "application/pdf", "Reporte.pdf");
+            return File(content, "application/pdf", fileName);
         }
 
         private MemoryStream ExportTotalSalesPDF(ReportsViewModel reportsView)
