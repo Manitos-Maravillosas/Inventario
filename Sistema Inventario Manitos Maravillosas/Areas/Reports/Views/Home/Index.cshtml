@@ -150,12 +150,15 @@
             </div>
         </div>
         <div class="card chart rounded-15 shadow">
-            here goes a chart
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
         </div>
     </div>
 </section>
 
 @section Scripts {
+    <script src="@Url.Content("~/js/Reports/chart.js")"></script>
     <script>
         function generateReport(reportFormat, reportType) {
             // Set values for hidden input fields

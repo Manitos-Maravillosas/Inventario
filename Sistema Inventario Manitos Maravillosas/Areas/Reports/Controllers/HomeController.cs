@@ -39,6 +39,31 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
             return View(reportsView);
         }
 
+        // GET - Chart
+        public object GetDataFromService()
+        {
+            // Get the start of month
+            var startDate = new System.DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month, 1);
+            // Get the end of month
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+
+            // Get the sales by business
+            var salesByBusiness = _reportsService.GetSalesByBusiness(startDate, endDate);
+
+            // Get the profit of Manitos Maravillosas
+            var profitManitosMaravillosas = salesByBusiness.Where(s => s.IdBusiness == 1).FirstOrDefault().TotalProfit;
+
+            // Get the profi of Don Mae
+            var profitDonMae = salesByBusiness.Where(s => s.IdBusiness == 2).FirstOrDefault().TotalProfit;
+
+
+            return new
+            {
+                ManitosMaravillosas = profitManitosMaravillosas,
+                DonMae = profitDonMae
+            };
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Report(ReportsViewModel reportsView)
@@ -518,10 +543,10 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
                 .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD))
                 .SetFontSize(12);
 
-            List<SalesByBusinessModel> salesByClient = _reportsService.GetSalesByBusiness(reportsView.StartDate, reportsView.EndDate);
+            List<SalesByBusinessModel> salesByBusiness = _reportsService.GetSalesByBusiness(reportsView.StartDate, reportsView.EndDate);
 
             // Loop through the clients sales by clients
-            foreach (SalesByBusinessModel sale in salesByClient)
+            foreach (SalesByBusinessModel sale in salesByBusiness)
             {
                 // Add the client name header1 style
                 doc.Add(new Paragraph($"{sale.BusinessName}").AddStyle(header1Style));
@@ -582,7 +607,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.Reports.Controllers
                 doc.Add(tableBillsByBusiness);
 
                 // Add a page break if there are more clients
-                if (sale != salesByClient.Last())
+                if (sale != salesByBusiness.Last())
                 {
                     doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                 }
