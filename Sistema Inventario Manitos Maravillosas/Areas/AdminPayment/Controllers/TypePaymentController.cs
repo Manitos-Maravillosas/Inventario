@@ -75,7 +75,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Controllers
             }
 
             LoadSelect();
-            return View();
+            return View(typePayment);
         }
 
         // POST: TypePaymentController/Edit/5

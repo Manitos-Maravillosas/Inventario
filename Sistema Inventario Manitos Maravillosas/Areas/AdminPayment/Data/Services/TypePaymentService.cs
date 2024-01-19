@@ -189,7 +189,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
         //------------------------------------------------------------------------------------
         public TypePaymentxCoin GetById(int id)
         {
-            TypePaymentxCoin typePayment = null;
+            TypePaymentxCoin typePaymentxCoin = null;
             string connectionString = _configuration.GetConnectionString("ConnectionToDataBase");
 
             try
@@ -216,12 +216,15 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                         {
                             if (dataReader.Read())
                             {
-                                typePayment = new TypePaymentxCoin
+                                typePaymentxCoin = new TypePaymentxCoin
                                 {
                                     Id = Convert.ToInt32(dataReader["idTypePaymentxCoin"]),
                                     Name = dataReader["name"].ToString(),
                                     CoinDescription = dataReader["coinDescription"].ToString(),
                                     CoinName = dataReader["coinName"].ToString(),
+                                    idCoin = Convert.ToInt32(dataReader["idCoin"]),
+                                    idTypePayment = Convert.ToInt32(dataReader["idTypePayment"])
+
                                 };
                             }
                         }
@@ -233,7 +236,7 @@ namespace Sistema_Inventario_Manitos_Maravillosas.Areas.AdminPayment.Data.Servic
                 throw new CustomDataException("An error occurred while fetching the type payment by ID.", ex);
             }
 
-            return typePayment;
+            return typePaymentxCoin;
         }
 
         //------------------------------------------------------------------------------------
